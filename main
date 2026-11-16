@@ -9,7 +9,7 @@ local LocalPlayer = Players.LocalPlayer
 
 local NeoxHub = {}
 NeoxHub.Name = "Neox Hub"
-NeoxHub.Version = "2.2.0"
+NeoxHub.Version = "2.3.0"
 NeoxHub.Flags = {}
 NeoxHub.Windows = {}
 
@@ -94,25 +94,25 @@ end
 
 NeoxHub.Themes = {
 	Default = withStatusColors({
-		Background = rgb(20, 16, 20),
-		Surface = rgb(24, 19, 24),
-		Surface2 = rgb(28, 22, 28),
-		Surface3 = rgb(42, 36, 43),
-		Stroke = rgb(40, 32, 41),
-		StrokeHover = rgb(88, 70, 90),
+		Background = rgb(8, 8, 10),
+		Surface = rgb(12, 12, 15),
+		Surface2 = rgb(16, 16, 20),
+		Surface3 = rgb(31, 31, 38),
+		Stroke = rgb(27, 27, 33),
+		StrokeHover = rgb(64, 60, 74),
 		Accent = rgb(235, 199, 246),
-		AccentDark = rgb(24, 18, 26),
-		Text = rgb(233, 229, 234),
-		Muted = rgb(138, 127, 139),
-		Glow = rgb(226, 218, 230),
+		AccentDark = rgb(20, 14, 24),
+		Text = rgb(236, 236, 241),
+		Muted = rgb(126, 126, 139),
+		Glow = rgb(220, 214, 230),
 	}),
 	Midnight = withStatusColors({
-		Background = rgb(14, 16, 22),
-		Surface = rgb(18, 21, 28),
-		Surface2 = rgb(22, 25, 34),
-		Surface3 = rgb(36, 41, 54),
-		Stroke = rgb(32, 36, 48),
-		StrokeHover = rgb(70, 80, 104),
+		Background = rgb(10, 11, 15),
+		Surface = rgb(13, 15, 20),
+		Surface2 = rgb(16, 18, 24),
+		Surface3 = rgb(29, 33, 43),
+		Stroke = rgb(26, 29, 38),
+		StrokeHover = rgb(63, 72, 94),
 		Accent = rgb(150, 180, 255),
 		AccentDark = rgb(12, 16, 28),
 		Text = rgb(226, 230, 240),
@@ -120,12 +120,12 @@ NeoxHub.Themes = {
 		Glow = rgb(210, 220, 240),
 	}),
 	Moss = withStatusColors({
-		Background = rgb(15, 18, 15),
-		Surface = rgb(19, 23, 19),
-		Surface2 = rgb(23, 28, 23),
-		Surface3 = rgb(37, 44, 37),
-		Stroke = rgb(33, 40, 33),
-		StrokeHover = rgb(72, 88, 72),
+		Background = rgb(10, 13, 10),
+		Surface = rgb(13, 16, 13),
+		Surface2 = rgb(17, 20, 17),
+		Surface3 = rgb(30, 35, 30),
+		Stroke = rgb(26, 32, 26),
+		StrokeHover = rgb(65, 79, 65),
 		Accent = rgb(176, 222, 170),
 		AccentDark = rgb(14, 22, 14),
 		Text = rgb(228, 234, 227),
@@ -133,12 +133,12 @@ NeoxHub.Themes = {
 		Glow = rgb(214, 230, 212),
 	}),
 	Ember = withStatusColors({
-		Background = rgb(20, 16, 13),
-		Surface = rgb(25, 20, 16),
-		Surface2 = rgb(30, 24, 19),
-		Surface3 = rgb(46, 37, 30),
-		Stroke = rgb(42, 34, 27),
-		StrokeHover = rgb(96, 76, 58),
+		Background = rgb(14, 11, 9),
+		Surface = rgb(18, 14, 11),
+		Surface2 = rgb(22, 17, 14),
+		Surface3 = rgb(37, 30, 24),
+		Stroke = rgb(34, 27, 22),
+		StrokeHover = rgb(86, 68, 52),
 		Accent = rgb(255, 190, 140),
 		AccentDark = rgb(28, 18, 10),
 		Text = rgb(240, 232, 226),
@@ -146,12 +146,12 @@ NeoxHub.Themes = {
 		Glow = rgb(240, 222, 208),
 	}),
 	Rose = withStatusColors({
-		Background = rgb(21, 14, 17),
-		Surface = rgb(26, 18, 21),
-		Surface2 = rgb(31, 21, 25),
-		Surface3 = rgb(48, 34, 40),
-		Stroke = rgb(44, 30, 36),
-		StrokeHover = rgb(100, 66, 80),
+		Background = rgb(15, 10, 12),
+		Surface = rgb(18, 13, 15),
+		Surface2 = rgb(22, 15, 18),
+		Surface3 = rgb(38, 27, 32),
+		Stroke = rgb(35, 24, 29),
+		StrokeHover = rgb(90, 59, 72),
 		Accent = rgb(255, 170, 195),
 		AccentDark = rgb(30, 12, 18),
 		Text = rgb(240, 228, 232),
@@ -159,12 +159,12 @@ NeoxHub.Themes = {
 		Glow = rgb(240, 214, 222),
 	}),
 	Mono = withStatusColors({
-		Background = rgb(16, 16, 17),
-		Surface = rgb(20, 20, 21),
-		Surface2 = rgb(24, 24, 26),
-		Surface3 = rgb(40, 40, 43),
-		Stroke = rgb(36, 36, 39),
-		StrokeHover = rgb(80, 80, 86),
+		Background = rgb(11, 11, 12),
+		Surface = rgb(14, 14, 15),
+		Surface2 = rgb(17, 17, 19),
+		Surface3 = rgb(32, 32, 34),
+		Stroke = rgb(29, 29, 31),
+		StrokeHover = rgb(72, 72, 77),
 		Accent = rgb(230, 230, 235),
 		AccentDark = rgb(18, 18, 20),
 		Text = rgb(232, 232, 236),
@@ -362,12 +362,22 @@ local CHIP_HEIGHT = IS_TOUCH and 34 or 28
 
 local Glass = {
 	Enabled = true,
-	Body = 0.12,
-	Panel = 0.3,
-	Card = 0.22,
-	Blur = 10,
+	Body = 0.06,
+	Panel = 0.2,
+	Card = 0.15,
 }
 NeoxHub.Glass = Glass
+
+local function removeLeftoverBlur()
+	pcall(function()
+		for _, child in ipairs(game:GetService("Lighting"):GetChildren()) do
+			if child.Name == "NeoxHubBlur" then
+				child:Destroy()
+			end
+		end
+	end)
+end
+removeLeftoverBlur()
 
 local function glassTransparency(level)
 	return Glass.Enabled and Glass[level] or 0
@@ -487,6 +497,62 @@ local function setIcon(imageLabel, icon)
 	imageLabel.ImageRectOffset = rectOffset or Vector2.zero
 	imageLabel.ImageRectSize = rectSize or Vector2.zero
 	return true
+end
+
+local logoTargets = setmetatable({}, { __mode = "k" })
+local resolvedLogo
+local resolvingLogo = false
+
+local function imageLoads(id)
+	local loaded = false
+	local ok = pcall(function()
+		game:GetService("ContentProvider"):PreloadAsync({ id }, function(_, status)
+			loaded = status == Enum.AssetFetchStatus.Success
+		end)
+	end)
+	return ok and loaded
+end
+
+local function findLogoImage(id)
+	if imageLoads(id) then
+		return id
+	end
+	local ok, objects = pcall(function()
+		return game:GetObjects(id)
+	end)
+	if ok and type(objects) == "table" then
+		local asset = objects[1]
+		if typeof(asset) == "Instance" and (asset:IsA("Decal") or asset:IsA("Texture")) and asset.Texture ~= "" then
+			return asset.Texture
+		end
+	end
+	return id
+end
+
+local function setLogo(imageLabel, customIcon)
+	if customIcon ~= nil then
+		setIcon(imageLabel, customIcon)
+		return
+	end
+	imageLabel.Image = resolvedLogo or Assets.Logo
+	if resolvedLogo then
+		return
+	end
+	logoTargets[imageLabel] = true
+	if resolvingLogo then
+		return
+	end
+	resolvingLogo = true
+	task.spawn(function()
+		local image = findLogoImage(Assets.Logo)
+		resolvedLogo = image
+		for target in pairs(logoTargets) do
+			if target.Parent then
+				target.Image = image
+			end
+		end
+		table.clear(logoTargets)
+	end)
 end
 
 local function createIcon(parent, icon, color, position)
@@ -3711,7 +3777,7 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 		ScaleType = Enum.ScaleType.Fit,
 		Parent = brand,
 	})
-	setIcon(logo, options.Icon or Assets.Logo)
+	setLogo(logo, options.Icon)
 	window._logo = logo
 
 	window._titleLabel = createLabel({
@@ -4051,16 +4117,6 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 		end
 		tooltip.Position = UDim2.fromOffset(math.max(x, 8), math.max(y, 8))
 	end)
-
-	if Glass.Enabled and options.Blur ~= false then
-		pcall(function()
-			local blur = Instance.new("BlurEffect")
-			blur.Name = "NeoxHubBlur"
-			blur.Size = 0
-			blur.Parent = game:GetService("Lighting")
-			window._blur = blur
-		end)
-	end
 
 	window:_enableDrag()
 	window.MaxSize = options.MaxSize
@@ -4535,7 +4591,6 @@ function Window:_playIntro(fromLoader)
 	end
 
 	root.Visible = true
-	self:_setBlur(true)
 	if fromLoader then
 
 		scale.Scale = self._fitScale or 1
@@ -4614,7 +4669,7 @@ function Window:_showLoader(options)
 		ScaleType = Enum.ScaleType.Fit,
 		Parent = logoHolder,
 	})
-	setIcon(logo, options.Icon or Assets.Logo)
+	setLogo(logo, options.Icon)
 	task.delay(0.15, function()
 		tween(logo, { Size = UDim2.fromScale(0.85, 0.85), Rotation = 0 }, 0.6, Enum.EasingStyle.Back)
 		tween(logo, { ImageTransparency = 0 }, 0.4)
@@ -4805,7 +4860,7 @@ function Window:_createOpenButton(buttonOptions)
 		ZIndex = 31,
 		Parent = pill,
 	})
-	setIcon(icon, buttonOptions.Icon or Assets.Logo)
+	setLogo(icon, buttonOptions.Icon)
 
 	createLabel({
 		Position = UDim2.fromOffset(28, 0),
@@ -5867,30 +5922,8 @@ function Window:_placeIndicator(tab)
 	tween(indicator, { Position = UDim2.new(0, 10, 0, y) }, 0.35, Enum.EasingStyle.Quint)
 end
 
-function Window:_setBlur(enabled)
-	if self._blur then
-		tween(self._blur, { Size = enabled and Glass.Blur or 0 }, 0.3)
-	end
-end
-
-function Window:SetBlur(enabled)
-	if enabled == false then
-		if self._blur then
-			self._blur:Destroy()
-			self._blur = nil
-		end
-		return
-	end
-	if not self._blur then
-		pcall(function()
-			local blur = Instance.new("BlurEffect")
-			blur.Name = "NeoxHubBlur"
-			blur.Size = 0
-			blur.Parent = game:GetService("Lighting")
-			self._blur = blur
-		end)
-	end
-	self:_setBlur(self.Open)
+function Window:SetBlur()
+	removeLeftoverBlur()
 end
 
 function Window:SelectTab(tab)
@@ -6262,7 +6295,6 @@ function Window:Toggle(open)
 	self.Open = open
 	self:_hideTooltip()
 
-	self:_setBlur(open)
 	if open then
 		self.Root.Visible = true
 		tween(self.Scale, { Scale = self._fitScale or 1 }, 0.4, Enum.EasingStyle.Back)
@@ -6548,7 +6580,7 @@ function Window:Watermark(input)
 		ZIndex = 51,
 		Parent = panel,
 	})
-	setIcon(icon, options.Icon or Assets.Logo)
+	setLogo(icon, options.Icon)
 
 	local label = createLabel({
 		Size = UDim2.new(0, 0, 1, 0),
@@ -7028,16 +7060,8 @@ function Window:Destroy()
 	tween(self.Body, { GroupTransparency = 1 }, 0.2)
 	tween(self.BodyStroke, { Transparency = 1 }, 0.12)
 	tween(self.Shadow, { ImageTransparency = 1 }, 0.2)
-	local blur = self._blur
-	self._blur = nil
-	if blur then
-		tween(blur, { Size = 0 }, 0.2)
-	end
 	task.delay(0.22, function()
 		self.Gui:Destroy()
-		if blur then
-			blur:Destroy()
-		end
 	end)
 end
 
