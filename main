@@ -9,7 +9,7 @@ local LocalPlayer = Players.LocalPlayer
 
 local NeoxHub = {}
 NeoxHub.Name = "Neox Hub"
-NeoxHub.Version = "2.6.0"
+NeoxHub.Version = "2.7.0"
 NeoxHub.Flags = {}
 NeoxHub.Windows = {}
 
@@ -183,12 +183,12 @@ NeoxHub.Assets = {
 	ResizeGrip = "rbxassetid://120997033468887",
 }
 
-local DEFAULT_FONT_FAMILY = "rbxasset://fonts/families/BuilderSans.json"
+local DEFAULT_FONT_FAMILY = "rbxasset://fonts/families/GothamSSm.json"
 
 NeoxHub.Fonts = {
 	Regular = Font.new(DEFAULT_FONT_FAMILY, Enum.FontWeight.Regular),
 	Medium = Font.new(DEFAULT_FONT_FAMILY, Enum.FontWeight.Medium),
-	Bold = Font.new(DEFAULT_FONT_FAMILY, Enum.FontWeight.SemiBold),
+	Bold = Font.new(DEFAULT_FONT_FAMILY, Enum.FontWeight.Bold),
 }
 
 local KNOWN_FONTS = {
@@ -360,14 +360,6 @@ local ROW_HEIGHT_DESC = IS_TOUCH and 70 or 64
 local OPTION_HEIGHT = IS_TOUCH and 40 or 34
 local CHIP_HEIGHT = IS_TOUCH and 34 or 28
 
-local Glass = {
-	Enabled = true,
-	Body = 0.04,
-	Panel = 0.1,
-	Card = 0.08,
-}
-NeoxHub.Glass = Glass
-
 local function removeLeftoverBlur()
 	pcall(function()
 		for _, child in ipairs(game:GetService("Lighting"):GetChildren()) do
@@ -378,10 +370,6 @@ local function removeLeftoverBlur()
 	end)
 end
 removeLeftoverBlur()
-
-local function glassTransparency(level)
-	return Glass.Enabled and Glass[level] or 0
-end
 
 local function logoColor(customIcon)
 	if customIcon ~= nil then
@@ -486,39 +474,6 @@ local function addTopHighlight(parent)
 		ZIndex = 0,
 		Parent = parent,
 	})
-end
-
-local function addGlassFinish(guiObject, inset, shade)
-	if not Glass.Enabled then
-		return
-	end
-	inset = inset or 8
-	local edge = create("Frame", {
-		Name = "GlassEdge",
-		Position = UDim2.fromOffset(inset, 0),
-		Size = UDim2.new(1, -inset * 2, 0, 1),
-		BackgroundColor3 = Color3.new(1, 1, 1),
-		BackgroundTransparency = 0.95,
-		BorderSizePixel = 0,
-		ZIndex = 2,
-		Parent = guiObject,
-	})
-	create("UIGradient", {
-		Transparency = NumberSequence.new({
-			NumberSequenceKeypoint.new(0, 1),
-			NumberSequenceKeypoint.new(0.5, 0),
-			NumberSequenceKeypoint.new(1, 1),
-		}),
-		Parent = edge,
-	})
-	if shade ~= false then
-		create("UIGradient", {
-			Rotation = 90,
-			Color = ColorSequence.new(Color3.new(1, 1, 1), Color3.fromRGB(224, 224, 230)),
-			Parent = guiObject,
-		})
-	end
-	return edge
 end
 
 local function setIcon(imageLabel, icon)
@@ -923,7 +878,6 @@ local function createCard(tab, className, height)
 	local properties = {
 		Size = UDim2.new(1, 0, 0, height),
 		BackgroundColor3 = Theme.Surface2,
-		BackgroundTransparency = glassTransparency("Card"),
 		BorderSizePixel = 0,
 		LayoutOrder = tab:_nextOrder(),
 		Parent = tab.List,
@@ -936,7 +890,6 @@ local function createCard(tab, className, height)
 	card:SetAttribute(ATTR_NO_DRAG, true)
 	addCorner(card)
 	local stroke = addStroke(card, Theme.Stroke)
-	addGlassFinish(card)
 	return card, stroke
 end
 
@@ -1243,10 +1196,6 @@ function Tab:Paragraph(input)
 
 	local card = createCard(self, "Frame", 0)
 	card.AutomaticSize = Enum.AutomaticSize.Y
-	local glassEdge = card:FindFirstChild("GlassEdge")
-	if glassEdge then
-		glassEdge:Destroy()
-	end
 	addPadding(card, 14, 14, 11, 12)
 	create("UIListLayout", {
 		SortOrder = Enum.SortOrder.LayoutOrder,
@@ -3676,7 +3625,6 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 	if options.Theme ~= nil then
 		NeoxHub:SetTheme(options.Theme)
 	end
-	Glass.Enabled = options.Glass ~= false
 
 	local toggleKey = toKeyCode(options.Keybind) or Enum.KeyCode.RightControl
 
@@ -3763,42 +3711,19 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 		Parent = root,
 	})
 	window.Body = body
-	body.BackgroundTransparency = glassTransparency("Body")
 	addCorner(body, UDim.new(0, 12))
 	window.BodyStroke = addStroke(body, Theme.Stroke)
 	addTopHighlight(body)
-	if Glass.Enabled then
-		local sheen = create("Frame", {
-			Name = "Sheen",
-			Size = UDim2.fromScale(1, 1),
-			BackgroundColor3 = Color3.new(1, 1, 1),
-			BackgroundTransparency = 0.97,
-			BorderSizePixel = 0,
-			ZIndex = 0,
-			Parent = body,
-		})
-		create("UIGradient", {
-			Rotation = 35,
-			Transparency = NumberSequence.new({
-				NumberSequenceKeypoint.new(0, 0.2),
-				NumberSequenceKeypoint.new(0.4, 1),
-				NumberSequenceKeypoint.new(1, 1),
-			}),
-			Parent = sheen,
-		})
-	end
 
 	local sidebar = create("Frame", {
 		Name = "Sidebar",
 		Position = UDim2.fromOffset(8, 8),
 		Size = UDim2.new(0, SIDEBAR_WIDTH - 8, 1, -16),
 		BackgroundColor3 = Theme.Surface,
-		BackgroundTransparency = glassTransparency("Panel"),
 		BorderSizePixel = 0,
 		Parent = body,
 	})
 	addCorner(sidebar, UDim.new(0, 10))
-	addGlassFinish(sidebar, 12)
 	addStroke(sidebar)
 
 	local brand = create("Frame", {
@@ -3957,13 +3882,11 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 		Position = UDim2.new(0, 10, 1, -58),
 		Size = UDim2.new(1, -20, 0, 48),
 		BackgroundColor3 = Theme.Surface2,
-		BackgroundTransparency = glassTransparency("Card"),
 		BorderSizePixel = 0,
 		Parent = sidebar,
 	})
 	profile:SetAttribute(ATTR_NO_DRAG, true)
 	addCorner(profile, UDim.new(0, 8))
-	addGlassFinish(profile)
 	addStroke(profile)
 
 	local avatar = create("ImageLabel", {
@@ -4673,14 +4596,12 @@ function Window:_showLoader(options)
 		Position = UDim2.new(0.5, 0, 0.5, 16),
 		Size = UDim2.fromOffset(300, 132),
 		BackgroundColor3 = Theme.Background,
-		BackgroundTransparency = glassTransparency("Body"),
 		BorderSizePixel = 0,
 		GroupTransparency = 1,
 		ZIndex = 10,
 		Parent = self.Gui,
 	})
 	local corner = addCorner(card, UDim.new(0, 12))
-	addGlassFinish(card, 14, false)
 	local cardStroke = addStroke(card, Theme.Stroke, 1)
 	addTopHighlight(card)
 
@@ -5257,14 +5178,12 @@ local function createStatTile(parent, order, icon, title)
 	local tile = create("Frame", {
 		Size = UDim2.new(0.5, -4, 0, 62),
 		BackgroundColor3 = Theme.Surface2,
-		BackgroundTransparency = glassTransparency("Card"),
 		BorderSizePixel = 0,
 		LayoutOrder = order,
 		Parent = parent,
 	})
 	addCorner(tile)
 	addStroke(tile)
-	addGlassFinish(tile)
 	tile:SetAttribute(ATTR_NO_DRAG, true)
 	if icon then
 		createIcon(tile, icon, Theme.Muted, UDim2.new(0, 14, 0, 21))
@@ -5372,14 +5291,12 @@ function Window:_buildHome(homeOptions)
 	local welcomeCard = create("Frame", {
 		Size = UDim2.new(1, 0, 0, 58),
 		BackgroundColor3 = Theme.Surface2,
-		BackgroundTransparency = glassTransparency("Card"),
 		BorderSizePixel = 0,
 		LayoutOrder = 2,
 		Parent = list,
 	})
 	welcomeCard:SetAttribute(ATTR_NO_DRAG, true)
 	addCorner(welcomeCard)
-	addGlassFinish(welcomeCard)
 	addStroke(welcomeCard)
 
 	local avatar = create("ImageLabel", {
@@ -5570,7 +5487,6 @@ function Window:_buildHome(homeOptions)
 				Size = UDim2.new(1, 0, 0, 0),
 				AutomaticSize = Enum.AutomaticSize.Y,
 				BackgroundColor3 = Theme.Surface2,
-				BackgroundTransparency = glassTransparency("Card"),
 				BorderSizePixel = 0,
 				LayoutOrder = order,
 				Parent = parent,
@@ -6100,7 +6016,6 @@ function Window:Dialog(input)
 		Parent = backdrop,
 	})
 	addCorner(panel, UDim.new(0, 10))
-	addGlassFinish(panel, 14)
 	local panelStroke = addStroke(panel, Theme.Stroke, 1)
 	local panelScale = create("UIScale", { Scale = 0.94, Parent = panel })
 
@@ -6913,13 +6828,11 @@ function Window:Notify(input)
 		Size = UDim2.new(1, 0, 0, 0),
 		AutomaticSize = Enum.AutomaticSize.Y,
 		BackgroundColor3 = Theme.Background,
-		BackgroundTransparency = glassTransparency("Body"),
 		BorderSizePixel = 0,
 		GroupTransparency = 1,
 		Parent = slider,
 	})
 	addCorner(card, UDim.new(0, 10))
-	addGlassFinish(card, 12, false)
 	local cardStroke = addStroke(card, Theme.Stroke)
 	addTopHighlight(card)
 
