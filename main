@@ -9,7 +9,7 @@ local LocalPlayer = Players.LocalPlayer
 
 local NeoxHub = {}
 NeoxHub.Name = "Neox Hub"
-NeoxHub.Version = "3.2.9"
+NeoxHub.Version = "3.2.10"
 NeoxHub.Flags = {}
 NeoxHub.Windows = {}
 
@@ -27,7 +27,7 @@ end
 
 local KNOWN_OPTIONS = {}
 local KNOWN_OPTIONS_LOWER = {}
-for name in string.gmatch("AU AbsoluteContentSize AbsoluteSize Accent AccentDark Active ActiveOnly AliveCheck Always Anonymous Asc Australia AutoLoad AutoSave BR Background BackgroundColor3 BackgroundTransparency Backspace BasePart Began Body Bold BottomRight Brazil Button ButtonRow Buttons CA CFrame Callback Canada Cancel CancelText CanvasGroup Caption Changed Changes ClearOnFocus Close CloseOnBackdrop Code Collapsed Color Color3 ColorPicker Configs ConfigurationSaving Confirm ConfirmText ConfirmTimeout Content ContentProvider Copied Copy Copyable CoreGui Create CurrentKeybind CurrentOption CurrentValue Custom CustomFont DE Danger Date DateFormat Decal Default DefaultState Delay Delete Depends DependsOn Desc Description Details Discord DiscordButton DiscordLink Divider Dropdown Duration Element EmptyText Enabled Ended Enter Entries Enum EnumItem Error ErrorNotifications Esc Example ExcludeSelf Executor Expired Expiry FPS FR FileName Flag Folder FolderName Format Frame France Free GET Game Germany GetActive GetKey Glow Greeting Group GuiButton GuiName GuiObject GuiService HWID HasKey Header HeaderItems Height Hold Home HttpService Humanoid HumanoidRootPart IN Icon Image ImageButton ImageColor3 ImageLabel ImageRectPosition ImageRectSize ImageTransparency Increment India Info Input Instance JP Japan KeepOnScreen Key KeyInfo KeyPanel Keybind Keybinds LAlt LCtrl LShift Label Language Lifetime Lighting Load Loading LoadingDuration LoadingSteps LoadingSubtitle LoadingText LoadingTitle Localization Lock Locked LockedReason Loop LoopDelay Lowest Main MarketplaceService Max MaxDistance MaxHeight MaxLength MaxNotifications MaxSize Medium Membership Merge Message Method Min MinSize MobileButton MobileIcon Mode Model Mono Monospace Monthly Multi MultiLine Multiline MultipleOptions Muted NL Name NeoxHidden NeoxHub NeoxHubBlur NeoxHubFonts NeoxLoc NeoxLocPlaceholderText NeoxLocText NeoxNoTheme Netherlands NoDrag None Not Notification NotificationPosition Notifications Numeric OK OnCancel OnChanged OnClose OnRelease Open OpenButton Opened Options Page Pages Paragraph Parent Ping Placeholder PlaceholderColor3 PlaceholderText Player PlayerGui Players Popup Position Prefix Premium PremiumBanner PremiumButton Perks Price PopupDelay Cooldown HeaderButton ExpiryButtons OnClick OnShown ShowWithoutKey ButtonText Link PremiumLink PremiumText Primary Profile Progress Qd Qn RAlt RCtrl RShift Radius Range Region RegionCity Regular Reminders Render Reset ResetOnUnload Resizable RunService SG Save Scale ScaleType ScreenGui ScrollBarImageColor3 ScrollingFrame Search SearchAfter SearchPlaceholder SearchResults Secondary Section SectionName Sections SemiBold Session ShowFPS ShowPing ShowPromo ShowTime Sidebar SidebarCollapsed Singapore Size Slider Sound Space Standard Stat Stats Step Stepper Stroke StrokeHover Studio Style Subtitle Success Suffix Surface Surface2 Surface3 Tab TabIcon TabSection Tabs Tag TeamCheck TeleportService Tertiary Text TextArea TextBounds TextBox TextButton TextColor3 TextLabel TextScale TextSize TextTransparency Texture Theme ThemeName Time TimeFormat Title Toggle ToggleUIKeybind Tooltip Top TotalTime TouchOnly TransitionIn TransitionOut Translations Transparency TweenService Type TypeName TypeNames UDim2 UICorner UIGradient UIGridLayout UIListLayout UIPadding UIScale UISizeConstraint UIStroke Unavailable Unknown Update UpdateRate Uptime Usage UseDisplayName User UserInputService UserInputType Value Values Variant Vector2 Vector3 Version VirtualUser Visible Volume Warning Weekly Weights Welcome Window", "%S+") do
+for name in string.gmatch("AU AbsoluteContentSize AbsoluteSize Accent AccentDark Active ActiveOnly AliveCheck Always Anonymous Asc Australia AutoLoad AutoSave BR Background BackgroundColor3 BackgroundTransparency Backspace BasePart Began Body Bold BottomRight Brazil Button ButtonRow Buttons CA CFrame Callback Canada Cancel CancelText CanvasGroup Caption Changed Changes ClearOnFocus Close CloseOnBackdrop Code Collapsed Color Color3 ColorPicker Configs ConfigurationSaving Confirm ConfirmText ConfirmTimeout Content ContentProvider Copied Copy Copyable CoreGui Create CurrentKeybind CurrentOption CurrentValue Custom CustomFont DE Danger Date DateFormat Decal Default DefaultState Delay Delete Depends DependsOn Desc Description Details Discord DiscordButton DiscordLink Divider Dropdown Duration Element EmptyText Enabled Ended Enter Entries Enum EnumItem Error ErrorNotifications Esc Example ExcludeSelf Executor Expired Expiry FPS FR FileName Flag Folder FolderName Format Frame France Free GET Game Germany GetActive GetKey Glow Greeting Group GuiButton GuiName GuiObject GuiService HWID HasKey Header HeaderItems Height Hold Home HttpService Humanoid HumanoidRootPart IN Icon Image ImageButton ImageColor3 ImageLabel ImageRectPosition ImageRectSize ImageTransparency Increment India Info Input Instance JP Japan KeepOnScreen Key KeyInfo KeyPanel Keybind Keybinds LAlt LCtrl LShift Label Language Lifetime Lighting Load Loading LoadingDuration LoadingSteps LoadingSubtitle LoadingText LoadingTitle Localization Lock Locked LockedReason Loop LoopDelay Lowest Main MarketplaceService Max MaxDistance MaxHeight MaxLength MaxNotifications MaxSize Medium Membership Merge Message Method Min MinSize MobileButton MobileIcon Mode Model MinimizeButton Mono Monospace Monthly Multi MultiLine Multiline MultipleOptions Muted NL Name NeoxHidden NeoxHub NeoxHubBlur NeoxHubFonts NeoxLoc NeoxLocPlaceholderText NeoxLocText NeoxNoTheme Netherlands NoDrag None Not Notification NotificationPosition Notifications Numeric OK OnCancel OnChanged OnClose OnRelease Open OpenButton Opened Options Page Pages Paragraph Parent Ping Placeholder PlaceholderColor3 PlaceholderText Player PlayerGui Players Popup Position Prefix Premium PremiumBanner PremiumButton Perks Price PopupDelay Cooldown HeaderButton ExpiryButtons OnClick OnShown ShowWithoutKey ButtonText Link PremiumLink PremiumText Primary Profile Progress Qd Qn RAlt RCtrl RShift Radius Range Region RegionCity Regular Reminders Render Reset ResetOnUnload Resizable RunService SG Save Scale ScaleType ScreenGui ScrollBarImageColor3 ScrollingFrame Search SearchAfter SearchPlaceholder SearchResults Secondary Section SectionName Sections SemiBold Session ShowFPS ShowPing ShowPromo ShowTime Sidebar SidebarCollapsed Singapore Size Slider Sound Space Standard Stat Stats Step Stepper Stroke StrokeHover Studio Style Subtitle Success Suffix Surface Surface2 Surface3 Tab TabIcon TabSection Tabs Tag TeamCheck TeleportService Tertiary Text TextArea TextBounds TextBox TextButton TextColor3 TextLabel TextScale TextSize TextTransparency Texture Theme ThemeName Time TimeFormat Title Toggle ToggleUIKeybind Tooltip Top TotalTime TouchOnly TransitionIn TransitionOut Translations Transparency TweenService Type TypeName TypeNames UDim2 UICorner UIGradient UIGridLayout UIListLayout UIPadding UIScale UISizeConstraint UIStroke Unavailable Unknown Update UpdateRate Uptime Usage UseDisplayName User UserInputService UserInputType Value Values Variant Vector2 Vector3 Version VirtualUser Visible Volume Warning Weekly Weights Welcome Window", "%S+") do
 	KNOWN_OPTIONS[name] = true
 	KNOWN_OPTIONS_LOWER[string.lower(name)] = name
 end
@@ -5097,6 +5097,41 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 	closeButton.MouseButton1Click:Connect(function()
 		window:Toggle(false)
 	end)
+	window._closeButton = closeButton
+
+	if options.MinimizeButton ~= false then
+		local minimizeButton = create("TextButton", {
+			Name = "Minimize",
+			AnchorPoint = Vector2.new(1, 0),
+			Position = UDim2.new(1, -52, 0, 14),
+			Size = UDim2.fromOffset(34, 34),
+			BackgroundColor3 = Theme.Surface2,
+			BackgroundTransparency = 1,
+			Text = "−",
+			TextColor3 = Theme.Muted,
+			TextSize = 26,
+			FontFace = Fonts.Bold,
+			AutoButtonColor = false,
+			ZIndex = 5,
+			Parent = content,
+		})
+		minimizeButton:SetAttribute(ATTR_NO_DRAG, true)
+		addPadding(minimizeButton, 0, 0, 1, 0)
+		addCorner(minimizeButton, UDim.new(0, 8))
+		minimizeButton.MouseEnter:Connect(function()
+			if IS_TOUCH then
+				return
+			end
+			tween(minimizeButton, { BackgroundTransparency = 0, TextColor3 = Theme.Text }, 0.15)
+		end)
+		minimizeButton.MouseLeave:Connect(function()
+			tween(minimizeButton, { BackgroundTransparency = 1, TextColor3 = Theme.Muted }, 0.2)
+		end)
+		minimizeButton.MouseButton1Click:Connect(function()
+			window:Minimize(true)
+		end)
+		window._minimizeButton = minimizeButton
+	end
 
 	window._notifyHost = createNotifyHost(screenGui, window._connections, options.MaxNotifications or 4, options.NotificationPosition or NeoxHub.NotificationPosition)
 	window.NotifyHolder = window._notifyHost.Holder
@@ -7779,6 +7814,12 @@ function Window:Toggle(open)
 	if not self._introDone or self._destroyed then
 		return
 	end
+	if self.Minimized then
+		self:Minimize(false)
+		if open ~= false then
+			return
+		end
+	end
 	if open == nil then
 		open = not self.Open
 	end
@@ -8061,7 +8102,7 @@ function Window:Search(text)
 	end
 end
 
-local function createOverlayPanel(window, position, width)
+local function createOverlayPanel(window, position, width, plain)
 	local panel = create("Frame", {
 		Position = position,
 		Size = UDim2.fromOffset(width or 0, 0),
@@ -8073,7 +8114,9 @@ local function createOverlayPanel(window, position, width)
 	})
 	addCorner(panel, UDim.new(0, 8))
 	addStroke(panel)
-	addTopHighlight(panel)
+	if not plain then
+		addTopHighlight(panel)
+	end
 	table.insert(window._overlays, panel)
 	return panel
 end
@@ -8084,7 +8127,7 @@ function Window:Watermark(input)
 	local showPing = options.ShowPing ~= false
 	local showTime = options.ShowTime ~= false
 
-	local panel = createOverlayPanel(self, options.Position or UDim2.fromOffset(16, 16))
+	local panel = createOverlayPanel(self, options.Position or UDim2.fromOffset(16, math.floor(getTopbarHeight()) + 10), nil, true)
 	panel.Size = UDim2.fromOffset(0, 30)
 	panel.AutomaticSize = Enum.AutomaticSize.X
 	addPadding(panel, 10, 12)
@@ -8190,7 +8233,7 @@ function Window:KeybindList(input)
 	local options = normalizeOptions(input, { Name = "Title" })
 	local activeOnly = options.ActiveOnly == true
 
-	local panel = createOverlayPanel(self, options.Position or UDim2.new(0, 16, 0.5, -80), 210)
+	local panel = createOverlayPanel(self, options.Position or UDim2.new(0, 16, 0.5, -80), 210, true)
 	addPadding(panel, 12, 12, 10, 10)
 	create("UIListLayout", {
 		SortOrder = Enum.SortOrder.LayoutOrder,
@@ -9251,7 +9294,7 @@ function Window:_headerRow()
 	local row = create("Frame", {
 		Name = "HeaderItems",
 		AnchorPoint = Vector2.new(1, 0),
-		Position = UDim2.new(1, -56, 0, 19),
+		Position = UDim2.new(1, self._minimizeButton and -94 or -56, 0, 19),
 		Size = UDim2.fromOffset(0, 24),
 		AutomaticSize = Enum.AutomaticSize.X,
 		BackgroundTransparency = 1,
@@ -10137,6 +10180,139 @@ function Window:FloatingButton(input)
 	return floating
 end
 Window.MobileButton = Window.FloatingButton
+
+function Window:_miniBar()
+	if self._miniBarFrame then
+		return self._miniBarFrame
+	end
+	local bar = create("Frame", {
+		Name = "MinimizedBar",
+		Size = UDim2.fromOffset(0, 44),
+		AutomaticSize = Enum.AutomaticSize.X,
+		BackgroundColor3 = Theme.Background,
+		BorderSizePixel = 0,
+		Active = true,
+		Visible = false,
+		ZIndex = 40,
+		Parent = self.Gui,
+	})
+	addCorner(bar, UDim.new(0, 12))
+	addStroke(bar)
+	addPadding(bar, 12, 6)
+	create("UIListLayout", {
+		FillDirection = Enum.FillDirection.Horizontal,
+		VerticalAlignment = Enum.VerticalAlignment.Center,
+		SortOrder = Enum.SortOrder.LayoutOrder,
+		Padding = UDim.new(0, 10),
+		Parent = bar,
+	})
+	local logo = create("ImageLabel", {
+		Size = UDim2.fromOffset(24, 24),
+		BackgroundTransparency = 1,
+		ImageColor3 = Color3.new(1, 1, 1),
+		ScaleType = Enum.ScaleType.Fit,
+		LayoutOrder = 1,
+		ZIndex = 41,
+		Parent = bar,
+	})
+	logo.Image = self._logo.Image
+	logo.ImageColor3 = self._logo.ImageColor3
+	logo.ImageRectOffset = self._logo.ImageRectOffset
+	logo.ImageRectSize = self._logo.ImageRectSize
+	local title = createLabel({
+		Size = UDim2.new(0, 0, 1, 0),
+		AutomaticSize = Enum.AutomaticSize.X,
+		Text = self._titleLabel.Text,
+		TextSize = 14,
+		TextTruncate = Enum.TextTruncate.None,
+		LayoutOrder = 2,
+		ZIndex = 41,
+		Parent = bar,
+	})
+	create("UISizeConstraint", { MaxSize = Vector2.new(180, 44), Parent = title })
+
+	local function barButton(order, text, size, onClick)
+		local button = create("TextButton", {
+			Size = UDim2.fromOffset(32, 32),
+			BackgroundColor3 = Theme.Surface2,
+			BackgroundTransparency = 1,
+			Text = text,
+			TextColor3 = Theme.Muted,
+			TextSize = size,
+			FontFace = Fonts.Bold,
+			AutoButtonColor = false,
+			LayoutOrder = order,
+			ZIndex = 41,
+			Parent = bar,
+		})
+		addCorner(button, UDim.new(0, 8))
+		button.MouseEnter:Connect(function()
+			if IS_TOUCH then
+				return
+			end
+			tween(button, { BackgroundTransparency = 0, TextColor3 = Theme.Text }, 0.15)
+		end)
+		button.MouseLeave:Connect(function()
+			tween(button, { BackgroundTransparency = 1, TextColor3 = Theme.Muted }, 0.2)
+		end)
+		button.MouseButton1Click:Connect(onClick)
+		return button
+	end
+	barButton(3, "+", 24, function()
+		self:Minimize(false)
+	end)
+	barButton(4, "×", 26, function()
+		self:Toggle(false)
+	end)
+
+	self:_makeDraggable(bar, function()
+		self:Minimize(false)
+	end)
+	self._miniBarFrame = bar
+	self._miniBarTitle = title
+	self._miniBarLogo = logo
+	return bar
+end
+
+function Window:Minimize(minimized)
+	if minimized == nil then
+		minimized = not self.Minimized
+	end
+	minimized = minimized == true
+	if self._destroyed or not self._introDone or minimized == (self.Minimized == true) then
+		return
+	end
+	if minimized and not self.Open then
+		return
+	end
+	local root = self.Root
+	local bar = self:_miniBar()
+	self:_hideTooltip()
+	if minimized then
+		self.Minimized = true
+		self._miniBarTitle.Text = self._titleLabel.Text
+		self._miniBarLogo.Image = self._logo.Image
+		local topLeft = root.AbsolutePosition - self.Gui.AbsolutePosition
+		bar.Position = UDim2.fromOffset(math.max(topLeft.X, 8), math.max(topLeft.Y, 8))
+		root.Visible = false
+		bar.Visible = true
+	else
+		self.Minimized = false
+		bar.Visible = false
+		local barTopLeft = bar.AbsolutePosition - self.Gui.AbsolutePosition
+		local size = root.AbsoluteSize
+		root.Position = UDim2.fromOffset(barTopLeft.X + size.X * root.AnchorPoint.X, barTopLeft.Y + size.Y * root.AnchorPoint.Y)
+		root.Visible = true
+		self:_clampToScreen()
+	end
+	for _, callback in ipairs(self._events[minimized and "Close" or "Open"]) do
+		task.spawn(safeCall, callback)
+	end
+end
+
+function Window:Restore()
+	self:Minimize(false)
+end
 
 do
 	local DEFAULT_PERKS = {
