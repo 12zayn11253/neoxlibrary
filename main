@@ -9,7 +9,7 @@ local LocalPlayer = Players.LocalPlayer
 
 local NeoxHub = {}
 NeoxHub.Name = "Neox Hub"
-NeoxHub.Version = "2.7.0"
+NeoxHub.Version = "2.8.0"
 NeoxHub.Flags = {}
 NeoxHub.Windows = {}
 
@@ -355,10 +355,10 @@ local Fonts = NeoxHub.Fonts
 local IS_TOUCH = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
 NeoxHub.Touch = IS_TOUCH
 
-local ROW_HEIGHT = IS_TOUCH and 54 or 48
-local ROW_HEIGHT_DESC = IS_TOUCH and 70 or 64
-local OPTION_HEIGHT = IS_TOUCH and 40 or 34
-local CHIP_HEIGHT = IS_TOUCH and 34 or 28
+local ROW_HEIGHT = IS_TOUCH and 50 or 42
+local ROW_HEIGHT_DESC = IS_TOUCH and 64 or 56
+local OPTION_HEIGHT = IS_TOUCH and 38 or 30
+local CHIP_HEIGHT = IS_TOUCH and 32 or 24
 
 local function removeLeftoverBlur()
 	pcall(function()
@@ -403,10 +403,14 @@ local function tween(object, goals, duration, style, direction)
 	return track
 end
 
+NeoxHub.TextScale = 0.9
+
 local function create(className, properties, children)
 	local instance = Instance.new(className)
 	for property, value in pairs(properties) do
-		if property ~= "Parent" then
+		if property == "TextSize" then
+			instance.TextSize = math.max(8, math.floor(value * (NeoxHub.TextScale or 1) + 0.5))
+		elseif property ~= "Parent" then
 			instance[property] = value
 		end
 	end
@@ -1377,13 +1381,13 @@ function Tab:Toggle(input)
 		Value = "Default",
 	}, "TextButton", 56, "Toggle")
 
-	local trackWidth = IS_TOUCH and 44 or 36
-	local knobSize = IS_TOUCH and 18 or 14
+	local trackWidth = IS_TOUCH and 44 or 32
+	local knobSize = IS_TOUCH and 18 or 12
 
 	local track = create("Frame", {
 		AnchorPoint = Vector2.new(1, 0.5),
 		Position = UDim2.new(1, -14, 0.5, 0),
-		Size = IS_TOUCH and UDim2.fromOffset(44, 24) or UDim2.fromOffset(36, 20),
+		Size = IS_TOUCH and UDim2.fromOffset(44, 24) or UDim2.fromOffset(32, 18),
 		BackgroundColor3 = Theme.Surface3,
 		BorderSizePixel = 0,
 		Parent = card,
@@ -1526,13 +1530,13 @@ function Tab:Slider(input)
 	local stepper = createStepper(minimum, maximum, step)
 	local window = self.Window
 
-	local height = ROW_HEIGHT_DESC + (options.Desc and 18 or 0)
+	local height = ROW_HEIGHT_DESC + 4 + (options.Desc and 18 or 0)
 	local card, stroke = createCard(self, "Frame", height)
 	bindHoverStroke(card, stroke)
 
 	createLabel({
 		Name = "Title",
-		Position = UDim2.fromOffset(14, 12),
+		Position = UDim2.fromOffset(14, 10),
 		Size = UDim2.new(1, -120, 0, 18),
 		Text = options.Name or "Slider",
 		Parent = card,
@@ -1540,7 +1544,7 @@ function Tab:Slider(input)
 	if options.Desc then
 		createLabel({
 			Name = "Desc",
-			Position = UDim2.fromOffset(14, 31),
+			Position = UDim2.fromOffset(14, 28),
 			Size = UDim2.new(1, -28, 0, 17),
 			Text = options.Desc,
 			TextSize = 13,
@@ -1552,8 +1556,8 @@ function Tab:Slider(input)
 
 	local chip = create("Frame", {
 		AnchorPoint = Vector2.new(1, 0),
-		Position = UDim2.new(1, -10, 0, 9),
-		Size = UDim2.fromOffset(40, 24),
+		Position = UDim2.new(1, -10, 0, 8),
+		Size = UDim2.fromOffset(40, 22),
 		BackgroundColor3 = Theme.Surface,
 		BorderSizePixel = 0,
 		ClipsDescendants = true,
@@ -1622,9 +1626,9 @@ function Tab:Slider(input)
 		end
 		width = math.max(width, 36)
 		if instant then
-			chip.Size = UDim2.fromOffset(width, 24)
+			chip.Size = UDim2.fromOffset(width, 22)
 		else
-			tween(chip, { Size = UDim2.fromOffset(width, 24) }, 0.2)
+			tween(chip, { Size = UDim2.fromOffset(width, 22) }, 0.2)
 		end
 	end
 
@@ -1640,7 +1644,7 @@ function Tab:Slider(input)
 	end)
 
 	local track = create("Frame", {
-		Position = UDim2.new(0, 14, 0, height - 18),
+		Position = UDim2.new(0, 14, 0, height - 16),
 		Size = UDim2.new(1, -28, 0, 5),
 		BackgroundColor3 = Theme.Surface3,
 		BorderSizePixel = 0,
@@ -1668,8 +1672,8 @@ function Tab:Slider(input)
 	addCorner(knob, UDim.new(1, 0))
 
 	local hitArea = create("TextButton", {
-		Position = UDim2.new(0, 8, 0, height - (IS_TOUCH and 37 or 31)),
-		Size = UDim2.new(1, -16, 0, IS_TOUCH and 40 or 28),
+		Position = UDim2.new(0, 8, 0, height - (IS_TOUCH and 35 or 29)),
+		Size = UDim2.new(1, -16, 0, IS_TOUCH and 38 or 26),
 		BackgroundTransparency = 1,
 		Text = "",
 		AutoButtonColor = false,
@@ -2378,7 +2382,7 @@ function Tab:Input(input)
 	local box = create("Frame", {
 		AnchorPoint = Vector2.new(1, 0.5),
 		Position = UDim2.new(1, -10, 0.5, 0),
-		Size = UDim2.fromOffset(170, 30),
+		Size = UDim2.fromOffset(170, 26),
 		BackgroundColor3 = Theme.Surface,
 		BorderSizePixel = 0,
 		ClipsDescendants = true,
@@ -2430,9 +2434,9 @@ function Tab:Input(input)
 		width = math.min(width, maxWidth + 8)
 		setTitleReserve(titleLabel, descLabel, width + 20)
 		if instant then
-			box.Size = UDim2.fromOffset(width, 30)
+			box.Size = UDim2.fromOffset(width, 26)
 		else
-			tween(box, { Size = UDim2.fromOffset(width, 30) }, 0.18)
+			tween(box, { Size = UDim2.fromOffset(width, 26) }, 0.18)
 		end
 	end
 
@@ -3497,6 +3501,449 @@ function Tab:ThemePicker(input)
 	})
 end
 
+local KEY_TYPE_NAMES = {
+	lifetime = "Lifetime",
+	["1month"] = "Monthly",
+	monthly = "Monthly",
+	weekly = "Weekly",
+	default = "Standard",
+	free = "Free",
+}
+
+local KEY_DETAIL_LABELS = {
+	Usage = "Usage",
+	Discord = "Discord",
+	HWID = "HWID",
+}
+
+local function readGlobal(key)
+	local ok, value = pcall(function()
+		local env = (type(getgenv) == "function" and getgenv()) or _G
+		return env[key]
+	end)
+	if ok then
+		return value
+	end
+	return nil
+end
+
+local function formatDuration(seconds)
+	seconds = math.max(0, math.floor(seconds))
+	if seconds < 60 then
+		return seconds .. "s"
+	elseif seconds < 3600 then
+		return string.format("%dm %02ds", seconds // 60, seconds % 60)
+	elseif seconds < 86400 then
+		return string.format("%dh %02dm", seconds // 3600, (seconds % 3600) // 60)
+	end
+	return string.format("%dd %dh", seconds // 86400, (seconds % 86400) // 3600)
+end
+
+local function createKeyPanel(window, parent, layoutOrder, input)
+	local options = normalizeOptions(input, { Title = "Name" })
+
+	local function pick(field, globalName)
+		local value = options[field]
+		if type(value) == "function" then
+			local ok, result = pcall(value)
+			return ok and result or nil
+		end
+		if value ~= nil then
+			return value
+		end
+		if globalName and options.UseGlobals ~= false then
+			return readGlobal(globalName)
+		end
+		return nil
+	end
+
+	local function snapshot()
+		local rawType = pick("Type", "NEOX_KEY_TYPE")
+		local lifetime = pick("Lifetime", "NEOX_KEY_IS_LIFETIME") == true or rawType == "lifetime"
+		local premium = options.Premium
+		if type(premium) == "function" then
+			local ok, result = pcall(premium)
+			premium = ok and result == true
+		elseif premium == nil then
+			premium = lifetime or rawType == "1month" or rawType == "monthly"
+		end
+		local names = options.TypeNames or KEY_TYPE_NAMES
+		return {
+			TypeName = (rawType ~= nil and (names[rawType] or tostring(rawType))) or "Unknown",
+			Lifetime = lifetime,
+			Premium = premium == true,
+			Expiry = tonumber(pick("Expiry", "NEOX_KEY_EXPIRY")),
+			Usage = pick("Usage", "NEOX_KEY_USAGE_COUNT"),
+			Discord = pick("Discord", "NEOX_KEY_DISCORD"),
+			HWID = pick("HWID", "NEOX_ACTIVE_HWID"),
+		}
+	end
+
+	local card = create("Frame", {
+		Name = "KeyPanel",
+		Size = UDim2.new(1, 0, 0, 0),
+		AutomaticSize = Enum.AutomaticSize.Y,
+		BackgroundColor3 = Theme.Surface2,
+		BorderSizePixel = 0,
+		LayoutOrder = layoutOrder,
+		Parent = parent,
+	})
+	card:SetAttribute(ATTR_NO_DRAG, true)
+	addCorner(card)
+	addStroke(card)
+	addPadding(card, 14, 14, 12, 12)
+	create("UIListLayout", {
+		SortOrder = Enum.SortOrder.LayoutOrder,
+		Padding = UDim.new(0, 8),
+		Parent = card,
+	})
+
+	local headerRow = create("Frame", {
+		Size = UDim2.new(1, 0, 0, 20),
+		BackgroundTransparency = 1,
+		LayoutOrder = 1,
+		Parent = card,
+	})
+	createIcon(headerRow, options.Icon or "key-round", Theme.Accent, UDim2.new(0, 0, 0.5, 0))
+	createLabel({
+		Name = "Title",
+		Position = UDim2.fromOffset(24, 0),
+		Size = UDim2.new(1, -130, 1, 0),
+		Text = options.Name or "Membership",
+		TextSize = 14,
+		Parent = headerRow,
+	})
+
+	local badge = create("Frame", {
+		AnchorPoint = Vector2.new(1, 0.5),
+		Position = UDim2.new(1, 0, 0.5, 0),
+		Size = UDim2.fromOffset(0, 20),
+		AutomaticSize = Enum.AutomaticSize.X,
+		BackgroundColor3 = Theme.Accent,
+		BackgroundTransparency = 0.85,
+		BorderSizePixel = 0,
+		Parent = headerRow,
+	})
+	addCorner(badge, UDim.new(1, 0))
+	local badgeStroke = addStroke(badge, Theme.Accent, 0.5)
+	addPadding(badge, 9, 9)
+	local badgeLabel = createLabel({
+		Size = UDim2.new(0, 0, 1, 0),
+		AutomaticSize = Enum.AutomaticSize.X,
+		Text = "",
+		TextSize = 11,
+		FontFace = Fonts.Bold,
+		TextColor3 = Theme.Accent,
+		TextTruncate = Enum.TextTruncate.None,
+		Parent = badge,
+	})
+
+	local timeRow = create("Frame", {
+		Size = UDim2.new(1, 0, 0, 38),
+		BackgroundTransparency = 1,
+		LayoutOrder = 2,
+		Parent = card,
+	})
+	local timeValue = createLabel({
+		Size = UDim2.new(0.55, 0, 0, 24),
+		Text = "...",
+		TextSize = 20,
+		FontFace = Fonts.Bold,
+		Parent = timeRow,
+	})
+	createLabel({
+		Position = UDim2.fromOffset(0, 24),
+		Size = UDim2.new(0.55, 0, 0, 14),
+		Text = "Time left",
+		TextSize = 12,
+		FontFace = Fonts.Regular,
+		TextColor3 = Theme.Muted,
+		Parent = timeRow,
+	})
+	local expiresLabel = createLabel({
+		AnchorPoint = Vector2.new(1, 0),
+		Position = UDim2.new(1, 0, 0, 4),
+		Size = UDim2.new(0.45, 0, 0, 16),
+		Text = "",
+		TextSize = 12,
+		FontFace = Fonts.Regular,
+		TextColor3 = Theme.Muted,
+		TextXAlignment = Enum.TextXAlignment.Right,
+		Parent = timeRow,
+	})
+
+	local totalTime = tonumber(options.TotalTime)
+	local barFill
+	if totalTime and totalTime > 0 then
+		local barTrack = create("Frame", {
+			Size = UDim2.new(1, 0, 0, 4),
+			BackgroundColor3 = Theme.Surface3,
+			BorderSizePixel = 0,
+			LayoutOrder = 3,
+			Parent = card,
+		})
+		addCorner(barTrack, UDim.new(1, 0))
+		barFill = create("Frame", {
+			Size = UDim2.fromScale(1, 1),
+			BackgroundColor3 = Theme.Accent,
+			BorderSizePixel = 0,
+			Parent = barTrack,
+		})
+		addCorner(barFill, UDim.new(1, 0))
+	end
+
+	local detailNames = options.Details or { "Usage", "Discord", "HWID" }
+	local detailValues = {}
+	if #detailNames > 0 then
+		local grid = create("Frame", {
+			Size = UDim2.new(1, 0, 0, 0),
+			AutomaticSize = Enum.AutomaticSize.Y,
+			BackgroundTransparency = 1,
+			LayoutOrder = 4,
+			Parent = card,
+		})
+		create("UIGridLayout", {
+			CellSize = UDim2.new(1 / math.min(#detailNames, 3), -6, 0, 40),
+			CellPadding = UDim2.fromOffset(8, 8),
+			SortOrder = Enum.SortOrder.LayoutOrder,
+			Parent = grid,
+		})
+		for order, name in ipairs(detailNames) do
+			local cell = create("Frame", {
+				BackgroundColor3 = Theme.Surface,
+				BorderSizePixel = 0,
+				LayoutOrder = order,
+				Parent = grid,
+			})
+			addCorner(cell, UDim.new(0, 6))
+			addStroke(cell)
+			createLabel({
+				Position = UDim2.fromOffset(10, 5),
+				Size = UDim2.new(1, -20, 0, 13),
+				Text = KEY_DETAIL_LABELS[name] or tostring(name),
+				TextSize = 11,
+				FontFace = Fonts.Regular,
+				TextColor3 = Theme.Muted,
+				Parent = cell,
+			})
+			detailValues[name] = createLabel({
+				Position = UDim2.fromOffset(10, 19),
+				Size = UDim2.new(1, -20, 0, 16),
+				Text = "-",
+				TextSize = 13,
+				Parent = cell,
+			})
+		end
+	end
+
+	local promoLabel = createLabel({
+		Size = UDim2.new(1, 0, 0, 0),
+		AutomaticSize = Enum.AutomaticSize.Y,
+		Text = options.PremiumText or "You're on a free key. Premium means no key resets and no waiting.",
+		TextSize = 12,
+		FontFace = Fonts.Regular,
+		TextColor3 = Theme.Muted,
+		TextWrapped = true,
+		TextTruncate = Enum.TextTruncate.None,
+		Visible = false,
+		LayoutOrder = 5,
+		Parent = card,
+	})
+
+	local buttonRow = create("Frame", {
+		Size = UDim2.new(1, 0, 0, 28),
+		BackgroundTransparency = 1,
+		Visible = false,
+		LayoutOrder = 6,
+		Parent = card,
+	})
+	create("UIListLayout", {
+		FillDirection = Enum.FillDirection.Horizontal,
+		SortOrder = Enum.SortOrder.LayoutOrder,
+		Padding = UDim.new(0, 8),
+		Parent = buttonRow,
+	})
+
+	local function addPanelButton(order, text, icon, primary, callback)
+		local button = create("TextButton", {
+			Size = UDim2.fromOffset(0, 28),
+			AutomaticSize = Enum.AutomaticSize.X,
+			BackgroundColor3 = primary and Theme.Accent or Theme.Surface,
+			BackgroundTransparency = primary and 0.1 or 0,
+			Text = "",
+			AutoButtonColor = false,
+			LayoutOrder = order,
+			Parent = buttonRow,
+		})
+		addCorner(button, UDim.new(0, 6))
+		local buttonStroke = addStroke(button, primary and Theme.Accent or Theme.Stroke)
+		addPadding(button, 10, 12)
+		create("UIListLayout", {
+			FillDirection = Enum.FillDirection.Horizontal,
+			VerticalAlignment = Enum.VerticalAlignment.Center,
+			SortOrder = Enum.SortOrder.LayoutOrder,
+			Padding = UDim.new(0, 6),
+			Parent = button,
+		})
+		if icon then
+			local image = create("ImageLabel", {
+				Size = UDim2.fromOffset(14, 14),
+				BackgroundTransparency = 1,
+				ImageColor3 = primary and Theme.AccentDark or Theme.Accent,
+				ScaleType = Enum.ScaleType.Fit,
+				LayoutOrder = 1,
+				Parent = button,
+			})
+			if not setIcon(image, icon) then
+				image:Destroy()
+			end
+		end
+		createLabel({
+			Size = UDim2.new(0, 0, 1, 0),
+			AutomaticSize = Enum.AutomaticSize.X,
+			Text = text,
+			TextSize = 12,
+			TextColor3 = primary and Theme.AccentDark or Theme.Text,
+			TextTruncate = Enum.TextTruncate.None,
+			LayoutOrder = 2,
+			Parent = button,
+		})
+		button.MouseEnter:Connect(function()
+			if primary then
+				tween(button, { BackgroundTransparency = 0 }, 0.12)
+			else
+				tween(buttonStroke, { Color = Theme.StrokeHover }, 0.12)
+			end
+		end)
+		button.MouseLeave:Connect(function()
+			if primary then
+				tween(button, { BackgroundTransparency = 0.1 }, 0.2)
+			else
+				tween(buttonStroke, { Color = Theme.Stroke }, 0.2)
+			end
+		end)
+		button.MouseButton1Click:Connect(function()
+			safeCall(callback)
+		end)
+		return button
+	end
+
+	local premiumButton
+	if options.PremiumLink then
+		premiumButton = addPanelButton(1, options.PremiumButton or "Get Premium", "crown", true, function()
+			NeoxHub:Copy(options.PremiumLink)
+		end)
+	end
+	local extraButtons = 0
+	if options.DiscordLink then
+		extraButtons += 1
+		addPanelButton(2, options.DiscordButton or "Discord", "message-circle", false, function()
+			NeoxHub:Copy(options.DiscordLink)
+		end)
+	end
+	for index, buttonDef in ipairs(options.Buttons or {}) do
+		extraButtons += 1
+		addPanelButton(2 + index, buttonDef.Title or buttonDef.Name or "Button", buttonDef.Icon, buttonDef.Primary == true, buttonDef.Callback)
+	end
+
+	local panel = { Frame = card }
+	local warned = {}
+	local shown = {}
+
+	local function setText(label, key, text)
+		if shown[key] ~= text then
+			shown[key] = text
+			label.Text = text
+		end
+	end
+
+	local function remind(key, title, content, kind)
+		if options.Reminders == false or warned[key] then
+			return
+		end
+		warned[key] = true
+		window:Notify({ Title = title, Content = content, Type = kind, Duration = 6 })
+	end
+
+	function panel:Refresh()
+		local data = snapshot()
+		local accent = data.Premium and Theme.Accent or Theme.Warning
+		setText(badgeLabel, "badge", string.upper(data.TypeName))
+		badge.BackgroundColor3 = accent
+		badgeStroke.Color = accent
+		badgeLabel.TextColor3 = accent
+
+		local left
+		if data.Lifetime then
+			setText(timeValue, "time", "Never expires")
+			setText(expiresLabel, "expires", "Lifetime key")
+		elseif data.Expiry then
+			left = math.floor(data.Expiry - os.time())
+			setText(timeValue, "time", left > 0 and formatDuration(left) or "Expired")
+			setText(expiresLabel, "expires", "Ends " .. os.date(options.DateFormat or "%b %d, %H:%M", data.Expiry))
+		else
+			setText(timeValue, "time", "Unknown")
+			setText(expiresLabel, "expires", "")
+		end
+		timeValue.TextColor3 = (left and left <= 0) and Theme.Error or ((left and left <= 900) and Theme.Warning or Theme.Text)
+
+		if barFill then
+			local fraction = data.Lifetime and 1 or (left and math.clamp(left / totalTime, 0, 1) or 0)
+			barFill.Size = UDim2.fromScale(fraction, 1)
+			barFill.BackgroundColor3 = fraction <= 0.15 and Theme.Warning or Theme.Accent
+		end
+
+		for name, label in pairs(detailValues) do
+			local value = data[name]
+			local text
+			if name == "HWID" then
+				text = (type(value) == "string" and #value >= 4) and ("••••" .. string.sub(value, -4)) or "Unknown"
+			elseif name == "Discord" then
+				text = (type(value) == "string" and value ~= "") and value or "Not linked"
+			elseif value ~= nil and value ~= "" then
+				text = tostring(value)
+			else
+				text = "-"
+			end
+			setText(label, "detail" .. name, text)
+		end
+
+		promoLabel.Visible = not data.Premium and options.ShowPromo ~= false
+		if premiumButton then
+			premiumButton.Visible = not data.Premium
+		end
+		buttonRow.Visible = (premiumButton ~= nil and not data.Premium) or extraButtons > 0
+
+		if left and not data.Lifetime then
+			if left <= 0 then
+				remind("expired", "Key expired", "Your key has run out. Get a new key to keep using the script.", "Error")
+			elseif left <= 900 then
+				remind("15m", "Key expiring soon", "Your key ends in about " .. math.max(1, math.floor(left / 60)) .. " minutes.", "Warning")
+			elseif left <= 3600 then
+				remind("60m", "Key ends in 1 hour", "Your key has about an hour left.", "Warning")
+			end
+		end
+	end
+
+	panel:Refresh()
+	task.spawn(function()
+		while card.Parent and not window._destroyed do
+			task.wait(1)
+			if card.Parent then
+				panel:Refresh()
+			end
+		end
+	end)
+
+	return panel, card
+end
+
+function Tab:KeyInfo(input)
+	local options = normalizeOptions(input, { Title = "Name" })
+	local panel, card = createKeyPanel(self.Window, self.List, self:_nextOrder(), options)
+	return registerElement(self, { Name = options.Name or "Membership" }, panel, card, "KeyInfo")
+end
+
 function Tab:Select()
 	self.Window:SelectTab(self)
 end
@@ -3624,6 +4071,9 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 
 	if options.Theme ~= nil then
 		NeoxHub:SetTheme(options.Theme)
+	end
+	if tonumber(options.TextScale) then
+		NeoxHub.TextScale = math.clamp(tonumber(options.TextScale), 0.7, 1.3)
 	end
 
 	local toggleKey = toKeyCode(options.Keybind) or Enum.KeyCode.RightControl
@@ -3851,7 +4301,7 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 	local indicator = create("Frame", {
 		AnchorPoint = Vector2.new(0, 0.5),
 		Position = UDim2.new(0, 10, 0, 0),
-		Size = UDim2.new(1, -20, 0, 38),
+		Size = UDim2.new(1, -20, 0, 34),
 		BackgroundColor3 = Theme.Accent,
 		BackgroundTransparency = 0.86,
 		BorderSizePixel = 0,
@@ -5379,6 +5829,10 @@ function Window:_buildHome(homeOptions)
 		task.defer(fitLine)
 	end
 
+	if type(homeOptions.Key) == "table" then
+		self.KeyPanel = createKeyPanel(self, detailsPage, 0, homeOptions.Key)
+	end
+
 	local statGrid = create("Frame", {
 		Size = UDim2.new(1, 0, 0, 0),
 		AutomaticSize = Enum.AutomaticSize.Y,
@@ -5731,7 +6185,7 @@ function Window:Tab(input, icon)
 	}, Tab)
 
 	local button = create("TextButton", {
-		Size = UDim2.new(1, 0, 0, 38),
+		Size = UDim2.new(1, 0, 0, 34),
 		BackgroundColor3 = Theme.Surface2,
 		BackgroundTransparency = 1,
 		Text = "",
@@ -5777,7 +6231,7 @@ function Window:Tab(input, icon)
 	tab._page = page
 
 	tab._pageTitle = createLabel({
-		Position = UDim2.fromOffset(24, 20),
+		Position = UDim2.fromOffset(24, 18),
 		Size = UDim2.new(1, -72, 0, 24),
 		Text = tab.Name,
 		TextSize = 22,
@@ -5785,7 +6239,7 @@ function Window:Tab(input, icon)
 	})
 	if options.Desc then
 		createLabel({
-			Position = UDim2.fromOffset(24, 44),
+			Position = UDim2.fromOffset(24, 40),
 			Size = UDim2.new(1, -72, 0, 16),
 			Text = options.Desc,
 			TextSize = 13,
@@ -5795,7 +6249,7 @@ function Window:Tab(input, icon)
 		})
 	end
 
-	local listTop = options.Desc and 70 or 58
+	local listTop = options.Desc and 64 or 54
 	local list = create("ScrollingFrame", {
 		Position = UDim2.fromOffset(0, listTop),
 		Size = UDim2.new(1, 0, 1, -listTop),
