@@ -9,7 +9,7 @@ local LocalPlayer = Players.LocalPlayer
 
 local NeoxHub = {}
 NeoxHub.Name = "Neox Hub"
-NeoxHub.Version = "3.2.0"
+NeoxHub.Version = "3.3.0"
 NeoxHub.Flags = {}
 NeoxHub.Windows = {}
 
@@ -2528,22 +2528,23 @@ function Tab:Dropdown(input)
 
 		if open then
 
-			task.spawn(function()
-				local first = true
-				for _, option in ipairs(optionList) do
-					local row = rows[option]
-					if row and row.Frame.Visible then
-						if not first then
-							task.wait(0.025)
-							if openGeneration ~= generation or not element.Open then
-								return
-							end
-						end
-						first = false
+			local staggered = 0
+			for _, option in ipairs(optionList) do
+				local row = rows[option]
+				if row and row.Frame.Visible then
+					local delay = math.min(staggered, 8) * 0.02
+					staggered += 1
+					if delay <= 0 then
 						fadeRow(row, true)
+					else
+						task.delay(delay, function()
+							if openGeneration == generation and element.Open then
+								fadeRow(row, true)
+							end
+						end)
 					end
 				end
-			end)
+			end
 		else
 
 			local visibleRows = {}
@@ -2553,17 +2554,9 @@ function Tab:Dropdown(input)
 					table.insert(visibleRows, row)
 				end
 			end
-			task.spawn(function()
-				for index = #visibleRows, 1, -1 do
-					fadeRow(visibleRows[index], false)
-					if index > 1 then
-						task.wait(0.015)
-						if openGeneration ~= generation or element.Open then
-							return
-						end
-					end
-				end
-			end)
+			for _, row in ipairs(visibleRows) do
+				fadeRow(row, false)
+			end
 		end
 	end
 
@@ -5471,36 +5464,12 @@ function Window:_enableDrag()
 	end)
 end
 
-local function revealElement(guiObject, delay, force)
-	if not guiObject.Visible and not force then
-		return
-	end
-	guiObject.Visible = false
-	task.delay(delay, function()
-		if not guiObject.Parent or guiObject:GetAttribute(ATTR_HIDDEN) then
-			return
-		end
-		local scale = create("UIScale", { Scale = 0.94, Parent = guiObject })
-		guiObject.Visible = true
-		tween(scale, { Scale = 1 }, 0.4, Enum.EasingStyle.Back)
-		task.delay(0.4, function()
-			scale:Destroy()
-		end)
-	end)
-end
-
 function Window:_revealCards(tab, delay)
 	if tab._revealed then
 		return
 	end
 	tab._revealed = true
-	local index = 0
-	for _, child in ipairs(tab.List:GetChildren()) do
-		if child:IsA("GuiObject") then
-			revealElement(child, (delay or 0) + index * 0.035)
-			index += 1
-		end
-	end
+	self:_fadeInPage(tab, delay or 0)
 end
 
 function Window:_playIntro(fromLoader)
@@ -5540,7 +5509,21 @@ function Window:_playIntro(fromLoader)
 	end
 
 	for index, tab in ipairs(self.Tabs) do
-		revealElement(tab._button, 0.1 + index * 0.05, true)
+		local label, icon = tab._label, tab._icon
+		if label then
+			label.TextTransparency = 1
+		end
+		if icon then
+			icon.ImageTransparency = 1
+		end
+		task.delay(0.08 + index * 0.03, function()
+			if label and label.Parent then
+				tween(label, { TextTransparency = 0 }, 0.35)
+			end
+			if icon and icon.Parent then
+				tween(icon, { ImageTransparency = 0 }, 0.35)
+			end
+		end)
 	end
 
 	self.Indicator.Visible = false
@@ -6342,6 +6325,32 @@ local function slideIn(group, offsetY)
 	group.Position = UDim2.fromOffset(0, offsetY + 14)
 	group.Visible = true
 	tween(group, { GroupTransparency = 0, Position = UDim2.fromOffset(0, offsetY) }, 0.32, Enum.EasingStyle.Quint)
+end
+
+function Window:_fadeInPage(tab, delay)
+	local page = tab and tab._page
+	if not page or self._inPage or self.CurrentTab ~= tab then
+		return
+	end
+	self._transitionGeneration = (self._transitionGeneration or 0) + 1
+	local generation = self._transitionGeneration
+	page.Position = UDim2.fromOffset(0, 0)
+	page.Visible = true
+	page.Parent = self._inLayer
+	self._inPage = page
+	self._inLayer.GroupTransparency = 1
+	self._inLayer.Visible = true
+	task.delay(delay or 0, function()
+		if self._transitionGeneration ~= generation or self._destroyed then
+			return
+		end
+		slideIn(self._inLayer)
+		task.delay(0.34, function()
+			if self._transitionGeneration == generation then
+				self:_settleIn()
+			end
+		end)
+	end)
 end
 
 local DEFAULT_STATS = { "FPS", "Ping", "Executor", "Game", "Region", "Time" }
@@ -7981,6 +7990,53 @@ function Window:KeybindList(input)
 
 	local list = { Frame = panel, Visible = true }
 	local lastSignature
+	local rows = {}
+
+	local emptyLabel = createLabel({
+		Size = UDim2.new(1, 0, 0, 18),
+		Text = activeOnly and "Nothing active" or "No keybinds",
+		TextSize = 12,
+		FontFace = Fonts.Regular,
+		TextColor3 = Theme.Muted,
+		LayoutOrder = 0,
+		Visible = false,
+		ZIndex = 51,
+		Parent = rowsHolder,
+	})
+
+	local function makeRow(entry)
+		local frame = create("Frame", {
+			Size = UDim2.new(1, 0, 0, 18),
+			BackgroundTransparency = 1,
+			ZIndex = 51,
+			Parent = rowsHolder,
+		})
+		local nameLabel = createLabel({
+			Size = UDim2.new(1, -70, 1, 0),
+			Text = entry.Name,
+			TextSize = 12,
+			FontFace = Fonts.Regular,
+			TextColor3 = Theme.Muted,
+			TextTransparency = 1,
+			ZIndex = 51,
+			Parent = frame,
+		})
+		local keyLabel = createLabel({
+			AnchorPoint = Vector2.new(1, 0),
+			Position = UDim2.new(1, 0, 0, 0),
+			Size = UDim2.new(0, 70, 1, 0),
+			Text = "",
+			TextSize = 12,
+			TextColor3 = Theme.Muted,
+			TextXAlignment = Enum.TextXAlignment.Right,
+			TextTransparency = 1,
+			ZIndex = 51,
+			Parent = frame,
+		})
+		tween(nameLabel, { TextTransparency = 0 }, 0.25)
+		tween(keyLabel, { TextTransparency = 0 }, 0.25)
+		return { Frame = frame, Name = nameLabel, Key = keyLabel }
+	end
 
 	local function refresh()
 		local entries = {}
@@ -7990,7 +8046,7 @@ function Window:KeybindList(input)
 			if key and not entry.Element._destroyed then
 				local active = entry.GetActive()
 				if not activeOnly or active then
-					table.insert(entries, { Name = entry.Name, Key = key, Active = active })
+					table.insert(entries, { Source = entry, Name = entry.Name, Key = key, Active = active })
 					table.insert(signatureParts, entry.Name .. key.Name .. tostring(active))
 				end
 			end
@@ -8001,54 +8057,34 @@ function Window:KeybindList(input)
 		end
 		lastSignature = signature
 
-		for _, child in ipairs(rowsHolder:GetChildren()) do
-			if child:IsA("GuiObject") then
-				child:Destroy()
+		local seen = {}
+		for order, entry in ipairs(entries) do
+			seen[entry.Source] = true
+			local row = rows[entry.Source]
+			if not row then
+				row = makeRow(entry)
+				rows[entry.Source] = row
+			end
+			row.Frame.LayoutOrder = order
+			row.Name.Text = entry.Name
+			row.Key.Text = "[" .. keyDisplayName(entry.Key) .. "]"
+			if row.Active ~= entry.Active then
+				row.Active = entry.Active
+				tween(row.Name, { TextColor3 = entry.Active and Theme.Text or Theme.Muted }, 0.2)
+				tween(row.Key, { TextColor3 = entry.Active and Theme.Accent or Theme.Muted }, 0.2)
 			end
 		end
-
-		if #entries == 0 then
-			createLabel({
-				Size = UDim2.new(1, 0, 0, 18),
-				Text = activeOnly and "Nothing active" or "No keybinds",
-				TextSize = 12,
-				FontFace = Fonts.Regular,
-				TextColor3 = Theme.Muted,
-				ZIndex = 51,
-				Parent = rowsHolder,
-			})
-			return
+		for source, row in pairs(rows) do
+			if not seen[source] then
+				rows[source] = nil
+				tween(row.Name, { TextTransparency = 1 }, 0.18)
+				tween(row.Key, { TextTransparency = 1 }, 0.18)
+				task.delay(0.19, function()
+					row.Frame:Destroy()
+				end)
+			end
 		end
-
-		for order, entry in ipairs(entries) do
-			local row = create("Frame", {
-				Size = UDim2.new(1, 0, 0, 18),
-				BackgroundTransparency = 1,
-				LayoutOrder = order,
-				ZIndex = 51,
-				Parent = rowsHolder,
-			})
-			createLabel({
-				Size = UDim2.new(1, -70, 1, 0),
-				Text = entry.Name,
-				TextSize = 12,
-				FontFace = Fonts.Regular,
-				TextColor3 = entry.Active and Theme.Text or Theme.Muted,
-				ZIndex = 51,
-				Parent = row,
-			})
-			createLabel({
-				AnchorPoint = Vector2.new(1, 0),
-				Position = UDim2.new(1, 0, 0, 0),
-				Size = UDim2.new(0, 70, 1, 0),
-				Text = "[" .. keyDisplayName(entry.Key) .. "]",
-				TextSize = 12,
-				TextColor3 = entry.Active and Theme.Accent or Theme.Muted,
-				TextXAlignment = Enum.TextXAlignment.Right,
-				ZIndex = 51,
-				Parent = row,
-			})
-		end
+		emptyLabel.Visible = #entries == 0
 	end
 
 	function list:SetVisible(visible)
@@ -8095,13 +8131,18 @@ local NOTIFY_POSITIONS = {
 local DEFAULT_NOTIFY_POSITION = IS_TOUCH and "Top" or "BottomRight"
 local NOTIFY_WIDTH = 300
 
+local NOTIFY_GAP = 8
+local NOTIFY_MOVE_TIME = 0.42
+
 local function applyNotifyPosition(host, positionName)
 	local layout = NOTIFY_POSITIONS[positionName] or NOTIFY_POSITIONS[DEFAULT_NOTIFY_POSITION]
 	host.Position = NOTIFY_POSITIONS[positionName] and positionName or DEFAULT_NOTIFY_POSITION
 	host.Layout = layout
 	host.Holder.AnchorPoint = layout.Anchor
 	host.Holder.Position = layout.Position
-	host.ListLayout.VerticalAlignment = layout.Bottom and Enum.VerticalAlignment.Bottom or Enum.VerticalAlignment.Top
+	if host.Reflow then
+		host.Reflow(true)
+	end
 end
 
 createNotifyHost = function(screenGui, connections, maxCount, positionName)
@@ -8112,18 +8153,34 @@ createNotifyHost = function(screenGui, connections, maxCount, positionName)
 		ZIndex = 80,
 		Parent = screenGui,
 	})
-	local listLayout = create("UIListLayout", {
-		SortOrder = Enum.SortOrder.LayoutOrder,
-		Padding = UDim.new(0, 6),
-		Parent = holder,
-	})
 	local host = {
 		Holder = holder,
-		ListLayout = listLayout,
 		Toasts = {},
+		Steps = {},
 		Order = 0,
 		MaxNotifications = math.clamp(math.floor(tonumber(maxCount) or 4), 1, 10),
 	}
+
+	function host.Reflow(instant)
+		local layout = host.Layout
+		local offset = 0
+		for index = #host.Toasts, 1, -1 do
+			local toast = host.Toasts[index]
+			local slot = toast._slot
+			if slot and slot.Parent then
+				slot.AnchorPoint = layout.Bottom and Vector2.new(0, 1) or Vector2.zero
+				local target = layout.Bottom and UDim2.new(0, 0, 1, -offset) or UDim2.new(0, 0, 0, offset)
+				if instant or not toast._placed then
+					toast._placed = true
+					slot.Position = target
+				elseif slot.Position ~= target then
+					tween(slot, { Position = target }, NOTIFY_MOVE_TIME, Enum.EasingStyle.Quint)
+				end
+				offset += (toast._height or 60) + NOTIFY_GAP
+			end
+		end
+	end
+
 	local function fit()
 		local screen = screenGui.AbsoluteSize
 		if screen.X > 0 then
@@ -8132,6 +8189,12 @@ createNotifyHost = function(screenGui, connections, maxCount, positionName)
 		end
 	end
 	table.insert(connections, screenGui:GetPropertyChangedSignal("AbsoluteSize"):Connect(fit))
+	host.Connection = RunService.RenderStepped:Connect(function(deltaTime)
+		for _, step in pairs(host.Steps) do
+			step(deltaTime)
+		end
+	end)
+	table.insert(connections, host.Connection)
 	applyNotifyPosition(host, positionName)
 	fit()
 	host.Fit = fit
@@ -8165,9 +8228,10 @@ local function showToast(host, input)
 	local slot = create("Frame", {
 		Size = UDim2.new(1, 0, 0, 0),
 		BackgroundTransparency = 1,
-		LayoutOrder = layout.Bottom and host.Order or -host.Order,
 		Parent = host.Holder,
 	})
+	toast._slot = slot
+	local enterScale = create("UIScale", { Scale = layout.Side == 0 and 0.94 or 1, Parent = slot })
 	local slider = create("Frame", {
 		Position = UDim2.fromOffset(slideOffset, slideY),
 		Size = UDim2.new(1, 0, 0, 0),
@@ -8272,6 +8336,7 @@ local function showToast(host, input)
 		Parent = titleRow,
 	})
 	addCorner(countBadge, UDim.new(1, 0))
+	local badgeScale = create("UIScale", { Parent = countBadge })
 	addPadding(countBadge, 6, 6)
 	local countLabel = createLabel({
 		Size = UDim2.new(0, 0, 1, 0),
@@ -8450,27 +8515,28 @@ local function showToast(host, input)
 			return
 		end
 		toast._dismissed = true
+		host.Steps[toast] = nil
 		local index = table.find(host.Toasts, toast)
 		if index then
 			table.remove(host.Toasts, index)
 		end
+		host.Reflow()
 		for _, connection in ipairs(dragConnections) do
 			connection:Disconnect()
 		end
-		local outX = direction or (layout.Side ~= 0 and layout.Side * (NOTIFY_WIDTH + 24) or 0)
-		tween(slider, { Position = UDim2.fromOffset(outX, slideY) }, 0.3, Enum.EasingStyle.Quint)
-		tween(card, { GroupTransparency = 1 }, 0.2)
-		tween(cardStroke, { Transparency = 1 }, 0.15)
+		slot.ZIndex = 0
+		if direction or layout.Side ~= 0 then
+			local outX = direction or layout.Side * (NOTIFY_WIDTH + 32)
+			tween(slider, { Position = UDim2.fromOffset(outX, slider.Position.Y.Offset) }, 0.34, Enum.EasingStyle.Quint)
+		else
+			tween(slider, { Position = UDim2.fromOffset(0, layout.Bottom and 16 or -16) }, 0.3, Enum.EasingStyle.Quint)
+			tween(enterScale, { Scale = 0.94 }, 0.3, Enum.EasingStyle.Quint)
+		end
+		tween(card, { GroupTransparency = 1 }, 0.22)
+		tween(cardStroke, { Transparency = 1 }, 0.18)
 		tween(shadow, { ImageTransparency = 1 }, 0.2)
-		task.delay(0.22, function()
-			if not slot.Parent then
-				return
-			end
-			slot.ClipsDescendants = true
-			tween(slot, { Size = UDim2.new(1, 0, 0, 0) }, 0.22, Enum.EasingStyle.Quint)
-			task.delay(0.24, function()
-				slot:Destroy()
-			end)
+		task.delay(0.36, function()
+			slot:Destroy()
 		end)
 		safeCall(options.OnClose)
 	end
@@ -8492,7 +8558,7 @@ local function showToast(host, input)
 	function toast:SetProgress(alpha)
 		timerTrack.Visible = true
 		persistent = true
-		timerFill.Size = UDim2.fromScale(math.clamp(tonumber(alpha) or 0, 0, 1), 1)
+		tween(timerFill, { Size = UDim2.fromScale(math.clamp(tonumber(alpha) or 0, 0, 1), 1) }, 0.25, Enum.EasingStyle.Quint)
 	end
 
 	function toast:_bump()
@@ -8500,11 +8566,14 @@ local function showToast(host, input)
 		countBadge.Visible = true
 		countLabel.Text = "×" .. count
 		remaining = duration
-		local scale = create("UIScale", { Scale = 1.04, Parent = card })
-		tween(scale, { Scale = 1 }, 0.25, Enum.EasingStyle.Back)
-		task.delay(0.26, function()
-			scale:Destroy()
-		end)
+		badgeScale.Scale = 1.35
+		tween(badgeScale, { Scale = 1 }, 0.35, Enum.EasingStyle.Back)
+		cardStroke.Color = timerFill.BackgroundColor3
+		tween(cardStroke, { Color = Theme.Stroke }, 0.6)
+		if layout.Side ~= 0 then
+			slider.Position = UDim2.fromOffset(-layout.Side * 6, 0)
+			tween(slider, { Position = UDim2.fromOffset(0, 0) }, 0.35, Enum.EasingStyle.Back)
+		end
 	end
 
 	toast.Close = toast.Dismiss
@@ -8559,43 +8628,46 @@ local function showToast(host, input)
 		end
 	end))
 
-	task.defer(function()
-		if slot.Parent then
-			tween(slot, { Size = UDim2.new(1, 0, 0, card.AbsoluteSize.Y) }, 0.3, Enum.EasingStyle.Quint)
+	local function measure()
+		if toast._dismissed or not slot.Parent then
+			return
 		end
-	end)
-	local settled = false
-	task.delay(0.32, function()
-		settled = true
-		if slot.Parent and not toast._dismissed then
-			slot.Size = UDim2.new(1, 0, 0, card.AbsoluteSize.Y)
+		local height = card.AbsoluteSize.Y
+		if height > 0 and height ~= toast._height then
+			toast._height = height
+			slot.Size = UDim2.new(1, 0, 0, height)
+			host.Reflow()
 		end
-	end)
-	card:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
-		if settled and slot.Parent and not toast._dismissed then
-			slot.Size = UDim2.new(1, 0, 0, card.AbsoluteSize.Y)
-		end
-	end)
+	end
+	card:GetPropertyChangedSignal("AbsoluteSize"):Connect(measure)
+	task.defer(measure)
 
-	tween(slider, { Position = UDim2.fromOffset(0, 0) }, 0.45, Enum.EasingStyle.Quint)
-	tween(card, { GroupTransparency = 0 }, 0.3)
+	tween(slider, { Position = UDim2.fromOffset(0, 0) }, 0.5, Enum.EasingStyle.Quint)
+	tween(enterScale, { Scale = 1 }, 0.45, Enum.EasingStyle.Quint)
+	tween(card, { GroupTransparency = 0 }, 0.28)
 	tween(shadow, { ImageTransparency = 0.6 }, 0.4)
 
-	task.spawn(function()
-		while slot.Parent and not toast._dismissed do
-			local elapsed = task.wait(0.05) or 0.05
-			if spinning then
-				iconImage.Rotation = (iconImage.Rotation + elapsed * 360) % 360
-			end
-			if not persistent and not paused and not holding then
-				remaining -= elapsed
-				timerFill.Size = UDim2.fromScale(math.clamp(remaining / duration, 0, 1), 1)
-				if remaining <= 0 then
-					toast:Dismiss()
-				end
-			end
+	local shownFill = 1
+	host.Steps[toast] = function(deltaTime)
+		if spinning then
+			iconImage.Rotation = (iconImage.Rotation + deltaTime * 300) % 360
 		end
-	end)
+		if persistent then
+			return
+		end
+		if not paused and not holding then
+			remaining -= deltaTime
+		end
+		local target = math.clamp(remaining / duration, 0, 1)
+		shownFill += (target - shownFill) * math.min(1, deltaTime * 14)
+		if math.abs(shownFill - target) < 0.002 then
+			shownFill = target
+		end
+		timerFill.Size = UDim2.fromScale(shownFill, 1)
+		if remaining <= 0 then
+			toast:Dismiss()
+		end
+	end
 
 	table.insert(host.Toasts, toast)
 	while #host.Toasts > host.MaxNotifications do
@@ -8630,8 +8702,14 @@ function NeoxHub:_notifyFallback(input)
 			Parent = getGuiParent(),
 		})
 		fallbackHost = createNotifyHost(screenGui, {}, 4, NeoxHub.NotificationPosition)
+		local host = fallbackHost
 		table.insert(NeoxHub._cleanup, function()
-			fallbackHost = nil
+			if host.Connection then
+				host.Connection:Disconnect()
+			end
+			if fallbackHost == host then
+				fallbackHost = nil
+			end
 			screenGui:Destroy()
 		end)
 	end
@@ -10099,13 +10177,60 @@ do
 		end)
 	end
 
+	local function animateVisibility(element, show)
+		local frame = element._frame
+		local automatic = typeof(frame) == "Instance" and frame.AutomaticSize
+		if typeof(frame) ~= "Instance" or not frame.Parent or automatic == Enum.AutomaticSize.Y
+			or automatic == Enum.AutomaticSize.XY or frame.Size.Y.Scale ~= 0 then
+			element:SetVisible(show)
+			return
+		end
+		element._visibilityGeneration = (element._visibilityGeneration or 0) + 1
+		local generation = element._visibilityGeneration
+		if not element._animatingVisibility then
+			element._restSize = frame.Size
+			element._restClips = frame.ClipsDescendants
+		end
+		element._animatingVisibility = true
+		local rest = element._restSize
+		local collapsed = UDim2.new(rest.X.Scale, rest.X.Offset, 0, 0)
+		frame.ClipsDescendants = true
+		local function finish()
+			if element._visibilityGeneration ~= generation or element._destroyed then
+				return
+			end
+			element._animatingVisibility = false
+			if not show then
+				element:SetVisible(false)
+			end
+			frame.Size = rest
+			frame.ClipsDescendants = element._restClips
+		end
+		if show then
+			if not frame.Visible then
+				frame.Size = collapsed
+				element:SetVisible(true)
+			end
+			tween(frame, { Size = rest }, 0.32, Enum.EasingStyle.Quint)
+			task.delay(0.33, finish)
+		else
+			tween(frame, { Size = collapsed }, 0.26, Enum.EasingStyle.Quint)
+			task.delay(0.27, finish)
+		end
+	end
+
 	function Window:_refreshDependencies()
 		for _, element in ipairs(table.clone(self._dependents)) do
 			if not element._destroyed and type(element.SetVisible) == "function" then
 				local show = evaluate(self, element._dependsOn)
 				if element._dependencyShown ~= show then
+					local first = element._dependencyShown == nil
 					element._dependencyShown = show
-					element:SetVisible(show)
+					if first or not self.Open then
+						element:SetVisible(show)
+					else
+						animateVisibility(element, show)
+					end
 				end
 			end
 		end
