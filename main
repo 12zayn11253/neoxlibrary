@@ -9,7 +9,7 @@ local LocalPlayer = Players.LocalPlayer
 
 local NeoxHub = {}
 NeoxHub.Name = "Neox Hub"
-NeoxHub.Version = "2.1.0"
+NeoxHub.Version = "2.1.1"
 NeoxHub.Flags = {}
 NeoxHub.Windows = {}
 
@@ -357,15 +357,14 @@ local Fonts = NeoxHub.Fonts
 local IS_TOUCH = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
 NeoxHub.Touch = IS_TOUCH
 
-local ROW_HEIGHT = IS_TOUCH and 46 or 40
-local ROW_HEIGHT_DESC = IS_TOUCH and 60 or 54
+local ROW_HEIGHT = IS_TOUCH and 54 or 48
+local ROW_HEIGHT_DESC = IS_TOUCH and 70 or 64
 local OPTION_HEIGHT = IS_TOUCH and 40 or 34
 local CHIP_HEIGHT = IS_TOUCH and 34 or 28
 local TOPBAR_HEIGHT = 54
 local TABSTRIP_HEIGHT = 44
 local STATUSBAR_HEIGHT = 28
-local CARD_RADIUS = UDim.new(0, 5)
-local ATTR_BASE_TRANSPARENCY = "NeoxBaseTransparency"
+local CARD_RADIUS = UDim.new(0, 6)
 
 local tweenInfoCache = {}
 
@@ -657,10 +656,9 @@ local function flashStroke(stroke)
 	if not stroke then
 		return
 	end
-	local base = stroke:GetAttribute(ATTR_BASE_TRANSPARENCY) or 0
 	tween(stroke, { Color = Theme.Accent, Transparency = 0.2 }, 0.08)
 	task.delay(0.12, function()
-		tween(stroke, { Color = Theme.Stroke, Transparency = base }, 0.35)
+		tween(stroke, { Color = Theme.Stroke, Transparency = 0 }, 0.35)
 	end)
 end
 
@@ -817,14 +815,12 @@ local function registerElement(tab, options, element, frame, typeName, callbackK
 end
 
 local function createCard(tab, className, height, plain)
-	local parent = tab.List
 	local properties = {
 		Size = UDim2.new(1, 0, 0, height),
-		BackgroundColor3 = Theme.Surface3,
-		BackgroundTransparency = 1,
+		BackgroundColor3 = Theme.Surface2,
 		BorderSizePixel = 0,
 		LayoutOrder = tab:_nextOrder(),
-		Parent = parent,
+		Parent = tab.List,
 	}
 	if className == "TextButton" then
 		properties.AutoButtonColor = false
@@ -833,11 +829,10 @@ local function createCard(tab, className, height, plain)
 	local card = create(className, properties)
 	card:SetAttribute(ATTR_NO_DRAG, true)
 	addCorner(card, CARD_RADIUS)
-	local stroke = addStroke(card, Theme.Stroke, 1)
-	stroke:SetAttribute(ATTR_BASE_TRANSPARENCY, 1)
+	local stroke = addStroke(card, Theme.Stroke)
 
 	if not plain then
-		local stripeHeight = math.max(height - 20, 10)
+		local stripeHeight = math.max(height - 24, 10)
 		local stripe = create("Frame", {
 			AnchorPoint = Vector2.new(0, 0.5),
 			Position = UDim2.new(0, 0, 0, height / 2),
@@ -850,11 +845,9 @@ local function createCard(tab, className, height, plain)
 		})
 		addCorner(stripe, UDim.new(1, 0))
 		card.MouseEnter:Connect(function()
-			tween(card, { BackgroundTransparency = 0.6 }, 0.15)
 			tween(stripe, { BackgroundTransparency = 0, Size = UDim2.fromOffset(2, stripeHeight) }, 0.2, Enum.EasingStyle.Quint)
 		end)
 		card.MouseLeave:Connect(function()
-			tween(card, { BackgroundTransparency = 1 }, 0.25)
 			tween(stripe, { BackgroundTransparency = 1, Size = UDim2.fromOffset(2, stripeHeight * 0.4) }, 0.25, Enum.EasingStyle.Quint)
 		end)
 	end
@@ -1046,145 +1039,14 @@ decorateElement = function(element, frame, options, window)
 end
 
 local Tab = {}
-Tab.__index = function(self, key)
-	if key == "List" and rawget(self, "_leftColumn") then
-		local _, inner = Tab._newBox(self)
-		return inner
-	end
-	return Tab[key]
-end
+Tab.__index = Tab
 
 function Tab:_nextOrder()
 	self._order += 1
 	return self._order
 end
 
-function Tab:_fullWidth()
-	local area = rawget(self, "_fullArea")
-	if area then
-		area.Visible = true
-	end
-	return area
-end
-
-function Tab:_newBox(title, side, icon)
-	self._boxCount += 1
-	local index = self._boxCount
-	if side ~= "Left" and side ~= "Right" then
-		side = index % 2 == 1 and "Left" or "Right"
-	end
-	if title == "" then
-		title = nil
-	end
-
-	local box = create("Frame", {
-		Name = "Box",
-		Size = UDim2.new(1, 0, 0, 0),
-		AutomaticSize = Enum.AutomaticSize.Y,
-		BackgroundColor3 = Theme.Surface2,
-		BorderSizePixel = 0,
-		LayoutOrder = index,
-		Parent = side == "Right" and self._rightColumn or self._leftColumn,
-	})
-	box:SetAttribute("NeoxSide", side)
-	box:SetAttribute(ATTR_NO_DRAG, true)
-	addCorner(box, UDim.new(0, 8))
-	addStroke(box)
-	addPadding(box, 0, 0, 0, 6)
-	create("UIListLayout", {
-		SortOrder = Enum.SortOrder.LayoutOrder,
-		Parent = box,
-	})
-
-	local titleLabel
-	if title then
-		local header = create("Frame", {
-			Size = UDim2.new(1, 0, 0, 38),
-			BackgroundTransparency = 1,
-			LayoutOrder = 0,
-			Parent = box,
-		})
-		local marker = create("Frame", {
-			AnchorPoint = Vector2.new(0, 0.5),
-			Position = UDim2.new(0, 12, 0.5, 0),
-			Size = UDim2.fromOffset(3, 14),
-			BackgroundColor3 = Theme.Accent,
-			BorderSizePixel = 0,
-			Parent = header,
-		})
-		addCorner(marker, UDim.new(1, 0))
-		local textLeft = 23
-		if icon then
-			createIcon(header, icon, Theme.Accent, UDim2.new(0, 23, 0.5, 0))
-			textLeft = 45
-		end
-		titleLabel = createLabel({
-			Name = "Title",
-			Position = UDim2.fromOffset(textLeft, 0),
-			Size = UDim2.new(1, -(textLeft + 12), 1, 0),
-			Text = tostring(title),
-			TextSize = 13,
-			FontFace = Fonts.Bold,
-			Parent = header,
-		})
-		create("Frame", {
-			AnchorPoint = Vector2.new(0, 1),
-			Position = UDim2.new(0, 12, 1, 0),
-			Size = UDim2.new(1, -24, 0, 1),
-			BackgroundColor3 = Theme.Stroke,
-			BorderSizePixel = 0,
-			Parent = header,
-		})
-	end
-
-	local inner = create("Frame", {
-		Size = UDim2.new(1, 0, 0, 0),
-		AutomaticSize = Enum.AutomaticSize.Y,
-		BackgroundTransparency = 1,
-		LayoutOrder = 1,
-		Parent = box,
-	})
-	addPadding(inner, 6, 6, 6, 0)
-	create("UIListLayout", {
-		SortOrder = Enum.SortOrder.LayoutOrder,
-		Padding = UDim.new(0, 2),
-		Parent = inner,
-	})
-
-	table.insert(self._boxes, box)
-	rawset(self, "List", inner)
-	self:_layoutColumns()
-	return box, inner, titleLabel
-end
-
-function Tab:_layoutColumns()
-	local left, right = rawget(self, "_leftColumn"), rawget(self, "_rightColumn")
-	if not left then
-		return
-	end
-	local window = self.Window
-	local width = self._scroll.AbsoluteSize.X / window.Scale.Scale
-	local hasRight = false
-	for _, box in ipairs(self._boxes) do
-		if box.Parent and box:GetAttribute("NeoxSide") == "Right" then
-			hasRight = true
-			break
-		end
-	end
-	local single = window._columns == 1 or not hasRight or (width > 0 and width < 500)
-	for _, box in ipairs(self._boxes) do
-		if box.Parent then
-			local target = (single or box:GetAttribute("NeoxSide") ~= "Right") and left or right
-			if box.Parent ~= target then
-				box.Parent = target
-			end
-		end
-	end
-	right.Visible = not single
-	left.Size = single and UDim2.new(1, 0, 0, 0) or UDim2.new(0.5, -6, 0, 0)
-end
-
-local function createInlineSection(self, input)
+function Tab:Section(input)
 	local text = input
 	if type(input) == "table" then
 		text = input.Name or input.Title or ""
@@ -1240,29 +1102,6 @@ local function createInlineSection(self, input)
 	section.SetTitle = section.Set
 
 	return registerElement(self, {}, section, holder, "Section")
-end
-
-function Tab:Section(input)
-	if not rawget(self, "_leftColumn") then
-		return createInlineSection(self, input)
-	end
-	local text, side, icon = input, nil, nil
-	if type(input) == "table" then
-		text = input.Name or input.Title
-		side = input.Side
-		icon = input.Icon
-	end
-	local box, _, titleLabel = self:_newBox(text and tostring(text) or nil, side, icon)
-
-	local section = {}
-	function section:Set(newText)
-		if titleLabel then
-			titleLabel.Text = tostring(newText)
-		end
-	end
-	section.SetTitle = section.Set
-
-	return registerElement(self, {}, section, box, "Section")
 end
 
 function Tab:Divider()
@@ -1413,7 +1252,7 @@ function Tab:Button(input)
 	local styleColorKey = BUTTON_STYLES[options.Style]
 	local styled = styleColorKey ~= nil
 	local height = options.Desc and ROW_HEIGHT_DESC or ROW_HEIGHT
-	local card, stroke = createCard(self, "TextButton", height, styled)
+	local card, stroke = createCard(self, "TextButton", height)
 	card.ClipsDescendants = true
 
 	if styled then
@@ -1694,7 +1533,7 @@ function Tab:Slider(input)
 	local stepper = createStepper(minimum, maximum, step)
 	local window = self.Window
 
-	local height = ROW_HEIGHT_DESC + 4 + (options.Desc and 18 or 0)
+	local height = ROW_HEIGHT_DESC + (options.Desc and 18 or 0)
 	local card, stroke = createCard(self, "Frame", height)
 	bindHoverStroke(card, stroke)
 
@@ -1849,8 +1688,8 @@ function Tab:Slider(input)
 	addStroke(knob, Theme.Accent, 0, 2)
 
 	local hitArea = create("TextButton", {
-		Position = UDim2.new(0, 8, 0, height - (IS_TOUCH and 34 or 26)),
-		Size = UDim2.new(1, -16, 0, IS_TOUCH and 36 or 22),
+		Position = UDim2.new(0, 8, 0, height - (IS_TOUCH and 37 or 31)),
+		Size = UDim2.new(1, -16, 0, IS_TOUCH and 40 or 28),
 		BackgroundTransparency = 1,
 		Text = "",
 		AutoButtonColor = false,
@@ -2025,7 +1864,7 @@ function Tab:Slider(input)
 	return registerElement(self, options, element, card, "Slider")
 end
 
-local DROPDOWN_CHIP_MAX_TEXT = 110
+local DROPDOWN_CHIP_MAX_TEXT = 146
 
 function Tab:Dropdown(input)
 	local options = normalizeOptions(input, {
@@ -2120,7 +1959,7 @@ function Tab:Dropdown(input)
 	end
 
 	local function fitChip(instant)
-		local width = math.clamp(selectionLabel.TextBounds.X + 10 + 34, 60, 150)
+		local width = math.clamp(selectionLabel.TextBounds.X + 10 + 34, 60, 190)
 		setTitleReserve(titleLabel, descLabel, width + 20)
 		if instant then
 			chip.Size = UDim2.fromOffset(width, CHIP_HEIGHT)
@@ -3431,11 +3270,8 @@ function Tab:Group(input)
 	local headerHeight = options.Desc and ROW_HEIGHT_DESC or ROW_HEIGHT
 	local open = not (options.Collapsed == true or options.Opened == false)
 
-	local card, stroke = createCard(self, "Frame", headerHeight, true)
+	local card, stroke = createCard(self, "Frame", headerHeight)
 	card.BackgroundColor3 = Theme.Surface
-	card.BackgroundTransparency = 0
-	stroke.Transparency = 0
-	stroke:SetAttribute(ATTR_BASE_TRANSPARENCY, 0)
 	card.ClipsDescendants = true
 
 	local header = create("TextButton", {
@@ -4808,20 +4644,12 @@ function Window:_revealCards(tab, delay)
 		return
 	end
 	tab._revealed = true
-	local targets = {}
-	local fullArea = rawget(tab, "_fullArea")
-	if fullArea then
-		for _, child in ipairs(fullArea:GetChildren()) do
-			if child:IsA("GuiObject") then
-				table.insert(targets, child)
-			end
+	local index = 0
+	for _, child in ipairs(tab.List:GetChildren()) do
+		if child:IsA("GuiObject") then
+			revealElement(child, (delay or 0) + index * 0.035)
+			index += 1
 		end
-	end
-	for _, box in ipairs(rawget(tab, "_boxes") or {}) do
-		table.insert(targets, box)
-	end
-	for index, target in ipairs(targets) do
-		revealElement(target, (delay or 0) + (index - 1) * 0.05)
 	end
 end
 
@@ -4876,15 +4704,21 @@ end
 function Window:_showLoader(options)
 	local duration = options.LoadingDuration or 1.6
 
-	local holder = create("Frame", {
+	local card = create("CanvasGroup", {
 		AnchorPoint = Vector2.new(0.5, 0.5),
-		Position = UDim2.fromScale(0.5, 0.5),
-		Size = UDim2.fromOffset(320, 96),
-		BackgroundTransparency = 1,
+		Position = UDim2.new(0.5, 0, 0.5, 16),
+		Size = UDim2.fromOffset(300, 132),
+		BackgroundColor3 = Theme.Background,
+		BorderSizePixel = 0,
+		GroupTransparency = 1,
 		ZIndex = 10,
 		Parent = self.Gui,
 	})
-	local holderScale = create("UIScale", { Scale = 0.94, Parent = holder })
+	local corner = addCorner(card, UDim.new(0, 12))
+	local cardStroke = addStroke(card, Theme.Stroke, 1)
+	addAccentLine(card)
+
+	local cardScale = create("UIScale", { Scale = 0.92, Parent = card })
 
 	local shadow = create("ImageLabel", {
 		Position = UDim2.fromOffset(-25, -25),
@@ -4895,83 +4729,56 @@ function Window:_showLoader(options)
 		ImageTransparency = 1,
 		ScaleType = Enum.ScaleType.Slice,
 		SliceCenter = Rect.new(49, 49, 450, 450),
-		ZIndex = 10,
-		Parent = holder,
-	})
-
-	local card = create("CanvasGroup", {
-		Size = UDim2.fromScale(1, 1),
-		BackgroundColor3 = Theme.Background,
-		BorderSizePixel = 0,
-		GroupTransparency = 1,
-		ZIndex = 11,
-		Parent = holder,
-	})
-	addCorner(card, UDim.new(0, 10))
-	local cardStroke = addStroke(card, Theme.Stroke)
-	addAccentLine(card)
-
-	local logoTile = create("Frame", {
-		AnchorPoint = Vector2.new(0, 0.5),
-		Position = UDim2.new(0, 18, 0.5, -4),
-		Size = UDim2.fromOffset(44, 44),
-		BackgroundColor3 = Theme.Surface2,
-		BorderSizePixel = 0,
+		ZIndex = 0,
 		Parent = card,
 	})
-	addCorner(logoTile, UDim.new(0, 10))
-	addStroke(logoTile)
+
+	local logoHolder = create("Frame", {
+		Position = UDim2.fromOffset(24, 26),
+		Size = UDim2.fromOffset(40, 40),
+		BackgroundTransparency = 1,
+		Parent = card,
+	})
 	local logo = create("ImageLabel", {
 		AnchorPoint = Vector2.new(0.5, 0.5),
 		Position = UDim2.fromScale(0.5, 0.5),
-		Size = UDim2.fromOffset(22, 22),
+		Size = UDim2.fromScale(0.5, 0.5),
+		Rotation = -14,
 		BackgroundTransparency = 1,
 		ImageColor3 = Theme.Accent,
+		ImageTransparency = 1,
 		ScaleType = Enum.ScaleType.Fit,
-		Parent = logoTile,
+		Parent = logoHolder,
 	})
 	setIcon(logo, options.Icon or Assets.Logo)
-	local logoScale = create("UIScale", { Parent = logo })
-	local pulse = TweenService:Create(logoScale,
-		TweenInfo.new(0.7, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true),
-		{ Scale = 0.82 })
-	pulse:Play()
+	task.delay(0.15, function()
+		tween(logo, { Size = UDim2.fromScale(0.85, 0.85), Rotation = 0 }, 0.6, Enum.EasingStyle.Back)
+		tween(logo, { ImageTransparency = 0 }, 0.4)
+	end)
 
 	createLabel({
-		Position = UDim2.fromOffset(76, 22),
-		Size = UDim2.new(1, -150, 0, 20),
+		Position = UDim2.fromOffset(78, 30),
+		Size = UDim2.new(1, -100, 0, 22),
 		Text = options.LoadingTitle or options.Title or LIB_NAME,
-		TextSize = 16,
-		FontFace = Fonts.Bold,
+		TextSize = 20,
 		Parent = card,
 	})
 	local statusLabel = createLabel({
-		Position = UDim2.fromOffset(76, 44),
-		Size = UDim2.new(1, -150, 0, 14),
+		Position = UDim2.fromOffset(78, 52),
+		Size = UDim2.new(1, -100, 0, 16),
 		Text = options.LoadingText or options.Subtitle or "Loading",
-		TextSize = 12,
+		TextSize = 13,
 		FontFace = Fonts.Regular,
 		TextColor3 = Theme.Muted,
 		Parent = card,
 	})
-	local percentLabel = createLabel({
-		AnchorPoint = Vector2.new(1, 0),
-		Position = UDim2.new(1, -18, 0, 22),
-		Size = UDim2.fromOffset(60, 20),
-		Text = "0%",
-		TextSize = 15,
-		FontFace = Fonts.Bold,
-		TextColor3 = Theme.Accent,
-		TextXAlignment = Enum.TextXAlignment.Right,
-		Parent = card,
-	})
 
 	local barTrack = create("Frame", {
-		AnchorPoint = Vector2.new(0, 1),
-		Position = UDim2.new(0, 18, 1, -14),
-		Size = UDim2.new(1, -36, 0, 3),
+		Position = UDim2.new(0, 24, 1, -30),
+		Size = UDim2.new(1, -48, 0, 4),
 		BackgroundColor3 = Theme.Surface3,
 		BorderSizePixel = 0,
+		ClipsDescendants = true,
 		Parent = card,
 	})
 	addCorner(barTrack, UDim.new(1, 0))
@@ -4982,62 +4789,88 @@ function Window:_showLoader(options)
 		Parent = barTrack,
 	})
 	addCorner(barFill, UDim.new(1, 0))
+	local shimmer = create("Frame", {
+		Position = UDim2.fromScale(-0.4, 0),
+		Size = UDim2.fromScale(0.4, 1),
+		BackgroundColor3 = Color3.new(1, 1, 1),
+		BackgroundTransparency = 0.6,
+		BorderSizePixel = 0,
+		ZIndex = 2,
+		Parent = barTrack,
+	})
+	create("UIGradient", {
+		Transparency = NumberSequence.new({
+			NumberSequenceKeypoint.new(0, 1),
+			NumberSequenceKeypoint.new(0.5, 0),
+			NumberSequenceKeypoint.new(1, 1),
+		}),
+		Parent = shimmer,
+	})
 
-	tween(card, { GroupTransparency = 0 }, 0.35)
-	tween(holderScale, { Scale = 1 }, 0.45, Enum.EasingStyle.Quint)
-	tween(shadow, { ImageTransparency = 0.55 }, 0.4)
+	tween(card, { GroupTransparency = 0, Position = UDim2.fromScale(0.5, 0.5) }, 0.4, Enum.EasingStyle.Quint)
+	tween(cardScale, { Scale = 1 }, 0.5, Enum.EasingStyle.Back)
+	tween(shadow, { ImageTransparency = 0.6 }, 0.4)
+
+	local shimmerTween = TweenService:Create(shimmer,
+		TweenInfo.new(1.1, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1),
+		{ Position = UDim2.fromScale(1, 0) })
+	shimmerTween:Play()
+
+	tween(barFill, { Size = UDim2.fromScale(0.85, 1) }, duration * 0.8, Enum.EasingStyle.Quart)
 	task.spawn(getIconPack)
-
-	local elapsed = 0
-	local function setProgress(alpha)
-		alpha = math.clamp(alpha, 0, 1)
-		barFill.Size = UDim2.fromScale(alpha, 1)
-		percentLabel.Text = math.floor(alpha * 100 + 0.5) .. "%"
-	end
-	local function progressStep(deltaTime)
-		elapsed += deltaTime
-		local alpha = math.min(elapsed / duration, 1)
-		setProgress(1 - (1 - alpha) ^ 3)
-	end
-	table.insert(self._frameSteps, progressStep)
 
 	local steps = options.LoadingSteps or { "Preparing interface", "Loading icons", "Almost there" }
 	for index, text in ipairs(steps) do
 		task.delay(duration * (index - 1) / #steps, function()
-			if holder.Parent then
+			if card.Parent then
 				statusLabel.Text = text
 			end
 		end)
 	end
 
 	task.delay(duration, function()
-		local stepIndex = table.find(self._frameSteps, progressStep)
-		if stepIndex then
-			table.remove(self._frameSteps, stepIndex)
-		end
-		if self._destroyed or not holder.Parent then
-			pulse:Cancel()
+		if self._destroyed or not card.Parent then
+			shimmerTween:Cancel()
 			return
 		end
-		setProgress(1)
-		statusLabel.Text = "Ready"
+		tween(barFill, { Size = UDim2.fromScale(1, 1) }, 0.25, Enum.EasingStyle.Quint)
 
-		task.delay(0.2, function()
-			pulse:Cancel()
-			if self._destroyed or not holder.Parent then
+		task.delay(0.25, function()
+			shimmerTween:Cancel()
+			if self._destroyed or not card.Parent then
 				return
 			end
-			tween(card, { GroupTransparency = 1 }, 0.22)
-			tween(cardStroke, { Transparency = 1 }, 0.2)
-			tween(shadow, { ImageTransparency = 1 }, 0.2)
-			tween(holderScale, { Scale = 0.92 }, 0.25, Enum.EasingStyle.Quint)
-			task.delay(0.12, function()
-				if not self._destroyed then
-					self:_playIntro(false)
+
+			for _, child in ipairs(card:GetChildren()) do
+				if child:IsA("TextLabel") then
+					tween(child, { TextTransparency = 1 }, 0.15)
 				end
+			end
+			tween(logo, { ImageTransparency = 1 }, 0.15)
+			tween(barTrack, { BackgroundTransparency = 1 }, 0.15)
+			tween(barFill, { BackgroundTransparency = 1 }, 0.15)
+			tween(shimmer, { BackgroundTransparency = 1 }, 0.1)
+
+			local fitScale = self._fitScale or 1
+			local windowSize = self.Root.Size
+			tween(card, {
+				Size = UDim2.fromOffset(windowSize.X.Offset * fitScale, windowSize.Y.Offset * fitScale),
+				Position = UDim2.fromScale(0.5, 0.5),
+			}, 0.5, Enum.EasingStyle.Quint)
+			tween(corner, { CornerRadius = UDim.new(0, 10) }, 0.5, Enum.EasingStyle.Quint)
+			tween(cardScale, { Scale = 1 }, 0.5, Enum.EasingStyle.Quint)
+
+			task.delay(0.28, function()
+				if self._destroyed then
+					return
+				end
+				self:_playIntro(true)
+				tween(card, { GroupTransparency = 1 }, 0.25)
+				tween(cardStroke, { Transparency = 1 }, 0.2)
+				tween(shadow, { ImageTransparency = 1 }, 0.2)
 			end)
-			task.delay(0.3, function()
-				holder:Destroy()
+			task.delay(0.6, function()
+				card:Destroy()
 			end)
 		end)
 	end)
@@ -5456,51 +5289,31 @@ end
 
 local function createStatTile(parent, order, icon, title)
 	local tile = create("Frame", {
-		Size = UDim2.new(1 / 3, -6, 0, 66),
+		Size = UDim2.new(0.5, -4, 0, 62),
 		BackgroundColor3 = Theme.Surface2,
 		BorderSizePixel = 0,
 		LayoutOrder = order,
 		Parent = parent,
 	})
-	addCorner(tile, UDim.new(0, 8))
+	addCorner(tile)
 	addStroke(tile)
 	tile:SetAttribute(ATTR_NO_DRAG, true)
 	if icon then
-		local iconTile = create("Frame", {
-			AnchorPoint = Vector2.new(1, 0),
-			Position = UDim2.new(1, -10, 0, 10),
-			Size = UDim2.fromOffset(26, 26),
-			BackgroundColor3 = Theme.Surface,
-			BorderSizePixel = 0,
-			Parent = tile,
-		})
-		addCorner(iconTile, UDim.new(0, 7))
-		local iconImage = create("ImageLabel", {
-			AnchorPoint = Vector2.new(0.5, 0.5),
-			Position = UDim2.fromScale(0.5, 0.5),
-			Size = UDim2.fromOffset(14, 14),
-			BackgroundTransparency = 1,
-			ImageColor3 = Theme.Accent,
-			ScaleType = Enum.ScaleType.Fit,
-			Parent = iconTile,
-		})
-		setIcon(iconImage, icon)
+		createIcon(tile, icon, Theme.Muted, UDim2.new(0, 14, 0, 21))
 	end
 	createLabel({
-		Position = UDim2.fromOffset(14, 40),
-		Size = UDim2.new(1, -24, 0, 14),
+		Position = UDim2.fromOffset(icon and 36 or 14, 12),
+		Size = UDim2.new(1, -(icon and 50 or 28), 0, 16),
 		Text = title,
-		TextSize = 11,
-		FontFace = Fonts.Regular,
+		TextSize = 12,
 		TextColor3 = Theme.Muted,
 		Parent = tile,
 	})
 	return createLabel({
-		Position = UDim2.fromOffset(14, 13),
-		Size = UDim2.new(1, -(icon and 50 or 24), 0, 20),
+		Position = UDim2.fromOffset(14, 34),
+		Size = UDim2.new(1, -28, 0, 18),
 		Text = "…",
-		TextSize = 16,
-		FontFace = Fonts.Bold,
+		TextSize = 15,
 		Parent = tile,
 	})
 end
@@ -5561,7 +5374,7 @@ function Window:_buildHome(homeOptions)
 		Desc = homeOptions.Desc,
 		Icon = homeOptions.Icon or "house",
 	})
-	local list = homeTab:_fullWidth()
+	local list = homeTab.List
 	local pageDefs = homeOptions.Pages or homeOptions.Tabs
 	local pages = {}
 
@@ -5687,7 +5500,7 @@ function Window:_buildHome(homeOptions)
 		Parent = detailsPage,
 	})
 	create("UIGridLayout", {
-		CellSize = UDim2.new(1 / 3, -6, 0, 66),
+		CellSize = UDim2.new(0.5, -4, 0, 62),
 		CellPadding = UDim2.fromOffset(8, 8),
 		SortOrder = Enum.SortOrder.LayoutOrder,
 		Parent = statGrid,
@@ -5744,7 +5557,7 @@ function Window:_buildHome(homeOptions)
 	end)
 
 	task.spawn(function()
-		while not self._destroyed and homeTab._page.Parent do
+		while not self._destroyed and homeTab.List.Parent and homeTab._page.Parent do
 
 			if not self.Open or self.CurrentTab ~= homeTab then
 				frames = 0
@@ -6013,6 +5826,7 @@ function Window:_buildHome(homeOptions)
 		showPage(1)
 	end
 
+	homeTab._order = 10
 	self.Home = homeTab
 	return homeTab
 end
@@ -6106,7 +5920,7 @@ function Window:Tab(input, icon)
 	end
 
 	local listTop = options.Desc and 32 or 4
-	local scroll = create("ScrollingFrame", {
+	local list = create("ScrollingFrame", {
 		Position = UDim2.fromOffset(0, listTop),
 		Size = UDim2.new(1, 0, 1, -listTop),
 		BackgroundTransparency = 1,
@@ -6118,83 +5932,31 @@ function Window:Tab(input, icon)
 		CanvasSize = UDim2.new(),
 		Parent = page,
 	})
-	addPadding(scroll, 14, 14, 10, 16)
+	addPadding(list, 18, 18, 10, 18)
 	if IS_TOUCH then
-		scroll:SetAttribute(ATTR_NO_DRAG, true)
+		list:SetAttribute(ATTR_NO_DRAG, true)
 	end
 	create("UIListLayout", {
 		SortOrder = Enum.SortOrder.LayoutOrder,
-		Padding = UDim.new(0, 12),
-		Parent = scroll,
+		Padding = UDim.new(0, 6),
+		Parent = list,
 	})
-
-	local fullArea = create("Frame", {
-		Name = "FullWidth",
-		Size = UDim2.new(1, 0, 0, 0),
-		AutomaticSize = Enum.AutomaticSize.Y,
-		BackgroundTransparency = 1,
-		Visible = false,
-		LayoutOrder = 1,
-		Parent = scroll,
-	})
-	create("UIListLayout", {
-		SortOrder = Enum.SortOrder.LayoutOrder,
-		Padding = UDim.new(0, 8),
-		Parent = fullArea,
-	})
-
-	local columns = create("Frame", {
-		Name = "Columns",
-		Size = UDim2.new(1, 0, 0, 0),
-		AutomaticSize = Enum.AutomaticSize.Y,
-		BackgroundTransparency = 1,
-		LayoutOrder = 2,
-		Parent = scroll,
-	})
-	create("UIListLayout", {
-		FillDirection = Enum.FillDirection.Horizontal,
-		VerticalAlignment = Enum.VerticalAlignment.Top,
-		SortOrder = Enum.SortOrder.LayoutOrder,
-		Padding = UDim.new(0, 12),
-		Parent = columns,
-	})
-
-	local function createColumn(order)
-		local column = create("Frame", {
-			Size = UDim2.new(0.5, -6, 0, 0),
-			AutomaticSize = Enum.AutomaticSize.Y,
-			BackgroundTransparency = 1,
-			LayoutOrder = order,
-			Parent = columns,
-		})
-		create("UIListLayout", {
-			SortOrder = Enum.SortOrder.LayoutOrder,
-			Padding = UDim.new(0, 12),
-			Parent = column,
-		})
-		return column
-	end
-
-	tab._scroll = scroll
-	tab._fullArea = fullArea
-	tab._boxes = {}
-	tab._boxCount = 0
-	tab._rightColumn = createColumn(2)
-	tab._leftColumn = createColumn(1)
-
-	scroll:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
-		tab:_layoutColumns()
-	end)
+	tab.List = list
 
 	local emptyState = createEmptyState(page, options.Icon or "layout-grid", options.EmptyText or "Nothing here yet")
-	local function refreshEmpty()
-		local count = #fullArea:GetChildren() + #tab._leftColumn:GetChildren() + #tab._rightColumn:GetChildren()
-		emptyState.Visible = count <= 3
-	end
-	for _, container in ipairs({ fullArea, tab._leftColumn, tab._rightColumn }) do
-		container.ChildAdded:Connect(refreshEmpty)
-		container.ChildRemoved:Connect(refreshEmpty)
-	end
+	local childCount = 0
+	list.ChildAdded:Connect(function(child)
+		if child:IsA("GuiObject") then
+			childCount += 1
+			emptyState.Visible = false
+		end
+	end)
+	list.ChildRemoved:Connect(function(child)
+		if child:IsA("GuiObject") then
+			childCount = math.max(childCount - 1, 0)
+			emptyState.Visible = childCount <= 0
+		end
+	end)
 	emptyState.Visible = true
 
 	button.MouseEnter:Connect(function()
@@ -6874,7 +6636,7 @@ function Window:_jumpTo(match)
 		if self._destroyed or not frame.Parent then
 			return
 		end
-		local list = match.Tab._scroll
+		local list = match.Tab.List
 		local offset = (frame.AbsolutePosition.Y - list.AbsolutePosition.Y) / self.Scale.Scale
 		local targetY = math.max(list.CanvasPosition.Y + offset - 12, 0)
 		tween(list, { CanvasPosition = Vector2.new(0, targetY) }, 0.35, Enum.EasingStyle.Quint)
