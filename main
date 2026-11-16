@@ -9,7 +9,7 @@ local LocalPlayer = Players.LocalPlayer
 
 local NeoxHub = {}
 NeoxHub.Name = "Neox Hub"
-NeoxHub.Version = "3.2.2"
+NeoxHub.Version = "3.2.3"
 NeoxHub.Flags = {}
 NeoxHub.Windows = {}
 
@@ -27,7 +27,7 @@ end
 
 local KNOWN_OPTIONS = {}
 local KNOWN_OPTIONS_LOWER = {}
-for name in string.gmatch("AU AbsoluteContentSize AbsoluteSize Accent AccentDark Active ActiveOnly AliveCheck Always Anonymous Asc Australia AutoLoad AutoSave BR Background BackgroundColor3 BackgroundTransparency Backspace BasePart Began Body Bold BottomRight Brazil Button ButtonRow Buttons CA CFrame Callback Canada Cancel CancelText CanvasGroup Caption Changed Changes ClearOnFocus Close CloseOnBackdrop Code Collapsed Color Color3 ColorPicker Configs ConfigurationSaving Confirm ConfirmText ConfirmTimeout Content ContentProvider Copied Copy Copyable CoreGui Create CurrentKeybind CurrentOption CurrentValue Custom CustomFont DE Danger Date DateFormat Decal Default DefaultState Delay Delete Depends DependsOn Desc Description Details Discord DiscordButton DiscordLink Divider Dropdown Duration Element EmptyText Enabled Ended Enter Entries Enum EnumItem Error ErrorNotifications Esc Example ExcludeSelf Executor Expired Expiry FPS FR FileName Flag Folder FolderName Format Frame France Free GET Game Germany GetActive GetKey Glow Greeting Group GuiButton GuiName GuiObject GuiService HWID HasKey Header HeaderItems Height Hold Home HttpService Humanoid HumanoidRootPart IN Icon Image ImageButton ImageColor3 ImageLabel ImageRectPosition ImageRectSize ImageTransparency Increment India Info Input Instance JP Japan KeepOnScreen Key KeyInfo KeyPanel Keybind Keybinds LAlt LCtrl LShift Label Language Lifetime Lighting Load Loading LoadingDuration LoadingSteps LoadingSubtitle LoadingText LoadingTitle Localization Lock Locked LockedReason Loop LoopDelay Lowest Main MarketplaceService Max MaxDistance MaxHeight MaxLength MaxNotifications MaxSize Medium Membership Merge Message Method Min MinSize MobileButton MobileIcon Mode Model Mono Monospace Monthly Multi MultiLine Multiline MultipleOptions Muted NL Name NeoxHidden NeoxHub NeoxHubBlur NeoxHubFonts NeoxLoc NeoxLocPlaceholderText NeoxLocText NeoxNoTheme Netherlands NoDrag None Not Notification NotificationPosition Notifications Numeric OK OnCancel OnChanged OnClose OnRelease Open OpenButton Opened Options Page Pages Paragraph Parent Ping Placeholder PlaceholderColor3 PlaceholderText Player PlayerGui Players Popup Position Prefix Premium PremiumButton PremiumLink PremiumText Primary Profile Progress Qd Qn RAlt RCtrl RShift Radius Range Region RegionCity Regular Reminders Render Reset ResetOnUnload Resizable RunService SG Save Scale ScaleType ScreenGui ScrollBarImageColor3 ScrollingFrame Search SearchAfter SearchPlaceholder SearchResults Secondary Section SectionName Sections SemiBold Session ShowFPS ShowPing ShowPromo ShowTime Sidebar Singapore Size Slider Sound Space Standard Stat Stats Step Stepper Stroke StrokeHover Studio Style Subtitle Success Suffix Surface Surface2 Surface3 Tab TabIcon TabSection Tabs Tag TeamCheck TeleportService Tertiary Text TextArea TextBounds TextBox TextButton TextColor3 TextLabel TextScale TextSize TextTransparency Texture Theme ThemeName Time TimeFormat Title Toggle ToggleUIKeybind Tooltip Top TotalTime TouchOnly TransitionIn TransitionOut Translations Transparency TweenService Type TypeName TypeNames UDim2 UICorner UIGradient UIGridLayout UIListLayout UIPadding UIScale UISizeConstraint UIStroke Unavailable Unknown Update UpdateRate Uptime Usage UseDisplayName User UserInputService UserInputType Value Values Variant Vector2 Vector3 Version VirtualUser Visible Volume Warning Weekly Weights Welcome Window", "%S+") do
+for name in string.gmatch("AU AbsoluteContentSize AbsoluteSize Accent AccentDark Active ActiveOnly AliveCheck Always Anonymous Asc Australia AutoLoad AutoSave BR Background BackgroundColor3 BackgroundTransparency Backspace BasePart Began Body Bold BottomRight Brazil Button ButtonRow Buttons CA CFrame Callback Canada Cancel CancelText CanvasGroup Caption Changed Changes ClearOnFocus Close CloseOnBackdrop Code Collapsed Color Color3 ColorPicker Configs ConfigurationSaving Confirm ConfirmText ConfirmTimeout Content ContentProvider Copied Copy Copyable CoreGui Create CurrentKeybind CurrentOption CurrentValue Custom CustomFont DE Danger Date DateFormat Decal Default DefaultState Delay Delete Depends DependsOn Desc Description Details Discord DiscordButton DiscordLink Divider Dropdown Duration Element EmptyText Enabled Ended Enter Entries Enum EnumItem Error ErrorNotifications Esc Example ExcludeSelf Executor Expired Expiry FPS FR FileName Flag Folder FolderName Format Frame France Free GET Game Germany GetActive GetKey Glow Greeting Group GuiButton GuiName GuiObject GuiService HWID HasKey Header HeaderItems Height Hold Home HttpService Humanoid HumanoidRootPart IN Icon Image ImageButton ImageColor3 ImageLabel ImageRectPosition ImageRectSize ImageTransparency Increment India Info Input Instance JP Japan KeepOnScreen Key KeyInfo KeyPanel Keybind Keybinds LAlt LCtrl LShift Label Language Lifetime Lighting Load Loading LoadingDuration LoadingSteps LoadingSubtitle LoadingText LoadingTitle Localization Lock Locked LockedReason Loop LoopDelay Lowest Main MarketplaceService Max MaxDistance MaxHeight MaxLength MaxNotifications MaxSize Medium Membership Merge Message Method Min MinSize MobileButton MobileIcon Mode Model Mono Monospace Monthly Multi MultiLine Multiline MultipleOptions Muted NL Name NeoxHidden NeoxHub NeoxHubBlur NeoxHubFonts NeoxLoc NeoxLocPlaceholderText NeoxLocText NeoxNoTheme Netherlands NoDrag None Not Notification NotificationPosition Notifications Numeric OK OnCancel OnChanged OnClose OnRelease Open OpenButton Opened Options Page Pages Paragraph Parent Ping Placeholder PlaceholderColor3 PlaceholderText Player PlayerGui Players Popup Position Prefix Premium PremiumButton PremiumLink PremiumText Primary Profile Progress Qd Qn RAlt RCtrl RShift Radius Range Region RegionCity Regular Reminders Render Reset ResetOnUnload Resizable RunService SG Save Scale ScaleType ScreenGui ScrollBarImageColor3 ScrollingFrame Search SearchAfter SearchPlaceholder SearchResults Secondary Section SectionName Sections SemiBold Session ShowFPS ShowPing ShowPromo ShowTime Sidebar SidebarCollapsed Singapore Size Slider Sound Space Standard Stat Stats Step Stepper Stroke StrokeHover Studio Style Subtitle Success Suffix Surface Surface2 Surface3 Tab TabIcon TabSection Tabs Tag TeamCheck TeleportService Tertiary Text TextArea TextBounds TextBox TextButton TextColor3 TextLabel TextScale TextSize TextTransparency Texture Theme ThemeName Time TimeFormat Title Toggle ToggleUIKeybind Tooltip Top TotalTime TouchOnly TransitionIn TransitionOut Translations Transparency TweenService Type TypeName TypeNames UDim2 UICorner UIGradient UIGridLayout UIListLayout UIPadding UIScale UISizeConstraint UIStroke Unavailable Unknown Update UpdateRate Uptime Usage UseDisplayName User UserInputService UserInputType Value Values Variant Vector2 Vector3 Version VirtualUser Visible Volume Warning Weekly Weights Welcome Window", "%S+") do
 	KNOWN_OPTIONS[name] = true
 	KNOWN_OPTIONS_LOWER[string.lower(name)] = name
 end
@@ -691,7 +691,7 @@ local function setIcon(imageLabel, icon)
 	return true
 end
 
-local logoTargets = setmetatable({}, { __mode = "k" })
+local logoTargets = {}
 local resolvedLogo
 local resolvingLogo = false
 
@@ -4520,6 +4520,27 @@ local COMPACT_SIDEBAR = 64
 local COMPACT_MIN = Vector2.new(400, 260)
 local DEFAULT_MIN_SIZE = Vector2.new(480, 360)
 
+local function getTopbarInset()
+	local ok, inset = pcall(function()
+		return GuiService.TopbarInset
+	end)
+	if ok and typeof(inset) == "Rect" and inset.Height > 0 then
+		return inset
+	end
+	return nil
+end
+
+local function getTopbarHeight()
+	local inset = getTopbarInset()
+	if inset then
+		return inset.Max.Y
+	end
+	local ok, guiInset = pcall(function()
+		return GuiService:GetGuiInset()
+	end)
+	return ok and typeof(guiInset) == "Vector2" and guiInset.Y or 36
+end
+
 local function toVector2(value)
 	if typeof(value) == "Vector2" then
 		return value
@@ -5511,7 +5532,12 @@ function Window:_enableDrag()
 		local alpha = 1 - math.exp(-deltaTime * 45)
 		local position = rootCenter():Lerp(target, alpha)
 		self.Root.Position = UDim2.fromOffset(position.X, position.Y)
+		self._userMoved = true
 	end)
+end
+
+function Window:_restPosition()
+	return self._restCenter or UDim2.fromScale(0.5, 0.5)
 end
 
 local function revealElement(guiObject, delay, force)
@@ -5569,14 +5595,14 @@ function Window:_playIntro(fromLoader)
 	if fromLoader then
 
 		scale.Scale = self._fitScale or 1
-		root.Position = UDim2.fromScale(0.5, 0.5)
+		root.Position = self:_restPosition()
 		tween(body, { GroupTransparency = 0 }, 0.3)
 		tween(self.BodyStroke, { Transparency = 0 }, 0.3)
 		tween(shadow, { ImageTransparency = 0.6 }, 0.3)
 	else
-		root.Position = UDim2.new(0.5, 0, 0.5, 24)
+		root.Position = self:_restPosition() + UDim2.fromOffset(0, 24)
 		tween(scale, { Scale = self._fitScale or 1 }, 0.5, Enum.EasingStyle.Back)
-		tween(root, { Position = UDim2.fromScale(0.5, 0.5) }, 0.5, Enum.EasingStyle.Quint)
+		tween(root, { Position = self:_restPosition() }, 0.5, Enum.EasingStyle.Quint)
 		tween(body, { GroupTransparency = 0 }, 0.35)
 		tween(self.BodyStroke, { Transparency = 0 }, 0.35)
 		tween(shadow, { ImageTransparency = 0.6 }, 0.5)
@@ -5748,7 +5774,7 @@ function Window:_showLoader(options)
 			local windowSize = self.Root.Size
 			tween(card, {
 				Size = UDim2.fromOffset(windowSize.X.Offset * fitScale, windowSize.Y.Offset * fitScale),
-				Position = UDim2.fromScale(0.5, 0.5),
+				Position = self:_restPosition(),
 			}, 0.5, Enum.EasingStyle.Quint)
 			tween(corner, { CornerRadius = UDim.new(0, 10) }, 0.5, Enum.EasingStyle.Quint)
 			tween(cardScale, { Scale = 1 }, 0.5, Enum.EasingStyle.Quint)
@@ -5781,13 +5807,19 @@ function Window:_fitToScreen(instant)
 	if IS_TOUCH then
 		local large = math.min(screen.X, screen.Y) >= 700
 		local portrait = screen.Y > screen.X
-		width = math.floor(large and base.X or math.min(base.X, 600))
-		height = math.floor(large and base.Y or math.min(base.Y, 400))
-		local maxX = screen.X * (portrait and 0.94 or 0.62)
-		local maxY = screen.Y * (portrait and 0.62 or 0.78)
+		local topbar = math.clamp(getTopbarHeight(), 0, screen.Y * 0.25)
+		local usableY = screen.Y - topbar
+		width = math.floor(large and base.X or math.min(base.X, COMPACT_WIDTH))
+		height = math.floor(large and base.Y or math.min(base.Y, 360))
+		local maxX = screen.X * (portrait and 0.94 or (large and 0.62 or 0.52))
+		local maxY = usableY * (portrait and 0.6 or 0.8)
 		local fit = math.min(maxX / width, maxY / height, 1) * userScale
-		fit = math.min(fit, (screen.X - 16) / width, (screen.Y - 16) / height)
+		fit = math.min(fit, (screen.X - 16) / width, (usableY - 16) / height)
 		self._fitScale = math.max(fit, 0.45)
+		self._restCenter = UDim2.new(0.5, 0, 0.5, math.floor(topbar / 2))
+		if self._introDone and not self._userMoved and self.Root.Position ~= self._restCenter then
+			self.Root.Position = self._restCenter
+		end
 	else
 		local margin = 24
 		local availX, availY = screen.X - margin * 2, screen.Y - margin * 2
@@ -5951,7 +5983,7 @@ function Window:_createOpenButton(buttonOptions)
 	})
 	setLogo(icon, buttonOptions.Icon)
 
-	createLabel({
+	local pillLabel = createLabel({
 		Position = UDim2.fromOffset(30, 0),
 		Size = UDim2.new(0, 0, 1, 0),
 		AutomaticSize = Enum.AutomaticSize.X,
@@ -5962,6 +5994,33 @@ function Window:_createOpenButton(buttonOptions)
 		Parent = pill,
 	})
 	self.OpenButton = pill
+
+	local autoPosition
+	local function placePill()
+		if autoPosition and pill.Position ~= autoPosition then
+			return
+		end
+		local inset = getTopbarInset()
+		if inset and inset.Min.X > 0 and inset.Height >= 30 then
+			local tall = inset.Height >= 50
+			local height = tall and 44 or 32
+			local centerY = tall and (inset.Max.Y - 24) or (inset.Min.Y + inset.Height / 2)
+			pill.AnchorPoint = Vector2.new(0, 0.5)
+			pill.Size = UDim2.fromOffset(0, height)
+			icon.Size = UDim2.fromOffset(tall and 26 or 22, tall and 26 or 22)
+			pillLabel.Position = UDim2.fromOffset(tall and 34 or 30, 0)
+			pillLabel.TextSize = math.floor((tall and 15 or 13) * NeoxHub.TextScale + 0.5)
+			autoPosition = UDim2.fromOffset(inset.Min.X + 10, centerY)
+		else
+			pill.AnchorPoint = Vector2.new(0.5, 0)
+			autoPosition = UDim2.new(0.5, 0, 0, 6)
+		end
+		pill.Position = autoPosition
+	end
+	placePill()
+	pcall(function()
+		table.insert(self._connections, GuiService:GetPropertyChangedSignal("TopbarInset"):Connect(placePill))
+	end)
 
 	self:_makeDraggable(pill, function()
 		self:Toggle()
