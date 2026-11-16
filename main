@@ -9,7 +9,7 @@ local LocalPlayer = Players.LocalPlayer
 
 local NeoxHub = {}
 NeoxHub.Name = "Neox Hub"
-NeoxHub.Version = "3.2.1"
+NeoxHub.Version = "3.2.2"
 NeoxHub.Flags = {}
 NeoxHub.Windows = {}
 
@@ -519,10 +519,10 @@ local Fonts = NeoxHub.Fonts
 local IS_TOUCH = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
 NeoxHub.Touch = IS_TOUCH
 
-local ROW_HEIGHT = IS_TOUCH and 50 or 42
-local ROW_HEIGHT_DESC = IS_TOUCH and 64 or 56
-local OPTION_HEIGHT = IS_TOUCH and 38 or 30
-local CHIP_HEIGHT = IS_TOUCH and 32 or 24
+local ROW_HEIGHT = 42
+local ROW_HEIGHT_DESC = 56
+local OPTION_HEIGHT = 30
+local CHIP_HEIGHT = 24
 
 local function removeLeftoverBlur()
 	pcall(function()
@@ -1775,13 +1775,13 @@ function Tab:Toggle(input)
 		Value = "Default",
 	}, "TextButton", 56, "Toggle")
 
-	local trackWidth = IS_TOUCH and 44 or 32
-	local knobSize = IS_TOUCH and 18 or 12
+	local trackWidth = IS_TOUCH and 36 or 32
+	local knobSize = IS_TOUCH and 14 or 12
 
 	local track = create("Frame", {
 		AnchorPoint = Vector2.new(1, 0.5),
 		Position = UDim2.new(1, -14, 0.5, 0),
-		Size = IS_TOUCH and UDim2.fromOffset(44, 24) or UDim2.fromOffset(32, 18),
+		Size = IS_TOUCH and UDim2.fromOffset(36, 20) or UDim2.fromOffset(32, 18),
 		BackgroundColor3 = Theme.Surface3,
 		BorderSizePixel = 0,
 		Parent = card,
@@ -2966,7 +2966,7 @@ function Tab:Keybind(input)
 	}
 
 	local function fitChip(instant)
-		local width = math.max(keyLabel.TextBounds.X + 20, IS_TOUCH and 44 or 36)
+		local width = math.max(keyLabel.TextBounds.X + 20, 36)
 		setTitleReserve(titleLabel, descLabel, width + 20)
 		if instant then
 			chip.Size = UDim2.fromOffset(width, CHIP_HEIGHT)
@@ -4585,6 +4585,7 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 		_loops = {},
 		_resetOnUnload = options.ResetOnUnload == true,
 		_events = { Open = {}, Close = {}, Destroy = {} },
+		_sidebarCollapsed = options.SidebarCollapsed == true,
 		_looseTabOrder = 0,
 		_sectionCount = 0,
 		_searchIndex = {},
@@ -4938,6 +4939,48 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 		ZIndex = 3,
 		Parent = content,
 	})
+
+	local sidebarButton = create("TextButton", {
+		Name = "SidebarToggle",
+		Position = UDim2.fromOffset(24, 16),
+		Size = UDim2.fromOffset(28, 28),
+		BackgroundColor3 = Theme.Surface2,
+		BackgroundTransparency = 1,
+		BorderSizePixel = 0,
+		Text = "",
+		AutoButtonColor = false,
+		ZIndex = 6,
+		Parent = content,
+	})
+	sidebarButton:SetAttribute(ATTR_NO_DRAG, true)
+	addCorner(sidebarButton, UDim.new(0, 7))
+	local sidebarIcon = create("ImageLabel", {
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		Position = UDim2.fromScale(0.5, 0.5),
+		Size = UDim2.fromOffset(18, 18),
+		BackgroundTransparency = 1,
+		ImageColor3 = Theme.Muted,
+		ScaleType = Enum.ScaleType.Fit,
+		ZIndex = 7,
+		Parent = sidebarButton,
+	})
+	setIcon(sidebarIcon, "panel-left-close")
+	window._sidebarButton = sidebarButton
+	window._sidebarIcon = sidebarIcon
+	sidebarButton.MouseEnter:Connect(function()
+		tween(sidebarButton, { BackgroundTransparency = 0 }, 0.15)
+		tween(sidebarIcon, { ImageColor3 = Theme.Text }, 0.15)
+		window:_showTooltip(window._compact and "Expand sidebar" or "Collapse sidebar", sidebarButton)
+	end)
+	sidebarButton.MouseLeave:Connect(function()
+		tween(sidebarButton, { BackgroundTransparency = 1 }, 0.2)
+		tween(sidebarIcon, { ImageColor3 = Theme.Muted }, 0.2)
+		window:_hideTooltip(sidebarButton)
+	end)
+	sidebarButton.MouseButton1Click:Connect(function()
+		window:_hideTooltip(sidebarButton)
+		window:ToggleSidebar()
+	end)
 
 	local closeButton = create("TextButton", {
 		AnchorPoint = Vector2.new(1, 0),
@@ -5760,7 +5803,8 @@ function Window:_fitToScreen(instant)
 	if current.X.Offset ~= width or current.Y.Offset ~= height then
 		self.Root.Size = UDim2.fromOffset(width, height)
 	end
-	self:_setCompact(width < COMPACT_WIDTH)
+	self._autoCompact = width < COMPACT_WIDTH
+	self:_setCompact(self._autoCompact or self._sidebarCollapsed == true)
 
 	if self._introDone and self.Open then
 		if instant then
@@ -5783,16 +5827,42 @@ function Window:_layoutTabButton(tab)
 	end
 end
 
-function Window:_setCompact(compact)
+function Window:_setCompact(compact, animated)
 	compact = compact == true
 	if self._compact == compact then
 		return
 	end
 	self._compact = compact
+	if self._sidebarIcon then
+		setIcon(self._sidebarIcon, compact and "panel-left-open" or "panel-left-close")
+	end
 	local width = compact and COMPACT_SIDEBAR or SIDEBAR_WIDTH
-	self._sidebar.Size = UDim2.new(0, width - 8, 1, -16)
-	self.Content.Position = UDim2.fromOffset(width + 2, 0)
-	self.Content.Size = UDim2.new(1, -(width + 2), 1, 0)
+	local sidebarSize = UDim2.new(0, width - 8, 1, -16)
+	local contentPosition = UDim2.fromOffset(width + 2, 0)
+	local contentSize = UDim2.new(1, -(width + 2), 1, 0)
+	if animated then
+		self._sidebar.ClipsDescendants = true
+		tween(self._sidebar, { Size = sidebarSize }, 0.28, Enum.EasingStyle.Quint)
+		tween(self.Content, { Position = contentPosition, Size = contentSize }, 0.28, Enum.EasingStyle.Quint)
+		self._compactGeneration = (self._compactGeneration or 0) + 1
+		local generation = self._compactGeneration
+		task.delay(0.3, function()
+			if self._compactGeneration == generation and not self._destroyed then
+				self._sidebar.ClipsDescendants = false
+				self._sidebar.Size = sidebarSize
+				self.Content.Position = contentPosition
+				self.Content.Size = contentSize
+				local current = self.CurrentTab
+				if current and self._introDone and current._button.Visible then
+					self:_placeIndicator(current)
+				end
+			end
+		end)
+	else
+		self._sidebar.Size = sidebarSize
+		self.Content.Position = contentPosition
+		self.Content.Size = contentSize
+	end
 
 	self._titleLabel.Visible = not compact
 	self._subtitleLabel.Visible = not compact
@@ -5855,8 +5925,8 @@ function Window:_createOpenButton(buttonOptions)
 	local screenGui = self.Gui
 	local pill = create("TextButton", {
 		AnchorPoint = Vector2.new(0.5, 0),
-		Position = UDim2.new(0.5, 0, 0, 14),
-		Size = UDim2.fromOffset(0, 40),
+		Position = UDim2.new(0.5, 0, 0, 6),
+		Size = UDim2.fromOffset(0, 34),
 		AutomaticSize = Enum.AutomaticSize.X,
 		BackgroundColor3 = Theme.Background,
 		BorderSizePixel = 0,
@@ -5872,7 +5942,7 @@ function Window:_createOpenButton(buttonOptions)
 	local icon = create("ImageLabel", {
 		AnchorPoint = Vector2.new(0, 0.5),
 		Position = UDim2.new(0, 0, 0.5, 0),
-		Size = UDim2.fromOffset(26, 26),
+		Size = UDim2.fromOffset(22, 22),
 		BackgroundTransparency = 1,
 		ImageColor3 = logoColor(buttonOptions.Icon),
 		ScaleType = Enum.ScaleType.Fit,
@@ -5882,7 +5952,7 @@ function Window:_createOpenButton(buttonOptions)
 	setLogo(icon, buttonOptions.Icon)
 
 	createLabel({
-		Position = UDim2.fromOffset(34, 0),
+		Position = UDim2.fromOffset(30, 0),
 		Size = UDim2.new(0, 0, 1, 0),
 		AutomaticSize = Enum.AutomaticSize.X,
 		Text = buttonOptions.Title or LIB_NAME,
@@ -5892,13 +5962,6 @@ function Window:_createOpenButton(buttonOptions)
 		Parent = pill,
 	})
 	self.OpenButton = pill
-	pill.Visible = not self.Open
-	table.insert(self._events.Open, function()
-		pill.Visible = false
-	end)
-	table.insert(self._events.Close, function()
-		pill.Visible = true
-	end)
 
 	self:_makeDraggable(pill, function()
 		self:Toggle()
@@ -6943,16 +7006,16 @@ function Window:Tab(input, icon)
 	tab._page = page
 
 	tab._pageTitle = createLabel({
-		Position = UDim2.fromOffset(24, 18),
-		Size = UDim2.new(1, -72, 0, 24),
+		Position = UDim2.fromOffset(60, 18),
+		Size = UDim2.new(1, -108, 0, 24),
 		Text = tab.Name,
 		TextSize = 22,
 		Parent = page,
 	})
 	if options.Desc then
 		createLabel({
-			Position = UDim2.fromOffset(24, 40),
-			Size = UDim2.new(1, -72, 0, 16),
+			Position = UDim2.fromOffset(60, 40),
+			Size = UDim2.new(1, -108, 0, 16),
 			Text = options.Desc,
 			TextSize = 13,
 			FontFace = Fonts.Regular,
@@ -8112,7 +8175,7 @@ local NOTIFY_POSITIONS = {
 	Bottom = { Anchor = Vector2.new(0.5, 1), Position = UDim2.new(0.5, 0, 1, -16), Bottom = true, Side = 0 },
 }
 
-local DEFAULT_NOTIFY_POSITION = IS_TOUCH and "Top" or "BottomRight"
+local DEFAULT_NOTIFY_POSITION = IS_TOUCH and "TopRight" or "BottomRight"
 local NOTIFY_WIDTH = 300
 
 local function applyNotifyPosition(host, positionName)
@@ -8137,6 +8200,9 @@ createNotifyHost = function(screenGui, connections, maxCount, positionName)
 		Padding = UDim.new(0, 6),
 		Parent = holder,
 	})
+	if IS_TOUCH then
+		create("UIScale", { Scale = 0.85, Parent = holder })
+	end
 	local host = {
 		Holder = holder,
 		ListLayout = listLayout,
@@ -9891,6 +9957,19 @@ function Window:FloatingButton(input)
 	return floating
 end
 Window.MobileButton = Window.FloatingButton
+
+function Window:SetSidebarCollapsed(collapsed)
+	self._sidebarCollapsed = collapsed == true
+	self:_setCompact(self._autoCompact == true or self._sidebarCollapsed, self._introDone == true)
+end
+
+function Window:ToggleSidebar()
+	self:SetSidebarCollapsed(not self._compact)
+end
+
+function Window:IsSidebarCollapsed()
+	return self._compact == true
+end
 
 function Window:Popup(input)
 	return NeoxHub:Popup(input)
