@@ -9,7 +9,7 @@ local LocalPlayer = Players.LocalPlayer
 
 local NeoxHub = {}
 NeoxHub.Name = "Neox Hub"
-NeoxHub.Version = "3.2.5"
+NeoxHub.Version = "3.2.6"
 NeoxHub.Flags = {}
 NeoxHub.Windows = {}
 
@@ -476,7 +476,16 @@ function NeoxHub:PreloadIcons()
 	return getIconPack() ~= false
 end
 
+local BUILTIN_ICONS = {
+	discord = { "rbxassetid://86699749765447", Vector2.new(256, 0), Vector2.new(128, 128) },
+}
+BUILTIN_ICONS["logo-discord"] = BUILTIN_ICONS.discord
+
 local function resolveIcon(icon)
+	if type(icon) == "string" and BUILTIN_ICONS[string.lower(icon)] then
+		local builtin = BUILTIN_ICONS[string.lower(icon)]
+		return builtin[1], builtin[2], builtin[3]
+	end
 	if typeof(icon) == "table" then
 		return icon.Image, icon.RectOffset, icon.RectSize
 	end
@@ -4309,7 +4318,7 @@ local function createKeyPanel(window, parent, layoutOrder, input)
 	local extraButtons = 0
 	if options.DiscordLink then
 		extraButtons += 1
-		addPanelButton(2, options.DiscordButton or "Discord", "message-circle", false, function()
+		addPanelButton(2, options.DiscordButton or "Discord", "discord", false, function()
 			NeoxHub:Copy(options.DiscordLink)
 		end)
 	end
@@ -4706,6 +4715,7 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 
 	local body = create("CanvasGroup", {
 		Name = "Body",
+		Active = true,
 		Size = UDim2.fromScale(1, 1),
 		BackgroundColor3 = Theme.Background,
 		BorderSizePixel = 0,
@@ -4718,6 +4728,7 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 
 	local sidebar = create("Frame", {
 		Name = "Sidebar",
+		Active = true,
 		Position = UDim2.fromOffset(8, 8),
 		Size = UDim2.new(0, SIDEBAR_WIDTH - 8, 1, -16),
 		BackgroundColor3 = Theme.Surface,
@@ -4966,6 +4977,7 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 
 	local content = create("Frame", {
 		Name = "Content",
+		Active = true,
 		Position = UDim2.fromOffset(SIDEBAR_WIDTH + 2, 0),
 		Size = UDim2.new(1, -(SIDEBAR_WIDTH + 2), 1, 0),
 		BackgroundTransparency = 1,
@@ -7115,6 +7127,7 @@ function Window:Tab(input, icon)
 
 	local listTop = options.Desc and 64 or 54
 	local list = create("ScrollingFrame", {
+		Active = true,
 		Position = UDim2.fromOffset(0, listTop),
 		Size = UDim2.new(1, 0, 1, -listTop),
 		BackgroundTransparency = 1,
@@ -7207,13 +7220,9 @@ end
 function Window:_placeIndicator(tab)
 	local indicator = self.Indicator
 	local y = self:_indicatorY(tab)
-	if not indicator.Visible then
-		indicator.Visible = true
-		indicator.Position = UDim2.new(0, 10, 0, y)
-		indicator.BackgroundTransparency = 1
-	end
-	tween(indicator, { BackgroundTransparency = 0.86 }, 0.2)
-	tween(indicator, { Position = UDim2.new(0, 10, 0, y) }, 0.35, Enum.EasingStyle.Quint)
+	indicator.Visible = true
+	indicator.BackgroundTransparency = 0.86
+	indicator.Position = UDim2.new(0, 10, 0, y)
 end
 
 function Window:SetBlur()
