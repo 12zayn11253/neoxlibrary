@@ -9,7 +9,7 @@ local LocalPlayer = Players.LocalPlayer
 
 local NeoxHub = {}
 NeoxHub.Name = "Neox Hub"
-NeoxHub.Version = "2.5.1"
+NeoxHub.Version = "2.6.0"
 NeoxHub.Flags = {}
 NeoxHub.Windows = {}
 
@@ -94,19 +94,6 @@ end
 
 NeoxHub.Themes = {
 	Default = withStatusColors({
-		Background = rgb(14, 14, 18),
-		Surface = rgb(18, 18, 23),
-		Surface2 = rgb(23, 23, 29),
-		Surface3 = rgb(40, 40, 50),
-		Stroke = rgb(35, 35, 43),
-		StrokeHover = rgb(80, 74, 94),
-		Accent = rgb(235, 199, 246),
-		AccentDark = rgb(22, 16, 26),
-		Text = rgb(236, 236, 241),
-		Muted = rgb(134, 133, 147),
-		Glow = rgb(220, 214, 230),
-	}),
-	Midnight = withStatusColors({
 		Background = rgb(12, 14, 18),
 		Surface = rgb(16, 18, 24),
 		Surface2 = rgb(19, 22, 29),
@@ -118,6 +105,19 @@ NeoxHub.Themes = {
 		Text = rgb(226, 230, 240),
 		Muted = rgb(122, 131, 153),
 		Glow = rgb(210, 220, 240),
+	}),
+	Lavender = withStatusColors({
+		Background = rgb(14, 14, 18),
+		Surface = rgb(18, 18, 23),
+		Surface2 = rgb(23, 23, 29),
+		Surface3 = rgb(40, 40, 50),
+		Stroke = rgb(35, 35, 43),
+		StrokeHover = rgb(80, 74, 94),
+		Accent = rgb(235, 199, 246),
+		AccentDark = rgb(22, 16, 26),
+		Text = rgb(236, 236, 241),
+		Muted = rgb(134, 133, 147),
+		Glow = rgb(220, 214, 230),
 	}),
 	Moss = withStatusColors({
 		Background = rgb(12, 16, 12),
@@ -362,9 +362,9 @@ local CHIP_HEIGHT = IS_TOUCH and 34 or 28
 
 local Glass = {
 	Enabled = true,
-	Body = 0.08,
-	Panel = 0.18,
-	Card = 0.16,
+	Body = 0.04,
+	Panel = 0.1,
+	Card = 0.08,
 }
 NeoxHub.Glass = Glass
 
@@ -498,7 +498,7 @@ local function addGlassFinish(guiObject, inset, shade)
 		Position = UDim2.fromOffset(inset, 0),
 		Size = UDim2.new(1, -inset * 2, 0, 1),
 		BackgroundColor3 = Color3.new(1, 1, 1),
-		BackgroundTransparency = 0.92,
+		BackgroundTransparency = 0.95,
 		BorderSizePixel = 0,
 		ZIndex = 2,
 		Parent = guiObject,
@@ -514,7 +514,7 @@ local function addGlassFinish(guiObject, inset, shade)
 	if shade ~= false then
 		create("UIGradient", {
 			Rotation = 90,
-			Color = ColorSequence.new(Color3.new(1, 1, 1), Color3.fromRGB(205, 205, 212)),
+			Color = ColorSequence.new(Color3.new(1, 1, 1), Color3.fromRGB(224, 224, 230)),
 			Parent = guiObject,
 		})
 	end
@@ -3656,7 +3656,7 @@ local NOTIFY_TYPES = {
 local Window = {}
 Window.__index = Window
 
-local DEFAULT_WINDOW_SIZE = UDim2.fromOffset(640, 480)
+local DEFAULT_WINDOW_SIZE = UDim2.fromOffset(746, 496)
 local DEFAULT_MIN_SIZE = Vector2.new(480, 360)
 local SIDEBAR_WIDTH = 170
 
@@ -3772,7 +3772,7 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 			Name = "Sheen",
 			Size = UDim2.fromScale(1, 1),
 			BackgroundColor3 = Color3.new(1, 1, 1),
-			BackgroundTransparency = 0.95,
+			BackgroundTransparency = 0.97,
 			BorderSizePixel = 0,
 			ZIndex = 0,
 			Parent = body,
@@ -4320,8 +4320,13 @@ local function recolorAllWindows(colorMap)
 	end
 end
 
+local THEME_ALIASES = {
+	Midnight = "Default",
+}
+
 local function resolveTheme(themeInput)
 	if type(themeInput) == "string" then
+		themeInput = THEME_ALIASES[themeInput] or themeInput
 		local preset = NeoxHub.Themes[themeInput]
 		if not preset then
 			log("unknown theme: " .. themeInput)
@@ -4329,7 +4334,8 @@ local function resolveTheme(themeInput)
 		end
 		return table.clone(preset), themeInput
 	elseif type(themeInput) == "table" then
-		local base = NeoxHub.Themes[themeInput.Base or "Default"] or NeoxHub.Themes.Default
+		local baseName = themeInput.Base or "Default"
+		local base = NeoxHub.Themes[THEME_ALIASES[baseName] or baseName] or NeoxHub.Themes.Default
 		local theme = table.clone(base)
 		for _, key in ipairs(THEME_KEYS) do
 			if typeof(themeInput[key]) == "Color3" then
