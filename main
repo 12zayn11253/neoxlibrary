@@ -9,7 +9,7 @@ local LocalPlayer = Players.LocalPlayer
 
 local NeoxHub = {}
 NeoxHub.Name = "Neox Hub"
-NeoxHub.Version = "3.2.4"
+NeoxHub.Version = "3.2.5"
 NeoxHub.Flags = {}
 NeoxHub.Windows = {}
 
@@ -27,7 +27,7 @@ end
 
 local KNOWN_OPTIONS = {}
 local KNOWN_OPTIONS_LOWER = {}
-for name in string.gmatch("AU AbsoluteContentSize AbsoluteSize Accent AccentDark Active ActiveOnly AliveCheck Always Anonymous Asc Australia AutoLoad AutoSave BR Background BackgroundColor3 BackgroundTransparency Backspace BasePart Began Body Bold BottomRight Brazil Button ButtonRow Buttons CA CFrame Callback Canada Cancel CancelText CanvasGroup Caption Changed Changes ClearOnFocus Close CloseOnBackdrop Code Collapsed Color Color3 ColorPicker Configs ConfigurationSaving Confirm ConfirmText ConfirmTimeout Content ContentProvider Copied Copy Copyable CoreGui Create CurrentKeybind CurrentOption CurrentValue Custom CustomFont DE Danger Date DateFormat Decal Default DefaultState Delay Delete Depends DependsOn Desc Description Details Discord DiscordButton DiscordLink Divider Dropdown Duration Element EmptyText Enabled Ended Enter Entries Enum EnumItem Error ErrorNotifications Esc Example ExcludeSelf Executor Expired Expiry FPS FR FileName Flag Folder FolderName Format Frame France Free GET Game Germany GetActive GetKey Glow Greeting Group GuiButton GuiName GuiObject GuiService HWID HasKey Header HeaderItems Height Hold Home HttpService Humanoid HumanoidRootPart IN Icon Image ImageButton ImageColor3 ImageLabel ImageRectPosition ImageRectSize ImageTransparency Increment India Info Input Instance JP Japan KeepOnScreen Key KeyInfo KeyPanel Keybind Keybinds LAlt LCtrl LShift Label Language Lifetime Lighting Load Loading LoadingDuration LoadingSteps LoadingSubtitle LoadingText LoadingTitle Localization Lock Locked LockedReason Loop LoopDelay Lowest Main MarketplaceService Max MaxDistance MaxHeight MaxLength MaxNotifications MaxSize Medium Membership Merge Message Method Min MinSize MobileButton MobileIcon Mode Model Mono Monospace Monthly Multi MultiLine Multiline MultipleOptions Muted NL Name NeoxHidden NeoxHub NeoxHubBlur NeoxHubFonts NeoxLoc NeoxLocPlaceholderText NeoxLocText NeoxNoTheme Netherlands NoDrag None Not Notification NotificationPosition Notifications Numeric OK OnCancel OnChanged OnClose OnRelease Open OpenButton Opened Options Page Pages Paragraph Parent Ping Placeholder PlaceholderColor3 PlaceholderText Player PlayerGui Players Popup Position Prefix Premium PremiumButton PremiumLink PremiumText Primary Profile Progress Qd Qn RAlt RCtrl RShift Radius Range Region RegionCity Regular Reminders Render Reset ResetOnUnload Resizable RunService SG Save Scale ScaleType ScreenGui ScrollBarImageColor3 ScrollingFrame Search SearchAfter SearchPlaceholder SearchResults Secondary Section SectionName Sections SemiBold Session ShowFPS ShowPing ShowPromo ShowTime Sidebar SidebarCollapsed Singapore Size Slider Sound Space Standard Stat Stats Step Stepper Stroke StrokeHover Studio Style Subtitle Success Suffix Surface Surface2 Surface3 Tab TabIcon TabSection Tabs Tag TeamCheck TeleportService Tertiary Text TextArea TextBounds TextBox TextButton TextColor3 TextLabel TextScale TextSize TextTransparency Texture Theme ThemeName Time TimeFormat Title Toggle ToggleUIKeybind Tooltip Top TotalTime TouchOnly TransitionIn TransitionOut Translations Transparency TweenService Type TypeName TypeNames UDim2 UICorner UIGradient UIGridLayout UIListLayout UIPadding UIScale UISizeConstraint UIStroke Unavailable Unknown Update UpdateRate Uptime Usage UseDisplayName User UserInputService UserInputType Value Values Variant Vector2 Vector3 Version VirtualUser Visible Volume Warning Weekly Weights Welcome Window", "%S+") do
+for name in string.gmatch("AU AbsoluteContentSize AbsoluteSize Accent AccentDark Active ActiveOnly AliveCheck Always Anonymous Asc Australia AutoLoad AutoSave BR Background BackgroundColor3 BackgroundTransparency Backspace BasePart Began Body Bold BottomRight Brazil Button ButtonRow Buttons CA CFrame Callback Canada Cancel CancelText CanvasGroup Caption Changed Changes ClearOnFocus Close CloseOnBackdrop Code Collapsed Color Color3 ColorPicker Configs ConfigurationSaving Confirm ConfirmText ConfirmTimeout Content ContentProvider Copied Copy Copyable CoreGui Create CurrentKeybind CurrentOption CurrentValue Custom CustomFont DE Danger Date DateFormat Decal Default DefaultState Delay Delete Depends DependsOn Desc Description Details Discord DiscordButton DiscordLink Divider Dropdown Duration Element EmptyText Enabled Ended Enter Entries Enum EnumItem Error ErrorNotifications Esc Example ExcludeSelf Executor Expired Expiry FPS FR FileName Flag Folder FolderName Format Frame France Free GET Game Germany GetActive GetKey Glow Greeting Group GuiButton GuiName GuiObject GuiService HWID HasKey Header HeaderItems Height Hold Home HttpService Humanoid HumanoidRootPart IN Icon Image ImageButton ImageColor3 ImageLabel ImageRectPosition ImageRectSize ImageTransparency Increment India Info Input Instance JP Japan KeepOnScreen Key KeyInfo KeyPanel Keybind Keybinds LAlt LCtrl LShift Label Language Lifetime Lighting Load Loading LoadingDuration LoadingSteps LoadingSubtitle LoadingText LoadingTitle Localization Lock Locked LockedReason Loop LoopDelay Lowest Main MarketplaceService Max MaxDistance MaxHeight MaxLength MaxNotifications MaxSize Medium Membership Merge Message Method Min MinSize MobileButton MobileIcon Mode Model Mono Monospace Monthly Multi MultiLine Multiline MultipleOptions Muted NL Name NeoxHidden NeoxHub NeoxHubBlur NeoxHubFonts NeoxLoc NeoxLocPlaceholderText NeoxLocText NeoxNoTheme Netherlands NoDrag None Not Notification NotificationPosition Notifications Numeric OK OnCancel OnChanged OnClose OnRelease Open OpenButton Opened Options Page Pages Paragraph Parent Ping Placeholder PlaceholderColor3 PlaceholderText Player PlayerGui Players Popup Position Prefix Premium PremiumBanner PremiumButton Perks Price PopupDelay Cooldown HeaderButton ExpiryButtons OnClick OnShown ShowWithoutKey ButtonText Link PremiumLink PremiumText Primary Profile Progress Qd Qn RAlt RCtrl RShift Radius Range Region RegionCity Regular Reminders Render Reset ResetOnUnload Resizable RunService SG Save Scale ScaleType ScreenGui ScrollBarImageColor3 ScrollingFrame Search SearchAfter SearchPlaceholder SearchResults Secondary Section SectionName Sections SemiBold Session ShowFPS ShowPing ShowPromo ShowTime Sidebar SidebarCollapsed Singapore Size Slider Sound Space Standard Stat Stats Step Stepper Stroke StrokeHover Studio Style Subtitle Success Suffix Surface Surface2 Surface3 Tab TabIcon TabSection Tabs Tag TeamCheck TeleportService Tertiary Text TextArea TextBounds TextBox TextButton TextColor3 TextLabel TextScale TextSize TextTransparency Texture Theme ThemeName Time TimeFormat Title Toggle ToggleUIKeybind Tooltip Top TotalTime TouchOnly TransitionIn TransitionOut Translations Transparency TweenService Type TypeName TypeNames UDim2 UICorner UIGradient UIGridLayout UIListLayout UIPadding UIScale UISizeConstraint UIStroke Unavailable Unknown Update UpdateRate Uptime Usage UseDisplayName User UserInputService UserInputType Value Values Variant Vector2 Vector3 Version VirtualUser Visible Volume Warning Weekly Weights Welcome Window", "%S+") do
 	KNOWN_OPTIONS[name] = true
 	KNOWN_OPTIONS_LOWER[string.lower(name)] = name
 end
@@ -4004,6 +4004,20 @@ local function readGlobal(key)
 	return nil
 end
 
+local function getKeyStatus()
+	local rawType = readGlobal("NEOX_KEY_TYPE")
+	local expiry = tonumber(readGlobal("NEOX_KEY_EXPIRY"))
+	local lifetime = readGlobal("NEOX_KEY_IS_LIFETIME") == true or rawType == "lifetime"
+	local hasKey = rawType ~= nil or expiry ~= nil or lifetime
+	return {
+		HasKey = hasKey,
+		Premium = lifetime or rawType == "1month" or rawType == "monthly",
+		Type = rawType,
+		Expiry = expiry,
+	}
+end
+NeoxHub._getKeyStatus = getKeyStatus
+
 local function formatDuration(seconds)
 	seconds = math.max(0, math.floor(seconds))
 	if seconds < 60 then
@@ -4321,7 +4335,22 @@ local function createKeyPanel(window, parent, layoutOrder, input)
 			return
 		end
 		warned[key] = true
-		window:Notify({ Title = title, Content = content, Type = kind, Duration = 6 })
+		local link = options.PremiumLink or (window._premium and window._premium.Link)
+		local buttons
+		if link and not getKeyStatus().Premium then
+			content = content .. " Premium keys never run out."
+			buttons = {
+				{ Title = "Later" },
+				{ Title = "Get Premium", Primary = true, Callback = function()
+					if window._premium then
+						window:_premiumClicked("reminder")
+					else
+						NeoxHub:Copy(link)
+					end
+				end },
+			}
+		end
+		window:Notify({ Title = title, Content = content, Type = kind, Duration = buttons and 12 or 6, Buttons = buttons })
 	end
 
 	function panel:Refresh()
@@ -5153,6 +5182,7 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 	window._introDone = false
 	table.insert(NeoxHub.Windows, window)
 
+	window:_setupPremium(options)
 	window:_buildHome(type(options.Home) == "table" and options.Home or {})
 
 	if type(options.User) == "table" and options.User.Anonymous then
@@ -7261,6 +7291,9 @@ function Window:SelectTab(tab)
 end
 
 function Window:_settleOut()
+	if self._destroyed then
+		return
+	end
 	local page = self._outPage
 	if page then
 		page.Parent = self.Content
@@ -7271,6 +7304,9 @@ function Window:_settleOut()
 end
 
 function Window:_settleIn()
+	if self._destroyed then
+		return
+	end
 	local page = self._inPage
 	if page then
 		page.Parent = self.Content
@@ -10016,6 +10052,226 @@ function Window:FloatingButton(input)
 	return floating
 end
 Window.MobileButton = Window.FloatingButton
+
+do
+	local DEFAULT_PERKS = {
+		"No key system, no checkpoints",
+		"Instant access every time you play",
+		"Supports future updates",
+	}
+	local COOLDOWN_FILE = "NeoxHub/premium.json"
+
+	local function isFreeUser(window)
+		local status = NeoxHub._getKeyStatus()
+		if window._premium and window._premium.ShowWithoutKey then
+			return not status.Premium
+		end
+		return status.HasKey and not status.Premium
+	end
+
+	local function readLastShown()
+		local ok, value = pcall(function()
+			if type(isfile) == "function" and isfile(COOLDOWN_FILE) then
+				return tonumber(HttpService:JSONDecode(readfile(COOLDOWN_FILE)).LastShown)
+			end
+		end)
+		return ok and value or nil
+	end
+
+	local function writeLastShown(time)
+		pcall(function()
+			if type(writefile) ~= "function" then
+				return
+			end
+			if type(isfolder) == "function" and type(makefolder) == "function" and not isfolder("NeoxHub") then
+				makefolder("NeoxHub")
+			end
+			writefile(COOLDOWN_FILE, HttpService:JSONEncode({ LastShown = time }))
+		end)
+	end
+
+	function NeoxHub:IsPremium()
+		return NeoxHub._getKeyStatus().Premium == true
+	end
+
+	function NeoxHub:GetKeyStatus()
+		return NeoxHub._getKeyStatus()
+	end
+
+	function Window:_premiumClicked(source)
+		local premium = self._premium
+		if not premium then
+			return
+		end
+		NeoxHub:Copy(premium.Link)
+		safeCall(premium.OnClick, source)
+	end
+
+	function Window:ShowPremium(source)
+		local premium = self._premium
+		if not premium or self._destroyed then
+			return nil
+		end
+		local lines = {}
+		if premium.Text then
+			table.insert(lines, tostring(premium.Text))
+			table.insert(lines, "")
+		end
+		for _, perk in ipairs(premium.Perks) do
+			table.insert(lines, "•  " .. tostring(perk))
+		end
+		if premium.Price then
+			table.insert(lines, "")
+			table.insert(lines, tostring(premium.Price))
+		end
+		safeCall(premium.OnShown, source or "manual")
+		return NeoxHub:Popup({
+			Title = premium.Title,
+			Icon = "crown",
+			Content = table.concat(lines, "\n"),
+			Buttons = {
+				{ Title = "Not now", Variant = "Tertiary" },
+				{ Title = premium.ButtonText or "Get Premium", Icon = "crown", Variant = "Primary", Callback = function()
+					self:_premiumClicked(source or "popup")
+				end },
+			},
+		})
+	end
+
+	function Window:_setupPremium(windowOptions)
+		local settings = windowOptions.Premium
+		if settings == false then
+			return
+		end
+		settings = type(settings) == "table" and settings or {}
+		local home = type(windowOptions.Home) == "table" and windowOptions.Home or {}
+		local homeKey = type(home.Key) == "table" and home.Key or {}
+		local link = settings.Link or homeKey.PremiumLink
+		if type(link) ~= "string" or link == "" then
+			return
+		end
+		self._premium = {
+			Link = link,
+			Title = settings.Title or "Go Premium",
+			Text = settings.Text,
+			Perks = type(settings.Perks) == "table" and settings.Perks or DEFAULT_PERKS,
+			Price = settings.Price,
+			ButtonText = settings.ButtonText,
+			ShowWithoutKey = settings.ShowWithoutKey == true,
+			OnClick = settings.OnClick,
+			OnShown = settings.OnShown,
+		}
+
+		if settings.HeaderButton ~= false then
+			local headerButton = self:HeaderButton({
+				Icon = "crown",
+				Tooltip = "Get Premium",
+				Callback = function()
+					self:ShowPremium("header")
+				end,
+			})
+			headerButton.Frame.Visible = isFreeUser(self)
+			task.spawn(function()
+				while not self._destroyed and headerButton.Frame.Parent do
+					headerButton.Frame.Visible = isFreeUser(self)
+					task.wait(3)
+				end
+			end)
+		end
+
+		if settings.Popup ~= false then
+			local delay = math.max(tonumber(settings.PopupDelay) or 600, 5)
+			local cooldown = tonumber(settings.Cooldown) or 86400
+			task.delay(delay, function()
+				if self._destroyed or not isFreeUser(self) then
+					return
+				end
+				local last = readLastShown()
+				local now = os.time()
+				if last and now - last < cooldown then
+					return
+				end
+				writeLastShown(now)
+				self:ShowPremium("timer")
+			end)
+		end
+	end
+
+	function Tab:PremiumBanner(input)
+		local options = normalizeOptions(input, { Title = "Text", Name = "Text", Content = "Text" })
+		local window = self.Window
+		local card = create("Frame", {
+			Size = UDim2.new(1, 0, 0, ROW_HEIGHT),
+			BackgroundColor3 = Theme.Surface2,
+			BorderSizePixel = 0,
+			LayoutOrder = self:_nextOrder(),
+			Parent = self.List,
+		})
+		card:SetAttribute(ATTR_NO_DRAG, true)
+		addCorner(card)
+		local stroke = addStroke(card, Theme.Accent, 1)
+		stroke.Transparency = 0.6
+		createIcon(card, "crown", Theme.Accent, UDim2.new(0, 14, 0.5, 0))
+		local label = createLabel({
+			Name = "Title",
+			Position = UDim2.fromOffset(40, 0),
+			Size = UDim2.new(1, -150, 1, 0),
+			Text = tostring(options.Text or "Premium: no key system, instant access"),
+			TextSize = 13,
+			Parent = card,
+		})
+		local button = create("TextButton", {
+			AnchorPoint = Vector2.new(1, 0.5),
+			Position = UDim2.new(1, -10, 0.5, 0),
+			Size = UDim2.fromOffset(0, 26),
+			AutomaticSize = Enum.AutomaticSize.X,
+			BackgroundColor3 = Theme.Accent,
+			BorderSizePixel = 0,
+			Text = "",
+			AutoButtonColor = false,
+			Parent = card,
+		})
+		button:SetAttribute(ATTR_NO_DRAG, true)
+		addCorner(button, UDim.new(0, 6))
+		addPadding(button, 12, 12)
+		createLabel({
+			Size = UDim2.new(0, 0, 1, 0),
+			AutomaticSize = Enum.AutomaticSize.X,
+			Text = tostring(options.ButtonText or "Get Premium"),
+			TextSize = 12,
+			TextColor3 = Theme.AccentDark,
+			TextTruncate = Enum.TextTruncate.None,
+			Parent = button,
+		})
+		button.MouseButton1Click:Connect(function()
+			if options.Link then
+				NeoxHub:Copy(options.Link)
+			elseif window._premium then
+				window:ShowPremium("banner")
+			end
+		end)
+
+		local element = {}
+		function element:SetText(text)
+			setTranslated(label, "Text", tostring(text))
+		end
+		local registered = registerElement(self, options, element, card, "PremiumBanner")
+		local function refresh()
+			local status = NeoxHub._getKeyStatus()
+			local show = not status.Premium and (status.HasKey or options.ShowWithoutKey == true)
+			card.Visible = element.Visible ~= false and show
+		end
+		refresh()
+		task.spawn(function()
+			while card.Parent and not window._destroyed do
+				task.wait(3)
+				refresh()
+			end
+		end)
+		return registered
+	end
+	Tab.CreatePremiumBanner = Tab.PremiumBanner
+end
 
 function Window:SetSidebarCollapsed(collapsed)
 	self._sidebarCollapsed = collapsed == true
