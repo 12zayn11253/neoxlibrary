@@ -9,7 +9,7 @@ local LocalPlayer = Players.LocalPlayer
 
 local NeoxHub = {}
 NeoxHub.Name = "Neox Hub"
-NeoxHub.Version = "2.4.0"
+NeoxHub.Version = "2.5.0"
 NeoxHub.Flags = {}
 NeoxHub.Windows = {}
 
@@ -94,25 +94,25 @@ end
 
 NeoxHub.Themes = {
 	Default = withStatusColors({
-		Background = rgb(8, 8, 10),
-		Surface = rgb(12, 12, 15),
-		Surface2 = rgb(16, 16, 20),
-		Surface3 = rgb(31, 31, 38),
-		Stroke = rgb(27, 27, 33),
-		StrokeHover = rgb(64, 60, 74),
+		Background = rgb(14, 14, 18),
+		Surface = rgb(18, 18, 23),
+		Surface2 = rgb(23, 23, 29),
+		Surface3 = rgb(40, 40, 50),
+		Stroke = rgb(35, 35, 43),
+		StrokeHover = rgb(80, 74, 94),
 		Accent = rgb(235, 199, 246),
-		AccentDark = rgb(20, 14, 24),
+		AccentDark = rgb(22, 16, 26),
 		Text = rgb(236, 236, 241),
-		Muted = rgb(126, 126, 139),
+		Muted = rgb(134, 133, 147),
 		Glow = rgb(220, 214, 230),
 	}),
 	Midnight = withStatusColors({
-		Background = rgb(10, 11, 15),
-		Surface = rgb(13, 15, 20),
-		Surface2 = rgb(16, 18, 24),
-		Surface3 = rgb(29, 33, 43),
-		Stroke = rgb(26, 29, 38),
-		StrokeHover = rgb(63, 72, 94),
+		Background = rgb(12, 14, 18),
+		Surface = rgb(16, 18, 24),
+		Surface2 = rgb(19, 22, 29),
+		Surface3 = rgb(32, 37, 48),
+		Stroke = rgb(29, 32, 43),
+		StrokeHover = rgb(66, 76, 99),
 		Accent = rgb(150, 180, 255),
 		AccentDark = rgb(12, 16, 28),
 		Text = rgb(226, 230, 240),
@@ -120,12 +120,12 @@ NeoxHub.Themes = {
 		Glow = rgb(210, 220, 240),
 	}),
 	Moss = withStatusColors({
-		Background = rgb(10, 13, 10),
-		Surface = rgb(13, 16, 13),
-		Surface2 = rgb(17, 20, 17),
-		Surface3 = rgb(30, 35, 30),
-		Stroke = rgb(26, 32, 26),
-		StrokeHover = rgb(65, 79, 65),
+		Background = rgb(12, 16, 12),
+		Surface = rgb(16, 20, 16),
+		Surface2 = rgb(20, 24, 20),
+		Surface3 = rgb(34, 40, 34),
+		Stroke = rgb(30, 36, 30),
+		StrokeHover = rgb(68, 84, 68),
 		Accent = rgb(176, 222, 170),
 		AccentDark = rgb(14, 22, 14),
 		Text = rgb(228, 234, 227),
@@ -133,12 +133,12 @@ NeoxHub.Themes = {
 		Glow = rgb(214, 230, 212),
 	}),
 	Ember = withStatusColors({
-		Background = rgb(14, 11, 9),
-		Surface = rgb(18, 14, 11),
-		Surface2 = rgb(22, 17, 14),
-		Surface3 = rgb(37, 30, 24),
-		Stroke = rgb(34, 27, 22),
-		StrokeHover = rgb(86, 68, 52),
+		Background = rgb(17, 14, 11),
+		Surface = rgb(22, 17, 14),
+		Surface2 = rgb(26, 20, 16),
+		Surface3 = rgb(42, 34, 27),
+		Stroke = rgb(38, 30, 24),
+		StrokeHover = rgb(91, 72, 55),
 		Accent = rgb(255, 190, 140),
 		AccentDark = rgb(28, 18, 10),
 		Text = rgb(240, 232, 226),
@@ -146,12 +146,12 @@ NeoxHub.Themes = {
 		Glow = rgb(240, 222, 208),
 	}),
 	Rose = withStatusColors({
-		Background = rgb(15, 10, 12),
-		Surface = rgb(18, 13, 15),
-		Surface2 = rgb(22, 15, 18),
-		Surface3 = rgb(38, 27, 32),
-		Stroke = rgb(35, 24, 29),
-		StrokeHover = rgb(90, 59, 72),
+		Background = rgb(18, 12, 14),
+		Surface = rgb(22, 16, 18),
+		Surface2 = rgb(26, 18, 22),
+		Surface3 = rgb(43, 30, 36),
+		Stroke = rgb(40, 27, 32),
+		StrokeHover = rgb(95, 62, 76),
 		Accent = rgb(255, 170, 195),
 		AccentDark = rgb(30, 12, 18),
 		Text = rgb(240, 228, 232),
@@ -159,12 +159,12 @@ NeoxHub.Themes = {
 		Glow = rgb(240, 214, 222),
 	}),
 	Mono = withStatusColors({
-		Background = rgb(11, 11, 12),
-		Surface = rgb(14, 14, 15),
-		Surface2 = rgb(17, 17, 19),
-		Surface3 = rgb(32, 32, 34),
-		Stroke = rgb(29, 29, 31),
-		StrokeHover = rgb(72, 72, 77),
+		Background = rgb(14, 14, 14),
+		Surface = rgb(17, 17, 18),
+		Surface2 = rgb(20, 20, 22),
+		Surface3 = rgb(36, 36, 38),
+		Stroke = rgb(32, 32, 35),
+		StrokeHover = rgb(76, 76, 82),
 		Accent = rgb(230, 230, 235),
 		AccentDark = rgb(18, 18, 20),
 		Text = rgb(232, 232, 236),
@@ -362,9 +362,9 @@ local CHIP_HEIGHT = IS_TOUCH and 34 or 28
 
 local Glass = {
 	Enabled = true,
-	Body = 0.14,
-	Panel = 0.3,
-	Card = 0.28,
+	Body = 0.08,
+	Panel = 0.18,
+	Card = 0.16,
 }
 NeoxHub.Glass = Glass
 
@@ -498,7 +498,7 @@ local function addGlassFinish(guiObject, inset, shade)
 		Position = UDim2.fromOffset(inset, 0),
 		Size = UDim2.new(1, -inset * 2, 0, 1),
 		BackgroundColor3 = Color3.new(1, 1, 1),
-		BackgroundTransparency = 0.86,
+		BackgroundTransparency = 0.92,
 		BorderSizePixel = 0,
 		ZIndex = 2,
 		Parent = guiObject,
@@ -514,7 +514,7 @@ local function addGlassFinish(guiObject, inset, shade)
 	if shade ~= false then
 		create("UIGradient", {
 			Rotation = 90,
-			Color = ColorSequence.new(Color3.new(1, 1, 1), Color3.fromRGB(168, 168, 178)),
+			Color = ColorSequence.new(Color3.new(1, 1, 1), Color3.fromRGB(205, 205, 212)),
 			Parent = guiObject,
 		})
 	end
@@ -1144,9 +1144,18 @@ function Tab:Section(input)
 		LayoutOrder = self:_nextOrder(),
 		Parent = self.List,
 	})
+	local dot = create("Frame", {
+		AnchorPoint = Vector2.new(0, 0.5),
+		Position = UDim2.new(0, 2, 0, 16),
+		Size = UDim2.fromOffset(5, 5),
+		BackgroundColor3 = Theme.Accent,
+		BorderSizePixel = 0,
+		Parent = holder,
+	})
+	addCorner(dot, UDim.new(1, 0))
 	local label = createLabel({
 		Name = "Title",
-		Position = UDim2.fromOffset(2, 8),
+		Position = UDim2.fromOffset(13, 8),
 		Size = UDim2.new(0, 0, 0, 16),
 		AutomaticSize = Enum.AutomaticSize.X,
 		Text = string.upper(text),
@@ -1166,7 +1175,7 @@ function Tab:Section(input)
 
 	local window = self.Window
 	local function fitLine()
-		line.Size = UDim2.new(1, -(label.AbsoluteSize.X / window.Scale.Scale + 14), 0, 1)
+		line.Size = UDim2.new(1, -(label.AbsoluteSize.X / window.Scale.Scale + 25), 0, 1)
 	end
 	label:GetPropertyChangedSignal("AbsoluteSize"):Connect(fitLine)
 	task.defer(fitLine)
@@ -1369,7 +1378,7 @@ function Tab:Button(input)
 		end
 	end
 
-	createIcon(card, "chevron-right", styled and Theme.AccentDark or Theme.Muted, UDim2.new(1, -30, 0.5, 0))
+	createIcon(card, options.ActionIcon or "arrow-up-right", styled and Theme.AccentDark or Theme.Muted, UDim2.new(1, -30, 0.5, 0))
 
 	local element = {}
 	local baseTitle = titleLabel.Text
@@ -1439,7 +1448,7 @@ function Tab:Toggle(input)
 		BorderSizePixel = 0,
 		Parent = card,
 	})
-	addCorner(track, UDim.new(1, 0))
+	addCorner(track, UDim.new(0, 6))
 	addStroke(track, Theme.Stroke)
 
 	local knob = create("Frame", {
@@ -1450,7 +1459,7 @@ function Tab:Toggle(input)
 		BorderSizePixel = 0,
 		Parent = track,
 	})
-	addCorner(knob, UDim.new(1, 0))
+	addCorner(knob, UDim.new(0, 4))
 
 	local element = { Value = options.Default == true }
 
@@ -3772,7 +3781,7 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 			Name = "Sheen",
 			Size = UDim2.fromScale(1, 1),
 			BackgroundColor3 = Color3.new(1, 1, 1),
-			BackgroundTransparency = 0.92,
+			BackgroundTransparency = 0.95,
 			BorderSizePixel = 0,
 			ZIndex = 0,
 			Parent = body,
@@ -4058,24 +4067,55 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 	local closeButton = create("TextButton", {
 		AnchorPoint = Vector2.new(1, 0),
 		Position = UDim2.new(1, -14, 0, 14),
-		Size = UDim2.fromOffset(34, 34),
-		BackgroundColor3 = Theme.Surface2,
+		Size = UDim2.fromOffset(32, 32),
+		BackgroundColor3 = Theme.Error,
 		BackgroundTransparency = 1,
-		Text = "×",
-		TextColor3 = Theme.Muted,
-		TextSize = 28,
-		FontFace = Fonts.Bold,
+		Text = "",
 		AutoButtonColor = false,
 		ZIndex = 5,
 		Parent = content,
 	})
-	addPadding(closeButton, 0, 0, 1, 0)
-	addCorner(closeButton, UDim.new(0, 8))
+	addCorner(closeButton, UDim.new(1, 0))
+	local closeStroke = addStroke(closeButton, Theme.Stroke)
+	local closeIcon = create("ImageLabel", {
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		Position = UDim2.fromScale(0.5, 0.5),
+		Size = UDim2.fromOffset(15, 15),
+		BackgroundTransparency = 1,
+		ImageColor3 = Theme.Muted,
+		ScaleType = Enum.ScaleType.Fit,
+		ZIndex = 6,
+		Parent = closeButton,
+	})
+	local closeGlyph
+	if not setIcon(closeIcon, "x") then
+		closeIcon:Destroy()
+		closeIcon = nil
+		closeGlyph = createLabel({
+			Size = UDim2.fromScale(1, 1),
+			Text = "×",
+			TextSize = 22,
+			TextColor3 = Theme.Muted,
+			TextXAlignment = Enum.TextXAlignment.Center,
+			ZIndex = 6,
+			Parent = closeButton,
+		})
+	end
+	local function paintClose(hovered)
+		local color = hovered and Theme.Error or Theme.Muted
+		tween(closeButton, { BackgroundTransparency = hovered and 0.82 or 1 }, 0.15)
+		tween(closeStroke, { Color = hovered and Theme.Error or Theme.Stroke }, 0.15)
+		if closeIcon then
+			tween(closeIcon, { ImageColor3 = color }, 0.15)
+		else
+			tween(closeGlyph, { TextColor3 = color }, 0.15)
+		end
+	end
 	closeButton.MouseEnter:Connect(function()
-		tween(closeButton, { BackgroundTransparency = 0, TextColor3 = Theme.Text }, 0.15)
+		paintClose(true)
 	end)
 	closeButton.MouseLeave:Connect(function()
-		tween(closeButton, { BackgroundTransparency = 1, TextColor3 = Theme.Muted }, 0.2)
+		paintClose(false)
 	end)
 	closeButton.MouseButton1Click:Connect(function()
 		window:Toggle(false)
@@ -5854,17 +5894,46 @@ function Window:Tab(input, icon)
 	})
 	tab._page = page
 
+	local titleLeft = 24
+	if options.Icon ~= nil then
+		local iconTile = create("Frame", {
+			Position = UDim2.fromOffset(24, options.Desc and 19 or 15),
+			Size = UDim2.fromOffset(34, 34),
+			BackgroundColor3 = Theme.Surface2,
+			BackgroundTransparency = glassTransparency("Card"),
+			BorderSizePixel = 0,
+			Parent = page,
+		})
+		addCorner(iconTile, UDim.new(0, 9))
+		addStroke(iconTile)
+		addGlassFinish(iconTile, 8)
+		local tileIcon = create("ImageLabel", {
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			Position = UDim2.fromScale(0.5, 0.5),
+			Size = UDim2.fromOffset(17, 17),
+			BackgroundTransparency = 1,
+			ImageColor3 = Theme.Accent,
+			ScaleType = Enum.ScaleType.Fit,
+			Parent = iconTile,
+		})
+		if setIcon(tileIcon, options.Icon) then
+			titleLeft = 68
+		else
+			iconTile:Destroy()
+		end
+	end
+
 	tab._pageTitle = createLabel({
-		Position = UDim2.fromOffset(24, 20),
-		Size = UDim2.new(1, -72, 0, 24),
+		Position = UDim2.fromOffset(titleLeft, 20),
+		Size = UDim2.new(1, -(titleLeft + 48), 0, 24),
 		Text = tab.Name,
 		TextSize = 22,
 		Parent = page,
 	})
 	if options.Desc then
 		createLabel({
-			Position = UDim2.fromOffset(24, 44),
-			Size = UDim2.new(1, -72, 0, 16),
+			Position = UDim2.fromOffset(titleLeft, 44),
+			Size = UDim2.new(1, -(titleLeft + 48), 0, 16),
 			Text = options.Desc,
 			TextSize = 13,
 			FontFace = Fonts.Regular,
