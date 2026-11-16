@@ -9,7 +9,7 @@ local LocalPlayer = Players.LocalPlayer
 
 local NeoxHub = {}
 NeoxHub.Name = "Neox Hub"
-NeoxHub.Version = "3.2.0"
+NeoxHub.Version = "3.2.1"
 NeoxHub.Flags = {}
 NeoxHub.Windows = {}
 
@@ -4802,6 +4802,25 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 		Parent = tabList,
 	})
 
+	local indicatorClip = create("Frame", {
+		Name = "IndicatorClip",
+		Position = tabList.Position,
+		Size = tabList.Size,
+		BackgroundTransparency = 1,
+		ClipsDescendants = true,
+		ZIndex = 1,
+		Parent = sidebar,
+	})
+	local function syncIndicatorClip()
+		indicatorClip.Position = tabList.Position
+		indicatorClip.Size = tabList.Size
+		indicatorClip.Visible = tabList.Visible
+	end
+	tabList:GetPropertyChangedSignal("Position"):Connect(syncIndicatorClip)
+	tabList:GetPropertyChangedSignal("Size"):Connect(syncIndicatorClip)
+	tabList:GetPropertyChangedSignal("Visible"):Connect(syncIndicatorClip)
+	window._indicatorClip = indicatorClip
+
 	local indicator = create("Frame", {
 		AnchorPoint = Vector2.new(0, 0.5),
 		Position = UDim2.new(0, 10, 0, 0),
@@ -4811,24 +4830,41 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 		BorderSizePixel = 0,
 		Visible = false,
 		ZIndex = 1,
-		Parent = sidebar,
+		Parent = indicatorClip,
 	})
 	addCorner(indicator, UDim.new(0, 8))
 	addStroke(indicator, Theme.Accent, 0.7)
 	window.Indicator = indicator
 
-	local lastCanvasY = tabList.CanvasPosition.Y
+	local lastCanvasY, lastButtonY, lastButton = tabList.CanvasPosition.Y, nil, nil
 	table.insert(window._frameSteps, function()
-		local canvasY = tabList.CanvasPosition.Y
-		if canvasY == lastCanvasY or not window.CurrentTab or not window._introDone then
+		local current = window.CurrentTab
+		if not current or not window._introDone then
 			return
 		end
-		lastCanvasY = canvasY
-		local y = window:_indicatorY(window.CurrentTab)
-		local listTop = tabList.Position.Y.Offset
-		local listBottom = listTop + tabList.AbsoluteSize.Y / window.Scale.Scale
-		indicator.Visible = window.CurrentTab._button.Visible and y > listTop and y < listBottom
-		indicator.Position = UDim2.new(0, 10, 0, y)
+		local button = current._button
+		local canvasY = tabList.CanvasPosition.Y
+		local buttonY = button.AbsolutePosition.Y - tabList.AbsolutePosition.Y
+		if button ~= lastButton then
+			lastButton, lastButtonY, lastCanvasY = button, buttonY, canvasY
+			return
+		end
+		if canvasY == lastCanvasY and buttonY == lastButtonY then
+			return
+		end
+		local scrolled = canvasY ~= lastCanvasY
+		lastCanvasY, lastButtonY = canvasY, buttonY
+		if not button.Visible then
+			indicator.Visible = false
+			return
+		end
+		local target = UDim2.new(0, 10, 0, window:_indicatorY(current))
+		if scrolled or not indicator.Visible then
+			indicator.Position = target
+			indicator.Visible = true
+		else
+			tween(indicator, { Position = target }, 0.25, Enum.EasingStyle.Quint)
+		end
 	end)
 
 	local profile = create("Frame", {
@@ -7029,7 +7065,6 @@ function Window:_indicatorY(tab)
 	local tabList = self.TabList
 	local scale = self.Scale.Scale
 	return (tab._button.AbsolutePosition.Y - tabList.AbsolutePosition.Y + tab._button.AbsoluteSize.Y / 2) / scale
-		+ tabList.Position.Y.Offset
 end
 
 function Window:_placeIndicator(tab)
