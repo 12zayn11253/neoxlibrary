@@ -9,7 +9,7 @@ local LocalPlayer = Players.LocalPlayer
 
 local NeoxHub = {}
 NeoxHub.Name = "Neox Hub"
-NeoxHub.Version = "2.9.0"
+NeoxHub.Version = "3.0.0"
 NeoxHub.Flags = {}
 NeoxHub.Windows = {}
 
@@ -94,6 +94,19 @@ end
 
 NeoxHub.Themes = {
 	Default = withStatusColors({
+		Background = rgb(14, 14, 14),
+		Surface = rgb(17, 17, 18),
+		Surface2 = rgb(20, 20, 22),
+		Surface3 = rgb(36, 36, 38),
+		Stroke = rgb(32, 32, 35),
+		StrokeHover = rgb(76, 76, 82),
+		Accent = rgb(230, 230, 235),
+		AccentDark = rgb(18, 18, 20),
+		Text = rgb(232, 232, 236),
+		Muted = rgb(130, 130, 136),
+		Glow = rgb(220, 220, 226),
+	}),
+	Midnight = withStatusColors({
 		Background = rgb(12, 14, 18),
 		Surface = rgb(16, 18, 24),
 		Surface2 = rgb(19, 22, 29),
@@ -157,19 +170,6 @@ NeoxHub.Themes = {
 		Text = rgb(240, 228, 232),
 		Muted = rgb(149, 124, 133),
 		Glow = rgb(240, 214, 222),
-	}),
-	Mono = withStatusColors({
-		Background = rgb(14, 14, 14),
-		Surface = rgb(17, 17, 18),
-		Surface2 = rgb(20, 20, 22),
-		Surface3 = rgb(36, 36, 38),
-		Stroke = rgb(32, 32, 35),
-		StrokeHover = rgb(76, 76, 82),
-		Accent = rgb(230, 230, 235),
-		AccentDark = rgb(18, 18, 20),
-		Text = rgb(232, 232, 236),
-		Muted = rgb(130, 130, 136),
-		Glow = rgb(220, 220, 226),
 	}),
 }
 
@@ -322,7 +322,7 @@ local function resolveIcon(icon)
 	if type(icon) ~= "string" or icon == "" then
 		return nil
 	end
-	if icon:find("^rbxassetid://") or icon:find("^rbxasset://") or icon:find("^http") then
+	if icon:find("^rbx%a*://") or icon:find("^http") then
 		return icon
 	end
 
@@ -404,6 +404,8 @@ local function tween(object, goals, duration, style, direction)
 end
 
 NeoxHub.TextScale = 0.9
+NeoxHub.NotificationPosition = nil
+local createNotifyHost
 NeoxHub._themeListeners = {}
 
 local Localization = {
@@ -861,6 +863,12 @@ local function registerElement(tab, options, element, frame, typeName, callbackK
 
 	if window then
 		table.insert(window._elements, element)
+	end
+	if options.Flag and type(element.Get) == "function" then
+		local ok, value = pcall(element.Get, element)
+		if ok then
+			element._defaultValue = type(value) == "table" and table.clone(value) or value
+		end
 	end
 
 	function element:SetCallback(callback)
@@ -1545,6 +1553,9 @@ function Tab:Toggle(input)
 	renderKey()
 
 	local registered = registerElement(self, options, element, card, "Toggle")
+	if options.MobileButton and (IS_TOUCH or options.MobileButton == "Always") then
+		window:FloatingButton({ Title = options.Name or "Toggle", Icon = options.MobileIcon, Toggle = element })
+	end
 	if element.Value then
 		safeCall(options.Callback, true)
 	end
@@ -3508,6 +3519,59 @@ function Tab:ConfigManager(input)
 		end,
 	})
 
+	self:Button({
+		Name = "Export to clipboard",
+		Desc = "Copy every setting as text to share or back up",
+		Icon = "copy",
+		Callback = function()
+			local text = window:ExportConfig()
+			if text then
+				NeoxHub:Copy(text)
+			end
+		end,
+	})
+
+	local importText = ""
+	self:Input({
+		Name = "Import config",
+		Placeholder = "Paste config text",
+		Callback = function(text)
+			importText = text
+		end,
+	})
+
+	self:Button({
+		Name = "Apply imported config",
+		Icon = "download",
+		Callback = function()
+			local ok, result = window:ImportConfig(importText)
+			window:Notify({
+				Title = ok and "Config imported" or "Import failed",
+				Content = ok and ("Applied " .. result .. " settings.") or tostring(result),
+				Type = ok and "Success" or "Error",
+				Duration = 3,
+			})
+		end,
+	})
+
+	self:Button({
+		Name = "Reset to defaults",
+		Icon = "rotate-ccw",
+		Style = "Danger",
+		Callback = function()
+			window:Confirm({
+				Title = "Reset settings",
+				Content = "Put every setting back to its default value?",
+				Icon = "rotate-ccw",
+				ConfirmText = "Reset",
+				Callback = function()
+					local count = window:ResetConfig()
+					window:Notify({ Title = "Settings reset", Content = count .. " settings back to default.", Type = "Info", Duration = 3 })
+				end,
+			})
+		end,
+	})
+
 	self:Toggle({
 		Name = "Auto save",
 		Desc = "Save whenever a flagged element changes",
@@ -4075,6 +4139,9 @@ local Window = {}
 Window.__index = Window
 
 local DEFAULT_WINDOW_SIZE = UDim2.fromOffset(746, 496)
+local COMPACT_WIDTH = 560
+local COMPACT_SIDEBAR = 64
+local COMPACT_MIN = Vector2.new(400, 260)
 local DEFAULT_MIN_SIZE = Vector2.new(480, 360)
 local SIDEBAR_WIDTH = 170
 
@@ -4167,6 +4234,7 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 		Parent = screenGui,
 	})
 	window.Root = root
+	window._baseSize = Vector2.new(root.Size.X.Offset, root.Size.Y.Offset)
 
 	window.Scale = create("UIScale", { Parent = root })
 
@@ -4203,6 +4271,7 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 		Parent = body,
 	})
 	addCorner(sidebar, UDim.new(0, 10))
+	window._sidebar = sidebar
 	addStroke(sidebar)
 
 	local brand = create("Frame", {
@@ -4242,6 +4311,7 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 
 	local searchEnabled = options.Search ~= false
 	local listTop = searchEnabled and 112 or 72
+	window._listTop = listTop
 
 	local tabList = create("ScrollingFrame", {
 		Name = "Tabs",
@@ -4258,7 +4328,8 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 	window.TabList = tabList
 
 	if searchEnabled then
-		local searchFrame = create("Frame", {
+		local searchFrame
+		searchFrame = create("Frame", {
 			Name = "Search",
 			Position = UDim2.fromOffset(10, 72),
 			Size = UDim2.new(1, -20, 0, 30),
@@ -4312,6 +4383,7 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 		})
 
 		window._searchBox = searchBox
+		window._searchFrame = searchFrame
 		window._searchResults = results
 		searchBox:GetPropertyChangedSignal("Text"):Connect(function()
 			window:_runSearch(searchBox.Text)
@@ -4365,6 +4437,7 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 		Parent = sidebar,
 	})
 	profile:SetAttribute(ATTR_NO_DRAG, true)
+	window._profile = profile
 	addCorner(profile, UDim.new(0, 8))
 	addStroke(profile)
 
@@ -4409,6 +4482,7 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 	addCorner(keyChip, UDim.new(0, 4))
 	addStroke(keyChip)
 	addPadding(keyChip, 5, 5)
+	window._keyChip = keyChip
 	window._keyChipLabel = createLabel({
 		Size = UDim2.new(0, 0, 1, 0),
 		AutomaticSize = Enum.AutomaticSize.X,
@@ -4427,6 +4501,7 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 		TextColor3 = Theme.Muted,
 		Parent = profile,
 	})
+	window._hintLabel = hintLabel
 	local function placeHint()
 		local chipWidth = keyChip.AbsoluteSize.X / window.Scale.Scale
 		hintLabel.Position = UDim2.fromOffset(48 + chipWidth + 6, 26)
@@ -4487,31 +4562,10 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 		window:Toggle(false)
 	end)
 
-	local notifyHolder = create("Frame", {
-		Name = "Notifications",
-		AnchorPoint = Vector2.new(1, 1),
-		Position = UDim2.new(1, -20, 1, -20),
-		Size = UDim2.new(0, 280, 1, -40),
-		BackgroundTransparency = 1,
-		Parent = screenGui,
-	})
-	local function fitNotifications()
-		local width = screenGui.AbsoluteSize.X
-		if width > 0 then
-			notifyHolder.Size = UDim2.new(0, math.min(280, width - 40), 1, -40)
-		end
-	end
-	table.insert(window._connections, screenGui:GetPropertyChangedSignal("AbsoluteSize"):Connect(fitNotifications))
-	create("UIListLayout", {
-		SortOrder = Enum.SortOrder.LayoutOrder,
-		VerticalAlignment = Enum.VerticalAlignment.Bottom,
-		Padding = UDim.new(0, 4),
-		Parent = notifyHolder,
-	})
-	window.NotifyHolder = notifyHolder
-	window._notifyOrder = 0
-	window._toasts = {}
-	window.MaxNotifications = options.MaxNotifications or 4
+	window._notifyHost = createNotifyHost(screenGui, window._connections, options.MaxNotifications or 4, options.NotificationPosition or NeoxHub.NotificationPosition)
+	window.NotifyHolder = window._notifyHost.Holder
+	window._toasts = window._notifyHost.Toasts
+	window.MaxNotifications = window._notifyHost.MaxNotifications
 
 	window._controlsDirty = true
 	table.insert(window._connections, body.DescendantAdded:Connect(function()
@@ -4611,7 +4665,6 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 		end
 	end)
 	screenGui.Parent = options.Parent or getGuiParent()
-	fitNotifications()
 
 	window.Scale.Scale = 0.9
 	body.GroupTransparency = 1
@@ -4640,9 +4693,6 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 	end
 	if options.Background then
 		window:SetBackground(options.Background, options.BackgroundTransparency)
-	end
-	if type(options.KeySystem) == "table" then
-		window:_runKeySystem(options.KeySystem)
 	end
 
 	local loading = options.Loading
@@ -4738,7 +4788,7 @@ local function recolorAllWindows(colorMap)
 end
 
 local THEME_ALIASES = {
-	Midnight = "Default",
+	Mono = "Default",
 }
 
 local function resolveTheme(themeInput)
@@ -4840,7 +4890,10 @@ end
 
 function NeoxHub:Notify(input)
 	local window = latestWindow()
-	return window and window:Notify(input) or nil
+	if window then
+		return window:Notify(input)
+	end
+	return NeoxHub:_notifyFallback(input)
 end
 
 function NeoxHub:Confirm(input)
@@ -5265,11 +5318,23 @@ function Window:_fitToScreen(instant)
 	if screen.X == 0 or screen.Y == 0 then
 		return
 	end
-	local size = self.Root.Size
-	local fit = math.min(
-		(screen.X - 24) / math.max(size.X.Offset, 1),
-		(screen.Y - 24) / math.max(size.Y.Offset, 1))
-	self._fitScale = math.max(math.min(self._userScale or 1, fit), 0.45)
+	local margin = IS_TOUCH and 12 or 24
+	local availX, availY = screen.X - margin * 2, screen.Y - margin * 2
+	local base = self._baseSize or Vector2.new(self.Root.Size.X.Offset, self.Root.Size.Y.Offset)
+	local userScale = self._userScale or 1
+
+	local width = math.min(base.X, availX / userScale)
+	local height = math.min(base.Y, availY / userScale)
+	width = math.floor(math.max(width, math.min(COMPACT_MIN.X, base.X)))
+	height = math.floor(math.max(height, math.min(COMPACT_MIN.Y, base.Y)))
+	local current = self.Root.Size
+	if current.X.Offset ~= width or current.Y.Offset ~= height then
+		self.Root.Size = UDim2.fromOffset(width, height)
+	end
+
+	local fit = math.min(availX / width, availY / height)
+	self._fitScale = math.max(math.min(userScale, fit), 0.5)
+	self:_setCompact(width < COMPACT_WIDTH)
 
 	if self._introDone and self.Open then
 		if instant then
@@ -5278,6 +5343,69 @@ function Window:_fitToScreen(instant)
 			tween(self.Scale, { Scale = self._fitScale }, 0.2)
 		end
 	end
+end
+
+function Window:_layoutTabButton(tab)
+	local compact = self._compact == true
+	tab._label.Visible = not compact
+	if tab._icon then
+		tab._icon.AnchorPoint = compact and Vector2.new(0.5, 0.5) or Vector2.new(0, 0.5)
+		tab._icon.Position = compact and UDim2.fromScale(0.5, 0.5) or UDim2.new(0, 12, 0.5, 0)
+	end
+	if tab._initial then
+		tab._initial.Visible = compact and not tab._icon
+	end
+end
+
+function Window:_setCompact(compact)
+	compact = compact == true
+	if self._compact == compact then
+		return
+	end
+	self._compact = compact
+	local width = compact and COMPACT_SIDEBAR or SIDEBAR_WIDTH
+	self._sidebar.Size = UDim2.new(0, width - 8, 1, -16)
+	self.Content.Position = UDim2.fromOffset(width + 2, 0)
+	self.Content.Size = UDim2.new(1, -(width + 2), 1, 0)
+
+	self._titleLabel.Visible = not compact
+	self._subtitleLabel.Visible = not compact
+	self._logo.AnchorPoint = compact and Vector2.new(0.5, 0) or Vector2.zero
+	self._logo.Position = compact and UDim2.new(0.5, 0, 0, 13) or UDim2.fromOffset(12, 13)
+
+	if self._searchFrame then
+		self._searchFrame.Visible = not compact
+		if compact and self._searchBox.Text ~= "" then
+			self._searchBox.Text = ""
+		end
+	end
+	local top = compact and 66 or self._listTop
+	self.TabList.Position = UDim2.fromOffset(0, top)
+	self.TabList.Size = UDim2.new(1, 0, 1, -(top + 66))
+	if self._searchResults then
+		self._searchResults.Position = UDim2.fromOffset(0, top)
+		self._searchResults.Size = UDim2.new(1, 0, 1, -(top + 66))
+	end
+
+	for _, tab in ipairs(self.Tabs) do
+		self:_layoutTabButton(tab)
+	end
+	for _, section in ipairs(self._sections or {}) do
+		section:_applyCompact(compact)
+	end
+
+	self._profileName.Visible = not compact
+	self._keyChip.Visible = not compact
+	self._hintLabel.Visible = not compact
+	self._avatar.AnchorPoint = compact and Vector2.new(0.5, 0.5) or Vector2.new(0, 0.5)
+	self._avatar.Position = compact and UDim2.fromScale(0.5, 0.5) or UDim2.new(0, 8, 0.5, 0)
+
+	task.delay(0.05, function()
+		local current = self.CurrentTab
+		if current and self._introDone and not self._destroyed and current._button.Visible then
+			self:_placeIndicator(current)
+		end
+	end)
 end
 
 function Window:_clampToScreen()
@@ -5443,6 +5571,7 @@ function Window:_enableResize(minSize)
 			tween(gripImage, { ImageTransparency = 0.8 }, 0.17)
 			if targetSize then
 				self.Root.Size = UDim2.fromOffset(targetSize.X, targetSize.Y)
+				self._baseSize = targetSize
 				targetSize = nil
 			end
 			self:_fitToScreen()
@@ -5620,6 +5749,57 @@ function Window:ListConfigs()
 	end
 	table.sort(names)
 	return names
+end
+
+function Window:ExportConfig()
+	local data = {}
+	for flag, element in pairs(self.Flags) do
+		if element._type and type(element.Get) == "function" then
+			data[flag] = serializeElement(element)
+		end
+	end
+	local ok, text = pcall(function()
+		return HttpService:JSONEncode(data)
+	end)
+	return ok and text or nil
+end
+
+function Window:ImportConfig(text)
+	local ok, data = pcall(function()
+		return HttpService:JSONDecode(text)
+	end)
+	if not ok or type(data) ~= "table" then
+		return false, "that is not a valid config"
+	end
+	local applied = 0
+	for flag, saved in pairs(data) do
+		local element = self.Flags[flag]
+		if element and type(element.Set) == "function" and type(saved) == "table" and saved.Type == element._type then
+			if pcall(applySavedValue, element, saved, false) then
+				applied += 1
+			end
+		end
+	end
+	if applied == 0 then
+		return false, "nothing in that config matches this script"
+	end
+	return true, applied
+end
+
+function Window:ResetConfig()
+	local reset = 0
+	for _, element in pairs(self.Flags) do
+		if element._defaultValue ~= nil and type(element.Set) == "function" then
+			local value = element._defaultValue
+			if type(value) == "table" then
+				value = table.clone(value)
+			end
+			if pcall(element.Set, element, value) then
+				reset += 1
+			end
+		end
+	end
+	return reset
 end
 
 function Window:SetAutoSave(enabled)
@@ -6297,6 +6477,20 @@ function Window:Tab(input, icon)
 	end
 
 	tab._labelX = hasIcon and 36 or 14
+	if not hasIcon then
+		tab._initial = createLabel({
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			Position = UDim2.fromScale(0.5, 0.5),
+			Size = UDim2.fromOffset(20, 20),
+			Text = string.upper(string.sub(tab.Name, 1, 1)),
+			TextSize = 14,
+			FontFace = Fonts.Bold,
+			TextColor3 = Theme.Muted,
+			TextXAlignment = Enum.TextXAlignment.Center,
+			Visible = false,
+			Parent = button,
+		})
+	end
 	tab._label = createLabel({
 		Position = UDim2.fromOffset(tab._labelX, 0),
 		Size = UDim2.new(1, -(hasIcon and 44 or 22), 1, 0),
@@ -6379,6 +6573,9 @@ function Window:Tab(input, icon)
 			tween(buttonStroke, { Transparency = 0.5 }, 0.12)
 			tween(tab._label, { Position = UDim2.fromOffset(tab._labelX + 3, 0) }, 0.15, Enum.EasingStyle.Quint)
 		end
+		if self._compact then
+			self:_showTooltip(tab.Name, button)
+		end
 	end)
 	button.MouseLeave:Connect(function()
 		if self.CurrentTab ~= tab then
@@ -6386,6 +6583,7 @@ function Window:Tab(input, icon)
 			tween(buttonStroke, { Transparency = 1 }, 0.2)
 			tween(tab._label, { Position = UDim2.fromOffset(tab._labelX, 0) }, 0.2, Enum.EasingStyle.Quint)
 		end
+		self:_hideTooltip(button)
 	end)
 	button.MouseButton1Click:Connect(function()
 		self:SelectTab(tab)
@@ -6394,10 +6592,11 @@ function Window:Tab(input, icon)
 	if not self._introDone then
 		button.Visible = false
 	end
-	if section and not section.Opened then
+	if section and not section.Opened and not self._compact then
 		button.Visible = false
 		button:SetAttribute(ATTR_HIDDEN, true)
 	end
+	self:_layoutTabButton(tab)
 
 	table.insert(self.Tabs, tab)
 	if #self.Tabs == 1 then
@@ -6877,6 +7076,9 @@ function Window:_registerKeybind(entry)
 end
 
 function Window:_showTooltip(text, owner)
+	if IS_TOUCH then
+		return
+	end
 	self._tooltipOwner = owner
 	self._tooltipGeneration = (self._tooltipGeneration or 0) + 1
 	local generation = self._tooltipGeneration
@@ -7332,32 +7534,93 @@ function Window:KeybindList(input)
 	return list
 end
 
-function Window:Notify(input)
+local NOTIFY_POSITIONS = {
+	TopRight = { Anchor = Vector2.new(1, 0), Position = UDim2.new(1, -16, 0, 16), Bottom = false, Side = 1 },
+	BottomRight = { Anchor = Vector2.new(1, 1), Position = UDim2.new(1, -16, 1, -16), Bottom = true, Side = 1 },
+	TopLeft = { Anchor = Vector2.new(0, 0), Position = UDim2.new(0, 16, 0, 16), Bottom = false, Side = -1 },
+	BottomLeft = { Anchor = Vector2.new(0, 1), Position = UDim2.new(0, 16, 1, -16), Bottom = true, Side = -1 },
+	Top = { Anchor = Vector2.new(0.5, 0), Position = UDim2.new(0.5, 0, 0, IS_TOUCH and 64 or 16), Bottom = false, Side = 0 },
+	Bottom = { Anchor = Vector2.new(0.5, 1), Position = UDim2.new(0.5, 0, 1, -16), Bottom = true, Side = 0 },
+}
+
+local DEFAULT_NOTIFY_POSITION = IS_TOUCH and "Top" or "BottomRight"
+local NOTIFY_WIDTH = 300
+
+local function applyNotifyPosition(host, positionName)
+	local layout = NOTIFY_POSITIONS[positionName] or NOTIFY_POSITIONS[DEFAULT_NOTIFY_POSITION]
+	host.Position = NOTIFY_POSITIONS[positionName] and positionName or DEFAULT_NOTIFY_POSITION
+	host.Layout = layout
+	host.Holder.AnchorPoint = layout.Anchor
+	host.Holder.Position = layout.Position
+	host.ListLayout.VerticalAlignment = layout.Bottom and Enum.VerticalAlignment.Bottom or Enum.VerticalAlignment.Top
+end
+
+createNotifyHost = function(screenGui, connections, maxCount, positionName)
+	local holder = create("Frame", {
+		Name = "Notifications",
+		Size = UDim2.new(0, NOTIFY_WIDTH, 1, -32),
+		BackgroundTransparency = 1,
+		ZIndex = 80,
+		Parent = screenGui,
+	})
+	local listLayout = create("UIListLayout", {
+		SortOrder = Enum.SortOrder.LayoutOrder,
+		Padding = UDim.new(0, 6),
+		Parent = holder,
+	})
+	local host = {
+		Holder = holder,
+		ListLayout = listLayout,
+		Toasts = {},
+		Order = 0,
+		MaxNotifications = maxCount or 4,
+	}
+	local function fit()
+		local screen = screenGui.AbsoluteSize
+		if screen.X > 0 then
+			local topOffset = (host.Layout and host.Layout.Position.Y.Offset or 16)
+			holder.Size = UDim2.new(0, math.min(NOTIFY_WIDTH, screen.X - 24), 1, -(math.abs(topOffset) + 16))
+		end
+	end
+	table.insert(connections, screenGui:GetPropertyChangedSignal("AbsoluteSize"):Connect(fit))
+	applyNotifyPosition(host, positionName)
+	fit()
+	host.Fit = fit
+	return host
+end
+
+local function toastKey(options)
+	return tostring(options.Title) .. "\0" .. tostring(options.Content) .. "\0" .. tostring(options.Type)
+end
+
+local function showToast(host, input)
 	local options = normalizeOptions(input, { Text = "Content", Message = "Content", Image = "Icon" })
+	local isLoading = options.Type == "Loading"
 
-	local duration = options.Duration
-	if duration == nil then
-		duration = 4
+	if not isLoading and options.Merge ~= false then
+		local key = toastKey(options)
+		for _, existing in ipairs(host.Toasts) do
+			if existing._key == key and not existing._dismissed then
+				existing:_bump()
+				return existing
+			end
+		end
 	end
-	local persistent = duration == false or (type(duration) == "number" and (duration <= 0 or duration == math.huge))
-	if type(duration) ~= "number" then
-		duration = 4
-	end
 
-	local colorKey = NOTIFY_TYPES[options.Type]
-	local accentColor = colorKey and Theme[colorKey] or Theme.Accent
-	local titleColor = (colorKey and options.Type ~= "Info") and accentColor or Theme.Text
-
-	self._notifyOrder += 1
+	local toast = { _key = toastKey(options) }
+	host.Order += 1
+	local layout = host.Layout
+	local slideOffset = layout.Side ~= 0 and layout.Side * (NOTIFY_WIDTH + 24) or 0
+	local slideY = layout.Side == 0 and (layout.Bottom and 30 or -30) or 0
 
 	local slot = create("Frame", {
 		Size = UDim2.new(1, 0, 0, 0),
 		BackgroundTransparency = 1,
-		LayoutOrder = self._notifyOrder,
-		Parent = self.NotifyHolder,
+		LayoutOrder = layout.Bottom and host.Order or -host.Order,
+		Parent = host.Holder,
 	})
 	local slider = create("Frame", {
-		Position = UDim2.fromOffset(320, 0),
+		Position = UDim2.fromOffset(slideOffset, slideY),
 		Size = UDim2.new(1, 0, 0, 0),
 		AutomaticSize = Enum.AutomaticSize.Y,
 		BackgroundTransparency = 1,
@@ -7393,128 +7656,260 @@ function Window:Notify(input)
 		BackgroundTransparency = 1,
 		Parent = card,
 	})
-	addPadding(inner, 16, 16, 14, persistent and 14 or 24)
-
-	local accentBar = create("Frame", {
-		Position = UDim2.fromOffset(0, 14),
-		Size = UDim2.new(0, 2, 1, -28),
-		BackgroundColor3 = accentColor,
-		BorderSizePixel = 0,
-		Parent = card,
-	})
-	addCorner(accentBar, UDim.new(1, 0))
-
-	local icon = options.Icon
-	if icon == nil then
-		icon = NOTIFY_ICONS[options.Type]
-	end
-	local textOffset = 0
-	if icon then
-		createIcon(inner, icon, accentColor, UDim2.new(0, 0, 0, 8))
-		textOffset = 24
-	end
-
-	createLabel({
-		Position = UDim2.fromOffset(textOffset, 0),
-		Size = UDim2.new(1, -28 - textOffset, 0, 16),
-		Text = tostring(options.Title or "Notification"),
-		TextSize = 14,
-		TextColor3 = titleColor,
+	addPadding(inner, 12, 12, 12, 14)
+	create("UIListLayout", {
+		SortOrder = Enum.SortOrder.LayoutOrder,
+		Padding = UDim.new(0, 8),
 		Parent = inner,
+	})
+
+	local topRow = create("Frame", {
+		Size = UDim2.new(1, 0, 0, 0),
+		AutomaticSize = Enum.AutomaticSize.Y,
+		BackgroundTransparency = 1,
+		LayoutOrder = 1,
+		Parent = inner,
+	})
+
+	local iconTile = create("Frame", {
+		Size = UDim2.fromOffset(30, 30),
+		BackgroundColor3 = Theme.Accent,
+		BackgroundTransparency = 0.85,
+		BorderSizePixel = 0,
+		Parent = topRow,
+	})
+	addCorner(iconTile, UDim.new(0, 8))
+	local iconImage = create("ImageLabel", {
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		Position = UDim2.fromScale(0.5, 0.5),
+		Size = UDim2.fromOffset(16, 16),
+		BackgroundTransparency = 1,
+		ScaleType = Enum.ScaleType.Fit,
+		Parent = iconTile,
+	})
+
+	local textColumn = create("Frame", {
+		Position = UDim2.fromOffset(40, 0),
+		Size = UDim2.new(1, -66, 0, 0),
+		AutomaticSize = Enum.AutomaticSize.Y,
+		BackgroundTransparency = 1,
+		Parent = topRow,
+	})
+	create("UIListLayout", {
+		SortOrder = Enum.SortOrder.LayoutOrder,
+		Padding = UDim.new(0, 3),
+		Parent = textColumn,
+	})
+	local titleRow = create("Frame", {
+		Size = UDim2.new(1, 0, 0, 16),
+		BackgroundTransparency = 1,
+		LayoutOrder = 1,
+		Parent = textColumn,
+	})
+	local titleLabel = createLabel({
+		Size = UDim2.new(1, -36, 1, 0),
+		Text = "",
+		TextSize = 14,
+		Parent = titleRow,
+	})
+	local countBadge = create("Frame", {
+		AnchorPoint = Vector2.new(1, 0.5),
+		Position = UDim2.new(1, 0, 0.5, 0),
+		Size = UDim2.fromOffset(0, 16),
+		AutomaticSize = Enum.AutomaticSize.X,
+		BackgroundColor3 = Theme.Surface3,
+		BorderSizePixel = 0,
+		Visible = false,
+		Parent = titleRow,
+	})
+	addCorner(countBadge, UDim.new(1, 0))
+	addPadding(countBadge, 6, 6)
+	local countLabel = createLabel({
+		Size = UDim2.new(0, 0, 1, 0),
+		AutomaticSize = Enum.AutomaticSize.X,
+		Text = "",
+		TextSize = 11,
+		TextColor3 = Theme.Text,
+		TextTruncate = Enum.TextTruncate.None,
+		Parent = countBadge,
+	})
+	local contentLabel = createLabel({
+		Size = UDim2.new(1, 0, 0, 0),
+		AutomaticSize = Enum.AutomaticSize.Y,
+		Text = "",
+		TextSize = 13,
+		FontFace = Fonts.Regular,
+		TextColor3 = Theme.Muted,
+		TextWrapped = true,
+		TextTruncate = Enum.TextTruncate.None,
+		TextYAlignment = Enum.TextYAlignment.Top,
+		LayoutOrder = 2,
+		Parent = textColumn,
 	})
 
 	local dismissButton = create("TextButton", {
 		AnchorPoint = Vector2.new(1, 0),
-		Position = UDim2.new(1, 6, 0, -5),
-		Size = UDim2.fromOffset(24, 24),
+		Position = UDim2.new(1, 4, 0, -4),
+		Size = UDim2.fromOffset(IS_TOUCH and 30 or 22, IS_TOUCH and 30 or 22),
 		BackgroundTransparency = 1,
 		Text = "×",
 		TextColor3 = Theme.Muted,
-		TextSize = 22,
+		TextSize = 20,
 		FontFace = Fonts.Bold,
 		AutoButtonColor = false,
-		Parent = inner,
+		Parent = topRow,
 	})
-	dismissButton.MouseEnter:Connect(function()
-		tween(dismissButton, { TextColor3 = Theme.Text }, 0.15)
-	end)
-	dismissButton.MouseLeave:Connect(function()
-		tween(dismissButton, { TextColor3 = Theme.Muted }, 0.2)
-	end)
 
-	if options.Content then
-		createLabel({
-			Position = UDim2.fromOffset(textOffset, 21),
-			Size = UDim2.new(1, -textOffset, 0, 0),
-			AutomaticSize = Enum.AutomaticSize.Y,
-			Text = tostring(options.Content),
-			TextSize = 13,
-			FontFace = Fonts.Regular,
-			TextColor3 = Theme.Muted,
-			TextWrapped = true,
-			TextTruncate = Enum.TextTruncate.None,
-			TextYAlignment = Enum.TextYAlignment.Top,
+	local buttonRow
+	if type(options.Buttons) == "table" and #options.Buttons > 0 then
+		buttonRow = create("Frame", {
+			Size = UDim2.new(1, 0, 0, IS_TOUCH and 32 or 28),
+			BackgroundTransparency = 1,
+			LayoutOrder = 2,
 			Parent = inner,
 		})
-	end
-
-	local timerFill
-	if not persistent then
-		local timerTrack = create("Frame", {
-			AnchorPoint = Vector2.new(0, 1),
-			Position = UDim2.new(0, 16, 1, -8),
-			Size = UDim2.new(1, -32, 0, 3),
-			BackgroundColor3 = Theme.Surface3,
-			BorderSizePixel = 0,
-			Parent = card,
+		create("UIListLayout", {
+			FillDirection = Enum.FillDirection.Horizontal,
+			HorizontalAlignment = Enum.HorizontalAlignment.Right,
+			SortOrder = Enum.SortOrder.LayoutOrder,
+			Padding = UDim.new(0, 6),
+			Parent = buttonRow,
 		})
-		addCorner(timerTrack, UDim.new(1, 0))
-		timerFill = create("Frame", {
-			Size = UDim2.fromScale(1, 1),
-			BackgroundColor3 = accentColor,
-			BorderSizePixel = 0,
-			Parent = timerTrack,
-		})
-		addCorner(timerFill, UDim.new(1, 0))
 	end
 
-	local settled = false
-	task.defer(function()
-		if slot.Parent then
-			tween(slot, { Size = UDim2.new(1, 0, 0, card.AbsoluteSize.Y) }, 0.3, Enum.EasingStyle.Quint)
-		end
-	end)
-	task.delay(0.32, function()
-		settled = true
-		if slot.Parent and not slot.ClipsDescendants then
-			slot.Size = UDim2.new(1, 0, 0, card.AbsoluteSize.Y)
-		end
-	end)
+	local timerTrack = create("Frame", {
+		AnchorPoint = Vector2.new(0, 1),
+		Position = UDim2.new(0, 12, 1, -6),
+		Size = UDim2.new(1, -24, 0, 2),
+		BackgroundColor3 = Theme.Surface3,
+		BorderSizePixel = 0,
+		Parent = card,
+	})
+	addCorner(timerTrack, UDim.new(1, 0))
+	local timerFill = create("Frame", {
+		Size = UDim2.fromScale(1, 1),
+		BackgroundColor3 = Theme.Accent,
+		BorderSizePixel = 0,
+		Parent = timerTrack,
+	})
+	addCorner(timerFill, UDim.new(1, 0))
 
-	card:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
-		if settled and slot.Parent and not slot.ClipsDescendants then
-			slot.Size = UDim2.new(1, 0, 0, card.AbsoluteSize.Y)
-		end
-	end)
+	local duration, remaining, persistent = 4, 4, false
+	local paused, holding = false, false
+	local spinning = false
 
-	tween(slider, { Position = UDim2.fromOffset(0, 0) }, 0.5, Enum.EasingStyle.Back)
-	tween(card, { GroupTransparency = 0 }, 0.3)
-	tween(shadow, { ImageTransparency = 0.6 }, 0.4)
-	if timerFill then
-		tween(timerFill, { Size = UDim2.fromScale(0, 1) }, duration, Enum.EasingStyle.Linear)
+	local function setDuration(value, loading)
+		if value == nil then
+			if loading then
+				value = false
+			else
+				value = 4
+			end
+		end
+		persistent = value == false or (type(value) == "number" and (value <= 0 or value == math.huge))
+		duration = type(value) == "number" and value > 0 and value ~= math.huge and value or 4
+		remaining = duration
+		timerTrack.Visible = not persistent
+		timerFill.Size = UDim2.fromScale(1, 1)
 	end
 
-	local dismissed = false
-	local function dismiss()
-		if dismissed then
+	local function paint(data)
+		local kind = data.Type
+		local colorKey = NOTIFY_TYPES[kind] or (kind == "Loading" and "Accent") or "Accent"
+		local color = Theme[colorKey] or Theme.Accent
+		iconTile.BackgroundColor3 = color
+		iconImage.ImageColor3 = color
+		timerFill.BackgroundColor3 = color
+		titleLabel.TextColor3 = (kind and kind ~= "Info" and kind ~= "Loading") and color or Theme.Text
+
+		local icon = data.Icon
+		if icon == nil then
+			icon = kind == "Loading" and "loader-circle" or NOTIFY_ICONS[kind] or "bell"
+		end
+		local hasIcon = icon ~= false and setIcon(iconImage, icon)
+		iconTile.Visible = hasIcon
+		textColumn.Position = UDim2.fromOffset(hasIcon and 40 or 0, 0)
+		textColumn.Size = UDim2.new(1, hasIcon and -66 or -26, 0, 0)
+		spinning = kind == "Loading" and hasIcon
+		if not spinning then
+			iconImage.Rotation = 0
+		end
+
+		setTranslated(titleLabel, "Text", tostring(data.Title or "Notification"))
+		local content = data.Content
+		contentLabel.Visible = content ~= nil and tostring(content) ~= ""
+		setTranslated(contentLabel, "Text", content ~= nil and tostring(content) or "")
+	end
+
+	paint(options)
+	setDuration(options.Duration, isLoading)
+
+	if buttonRow then
+		for order, buttonDef in ipairs(options.Buttons) do
+			local primary = buttonDef.Primary == true or buttonDef.Variant == "Primary"
+			local button = create("TextButton", {
+				Size = UDim2.fromOffset(0, IS_TOUCH and 32 or 28),
+				AutomaticSize = Enum.AutomaticSize.X,
+				BackgroundColor3 = primary and Theme.Accent or Theme.Surface2,
+				Text = "",
+				AutoButtonColor = false,
+				LayoutOrder = order,
+				Parent = buttonRow,
+			})
+			addCorner(button, UDim.new(0, 6))
+			if not primary then
+				addStroke(button)
+			end
+			addPadding(button, 12, 12)
+			createLabel({
+				Size = UDim2.new(0, 0, 1, 0),
+				AutomaticSize = Enum.AutomaticSize.X,
+				Text = tostring(buttonDef.Title or buttonDef.Name or "OK"),
+				TextSize = 12,
+				TextColor3 = primary and Theme.AccentDark or Theme.Text,
+				TextTruncate = Enum.TextTruncate.None,
+				Parent = button,
+			})
+			button.MouseButton1Click:Connect(function()
+				safeCall(buttonDef.Callback)
+				if buttonDef.Close ~= false then
+					toast:Dismiss()
+				end
+			end)
+		end
+	end
+
+	if options.Sound then
+		pcall(function()
+			local sound = Instance.new("Sound")
+			sound.SoundId = tostring(options.Sound)
+			sound.Volume = tonumber(options.Volume) or 0.5
+			sound.Parent = host.Holder
+			sound:Play()
+			task.delay(5, function()
+				sound:Destroy()
+			end)
+		end)
+	end
+
+	local count = 1
+	local dragConnections = {}
+	toast._dismissed = false
+
+	function toast:Dismiss(direction)
+		if toast._dismissed then
 			return
 		end
-		dismissed = true
-		local index = table.find(self._toasts, dismiss)
+		toast._dismissed = true
+		local index = table.find(host.Toasts, toast)
 		if index then
-			table.remove(self._toasts, index)
+			table.remove(host.Toasts, index)
 		end
-		tween(slider, { Position = UDim2.fromOffset(320, 0) }, 0.3, Enum.EasingStyle.Quint)
+		for _, connection in ipairs(dragConnections) do
+			connection:Disconnect()
+		end
+		local outX = direction or (layout.Side ~= 0 and layout.Side * (NOTIFY_WIDTH + 24) or 0)
+		tween(slider, { Position = UDim2.fromOffset(outX, slideY) }, 0.3, Enum.EasingStyle.Quint)
 		tween(card, { GroupTransparency = 1 }, 0.2)
 		tween(cardStroke, { Transparency = 1 }, 0.15)
 		tween(shadow, { ImageTransparency = 1 }, 0.2)
@@ -7523,24 +7918,167 @@ function Window:Notify(input)
 				return
 			end
 			slot.ClipsDescendants = true
-			tween(slot, { Size = UDim2.new(1, 0, 0, -4) }, 0.22, Enum.EasingStyle.Quint)
+			tween(slot, { Size = UDim2.new(1, 0, 0, 0) }, 0.22, Enum.EasingStyle.Quint)
 			task.delay(0.24, function()
 				slot:Destroy()
 			end)
 		end)
+		safeCall(options.OnClose)
 	end
 
-	if not persistent then
-		task.delay(duration, dismiss)
+	function toast:Update(changes)
+		if toast._dismissed or type(changes) ~= "table" then
+			return
+		end
+		for key, value in pairs(changes) do
+			options[key] = value
+		end
+		paint(options)
+		if changes.Duration ~= nil or changes.Type ~= nil then
+			setDuration(options.Duration, options.Type == "Loading")
+		end
+		toast._key = toastKey(options)
 	end
-	dismissButton.MouseButton1Click:Connect(dismiss)
 
-	table.insert(self._toasts, dismiss)
-	while #self._toasts > self.MaxNotifications do
-		table.remove(self._toasts, 1)()
+	function toast:SetProgress(alpha)
+		timerTrack.Visible = true
+		persistent = true
+		timerFill.Size = UDim2.fromScale(math.clamp(tonumber(alpha) or 0, 0, 1), 1)
 	end
 
-	return { Dismiss = dismiss }
+	function toast:_bump()
+		count += 1
+		countBadge.Visible = true
+		countLabel.Text = "×" .. count
+		remaining = duration
+		local scale = create("UIScale", { Scale = 1.04, Parent = card })
+		tween(scale, { Scale = 1 }, 0.25, Enum.EasingStyle.Back)
+		task.delay(0.26, function()
+			scale:Destroy()
+		end)
+	end
+
+	toast.Close = toast.Dismiss
+
+	local hoverTargets = { card, dismissButton }
+	for _, target in ipairs(hoverTargets) do
+		target.MouseEnter:Connect(function()
+			paused = true
+		end)
+		target.MouseLeave:Connect(function()
+			paused = false
+		end)
+	end
+	dismissButton.MouseButton1Click:Connect(function()
+		toast:Dismiss()
+	end)
+
+	local dragStart, dragging, moved = nil, false, false
+	card.InputBegan:Connect(function(inputObject)
+		if isPress(inputObject) then
+			dragStart = getMousePosition()
+			dragging, moved, holding = true, false, true
+		end
+	end)
+	table.insert(dragConnections, UserInputService.InputChanged:Connect(function(inputObject)
+		if not dragging or not isMove(inputObject) then
+			return
+		end
+		local dx = getMousePosition().X - dragStart.X
+		if math.abs(dx) > 6 then
+			moved = true
+		end
+		if moved then
+			slider.Position = UDim2.fromOffset(dx, 0)
+			card.GroupTransparency = math.clamp(math.abs(dx) / 220, 0, 0.6)
+		end
+	end))
+	table.insert(dragConnections, UserInputService.InputEnded:Connect(function(inputObject)
+		if not dragging or not isPress(inputObject) then
+			return
+		end
+		dragging, holding = false, false
+		local dx = getMousePosition().X - dragStart.X
+		if moved and math.abs(dx) > 70 then
+			toast:Dismiss((dx > 0 and 1 or -1) * (NOTIFY_WIDTH + 40))
+		elseif moved then
+			tween(slider, { Position = UDim2.fromOffset(0, 0) }, 0.25, Enum.EasingStyle.Quint)
+			tween(card, { GroupTransparency = 0 }, 0.2)
+		elseif type(options.Callback) == "function" then
+			safeCall(options.Callback)
+			toast:Dismiss()
+		end
+	end))
+
+	task.defer(function()
+		if slot.Parent then
+			tween(slot, { Size = UDim2.new(1, 0, 0, card.AbsoluteSize.Y) }, 0.3, Enum.EasingStyle.Quint)
+		end
+	end)
+	local settled = false
+	task.delay(0.32, function()
+		settled = true
+		if slot.Parent and not toast._dismissed then
+			slot.Size = UDim2.new(1, 0, 0, card.AbsoluteSize.Y)
+		end
+	end)
+	card:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
+		if settled and slot.Parent and not toast._dismissed then
+			slot.Size = UDim2.new(1, 0, 0, card.AbsoluteSize.Y)
+		end
+	end)
+
+	tween(slider, { Position = UDim2.fromOffset(0, 0) }, 0.45, Enum.EasingStyle.Quint)
+	tween(card, { GroupTransparency = 0 }, 0.3)
+	tween(shadow, { ImageTransparency = 0.6 }, 0.4)
+
+	task.spawn(function()
+		while slot.Parent and not toast._dismissed do
+			local elapsed = task.wait(0.05) or 0.05
+			if spinning then
+				iconImage.Rotation = (iconImage.Rotation + elapsed * 360) % 360
+			end
+			if not persistent and not paused and not holding then
+				remaining -= elapsed
+				timerFill.Size = UDim2.fromScale(math.clamp(remaining / duration, 0, 1), 1)
+				if remaining <= 0 then
+					toast:Dismiss()
+				end
+			end
+		end
+	end)
+
+	table.insert(host.Toasts, toast)
+	while #host.Toasts > host.MaxNotifications do
+		host.Toasts[1]:Dismiss()
+	end
+
+	return toast
+end
+
+function Window:Notify(input)
+	return showToast(self._notifyHost, input)
+end
+
+function Window:SetNotificationPosition(positionName)
+	applyNotifyPosition(self._notifyHost, positionName)
+	self._notifyHost.Fit()
+end
+
+local fallbackHost
+function NeoxHub:_notifyFallback(input)
+	if not fallbackHost or not fallbackHost.Holder.Parent then
+		local screenGui = create("ScreenGui", {
+			Name = GUI_NAME .. "Notifications",
+			IgnoreGuiInset = true,
+			ResetOnSpawn = false,
+			DisplayOrder = 1000,
+			ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
+			Parent = getGuiParent(),
+		})
+		fallbackHost = createNotifyHost(screenGui, {}, 4, NeoxHub.NotificationPosition)
+	end
+	return showToast(fallbackHost, input)
 end
 
 function Window:Destroy()
@@ -7661,6 +8199,7 @@ function Window:SetSize(size)
 	if typeof(size) ~= "UDim2" then
 		return
 	end
+	self._baseSize = Vector2.new(size.X.Offset, size.Y.Offset)
 	tween(self.Root, { Size = size }, 0.25, Enum.EasingStyle.Quint)
 	task.delay(0.26, function()
 		if not self._destroyed then
@@ -7834,7 +8373,26 @@ function Window:TabSection(input)
 		tween(titleLabel, { TextColor3 = Theme.Muted }, 0.2)
 	end)
 
+	function section:_applyCompact(compact)
+		header.Visible = not compact
+		if compact then
+			for _, tab in ipairs(section.Tabs) do
+				tab._button:SetAttribute(ATTR_HIDDEN, false)
+				if section.Window._introDone then
+					tab._button.Visible = true
+				end
+			end
+		else
+			section:SetOpen(section.Opened)
+		end
+	end
+
 	chevron:Set(section.Opened)
+	self._sections = self._sections or {}
+	table.insert(self._sections, section)
+	if self._compact then
+		section:_applyCompact(true)
+	end
 	self._currentSection = section
 	return section
 end
@@ -8460,6 +9018,260 @@ function Tab:Space(input)
 	return registerElement(self, {}, {}, spacer, "Space")
 end
 
+function Tab:Stat(input)
+	local options = normalizeOptions(input, { Title = "Name", Text = "Value" })
+	local height = options.Desc and ROW_HEIGHT_DESC or ROW_HEIGHT
+	local card, stroke = createCard(self, "Frame", height)
+	bindHoverStroke(card, stroke)
+
+	local left = 14
+	if options.Icon then
+		createIcon(card, options.Icon, Theme.Accent, UDim2.new(0, 14, 0.5, 0))
+		left = 40
+	end
+	local titleLabel, descLabel = createTitleBlock(card, options.Name or "Stat", options.Desc, 150)
+	for _, label in ipairs({ titleLabel, descLabel }) do
+		label.Position += UDim2.fromOffset(left - 14, 0)
+		label.Size -= UDim2.fromOffset(left - 14, 0)
+	end
+
+	local valueLabel = createLabel({
+		AnchorPoint = Vector2.new(1, 0.5),
+		Position = UDim2.new(1, -14, 0.5, 0),
+		Size = UDim2.new(0, 140, 0, 20),
+		Text = tostring(options.Value or "-"),
+		TextSize = 14,
+		FontFace = Fonts.Bold,
+		TextColor3 = options.Color or Theme.Accent,
+		TextXAlignment = Enum.TextXAlignment.Right,
+		Parent = card,
+	})
+
+	local element = { Value = options.Value, _listeners = {} }
+	function element:Set(value)
+		element.Value = value
+		local text = tostring(value)
+		if valueLabel.Text ~= text then
+			valueLabel.Text = text
+		end
+	end
+	element.SetValue = element.Set
+	function element:Get()
+		return element.Value
+	end
+	function element:SetColor(color)
+		valueLabel.TextColor3 = color
+	end
+
+	if type(options.Update) == "function" then
+		local rate = math.max(tonumber(options.UpdateRate) or 1, 0.05)
+		local running = true
+		table.insert(element._listeners, function()
+			running = false
+		end)
+		task.spawn(function()
+			while running and card.Parent do
+				local ok, value = pcall(options.Update)
+				if ok and value ~= nil then
+					element:Set(value)
+				end
+				task.wait(rate)
+			end
+		end)
+	end
+
+	return registerElement(self, options, element, card, "Stat")
+end
+
+function Tab:Image(input)
+	local options = normalizeOptions(input, { Title = "Name", Text = "Caption", Desc = "Caption" })
+	local height = tonumber(options.Height) or 150
+
+	local card = create("Frame", {
+		Size = UDim2.new(1, 0, 0, 0),
+		AutomaticSize = Enum.AutomaticSize.Y,
+		BackgroundColor3 = Theme.Surface2,
+		BorderSizePixel = 0,
+		LayoutOrder = self:_nextOrder(),
+		Parent = self.List,
+	})
+	card:SetAttribute(ATTR_NO_DRAG, true)
+	addCorner(card)
+	addStroke(card)
+	addPadding(card, 8, 8, 8, 8)
+	create("UIListLayout", {
+		SortOrder = Enum.SortOrder.LayoutOrder,
+		Padding = UDim.new(0, 8),
+		Parent = card,
+	})
+
+	local image = create("ImageLabel", {
+		Size = UDim2.new(1, 0, 0, height),
+		BackgroundColor3 = Theme.Background,
+		ScaleType = options.ScaleType or Enum.ScaleType.Fit,
+		LayoutOrder = 1,
+		Parent = card,
+	})
+	image:SetAttribute(ATTR_NO_THEME, true)
+	addCorner(image, UDim.new(0, 6))
+	setIcon(image, options.Image or options.Icon)
+
+	local caption
+	if options.Name or options.Caption then
+		caption = createLabel({
+			Name = "Title",
+			Size = UDim2.new(1, 0, 0, 0),
+			AutomaticSize = Enum.AutomaticSize.Y,
+			Text = tostring(options.Caption or options.Name),
+			TextSize = 12,
+			FontFace = Fonts.Regular,
+			TextColor3 = Theme.Muted,
+			TextWrapped = true,
+			TextTruncate = Enum.TextTruncate.None,
+			LayoutOrder = 2,
+			Parent = card,
+		})
+		addPadding(caption, 4, 4)
+	end
+
+	local element = {}
+	function element:SetImage(newImage)
+		setIcon(image, newImage)
+	end
+	function element:SetHeight(newHeight)
+		image.Size = UDim2.new(1, 0, 0, tonumber(newHeight) or height)
+	end
+	return registerElement(self, options, element, card, "Image")
+end
+
+function Window:FloatingButton(input)
+	local options = normalizeOptions(input, { Name = "Title", Text = "Title" })
+	local linked = options.Toggle
+	local count = #(self._floating or {})
+	self._floating = self._floating or {}
+
+	local button = create("TextButton", {
+		AnchorPoint = Vector2.new(1, 0.5),
+		Position = options.Position or UDim2.new(1, -16, 0.5, count * (IS_TOUCH and 52 or 44)),
+		Size = UDim2.fromOffset(0, IS_TOUCH and 44 or 36),
+		AutomaticSize = Enum.AutomaticSize.X,
+		BackgroundColor3 = Theme.Background,
+		Text = "",
+		AutoButtonColor = false,
+		ZIndex = 60,
+		Parent = self.Gui,
+	})
+	addCorner(button, UDim.new(1, 0))
+	local buttonStroke = addStroke(button, Theme.Stroke)
+	addPadding(button, 12, 14)
+	create("UIListLayout", {
+		FillDirection = Enum.FillDirection.Horizontal,
+		VerticalAlignment = Enum.VerticalAlignment.Center,
+		SortOrder = Enum.SortOrder.LayoutOrder,
+		Padding = UDim.new(0, 7),
+		Parent = button,
+	})
+
+	local dot = create("Frame", {
+		Size = UDim2.fromOffset(8, 8),
+		BackgroundColor3 = Theme.Muted,
+		BorderSizePixel = 0,
+		LayoutOrder = 1,
+		Visible = linked ~= nil,
+		ZIndex = 61,
+		Parent = button,
+	})
+	addCorner(dot, UDim.new(1, 0))
+
+	if options.Icon then
+		local image = create("ImageLabel", {
+			Size = UDim2.fromOffset(16, 16),
+			BackgroundTransparency = 1,
+			ImageColor3 = Theme.Accent,
+			ScaleType = Enum.ScaleType.Fit,
+			LayoutOrder = 2,
+			ZIndex = 61,
+			Parent = button,
+		})
+		if not setIcon(image, options.Icon) then
+			image:Destroy()
+		end
+	end
+
+	local label = createLabel({
+		Size = UDim2.new(0, 0, 1, 0),
+		AutomaticSize = Enum.AutomaticSize.X,
+		Text = tostring(options.Title or "Button"),
+		TextSize = 13,
+		TextTruncate = Enum.TextTruncate.None,
+		LayoutOrder = 3,
+		ZIndex = 61,
+		Parent = button,
+	})
+
+	local floating = { Frame = button }
+
+	local function renderState()
+		if not linked then
+			return
+		end
+		local on = linked:Get() == true
+		tween(dot, { BackgroundColor3 = on and Theme.Success or Theme.Muted }, 0.15)
+		tween(buttonStroke, { Color = on and Theme.Accent or Theme.Stroke }, 0.15)
+	end
+
+	local function press()
+		if linked and type(linked.Set) == "function" then
+			if not linked.Locked then
+				linked:Set(not linked:Get())
+			end
+		else
+			safeCall(options.Callback)
+		end
+		renderState()
+		local scale = create("UIScale", { Scale = 0.94, Parent = button })
+		tween(scale, { Scale = 1 }, 0.2, Enum.EasingStyle.Back)
+		task.delay(0.21, function()
+			scale:Destroy()
+		end)
+	end
+
+	self:_makeDraggable(button, press)
+	table.insert(self._overlays, button)
+	table.insert(self._floating, floating)
+
+	if linked then
+		task.spawn(function()
+			while button.Parent and not linked._destroyed do
+				renderState()
+				task.wait(0.25)
+			end
+			if button.Parent and linked._destroyed then
+				button:Destroy()
+			end
+		end)
+	end
+
+	function floating:SetTitle(text)
+		setTranslated(label, "Text", tostring(text))
+	end
+	function floating:SetVisible(visible)
+		button.Visible = visible ~= false
+	end
+	function floating:Destroy()
+		button:Destroy()
+	end
+
+	if options.Visible == false or (options.TouchOnly and not IS_TOUCH) then
+		floating:SetVisible(false)
+	end
+	renderState()
+	return floating
+end
+Window.MobileButton = Window.FloatingButton
+
+Tab.CreateStat = Tab.Stat
+Tab.CreateImage = Tab.Image
 Tab.CreateCode = Tab.Code
 Tab.CreateSpace = Tab.Space
 
@@ -8470,311 +9282,5 @@ table.insert(NeoxHub._themeListeners, function()
 		end
 	end
 end)
-
-local function keyFilePath(settings)
-	local name = tostring(settings.FileName or "key"):gsub('[%c/\\:%*%?"<>|]', "")
-	return (settings.Folder or GUI_NAME) .. "/" .. (name ~= "" and name or "key") .. ".txt"
-end
-
-local function verifyKey(settings, key)
-	key = tostring(key or ""):match("^%s*(.-)%s*$")
-	if key == "" then
-		return false, "Enter a key first."
-	end
-	if type(settings.Verify) == "function" then
-		local ok, valid, message = pcall(settings.Verify, key)
-		if not ok then
-			return false, "Could not check the key. Try again."
-		end
-		return valid == true, message
-	end
-	local keys = settings.Keys or settings.Key
-	if type(keys) == "string" then
-		keys = { keys }
-	end
-	if type(keys) == "table" then
-		for _, valid in ipairs(keys) do
-			if key == tostring(valid) then
-				return true
-			end
-		end
-		return false, "That key is not valid."
-	end
-	return true
-end
-
-local function readSavedKey(settings)
-	if settings.SaveKey == false or type(readfile) ~= "function" or type(isfile) ~= "function" then
-		return nil
-	end
-	local ok, key = pcall(function()
-		local path = keyFilePath(settings)
-		return isfile(path) and readfile(path) or nil
-	end)
-	return ok and type(key) == "string" and key or nil
-end
-
-local function saveKey(settings, key)
-	if settings.SaveKey == false or type(writefile) ~= "function" then
-		return
-	end
-	pcall(function()
-		local folder = settings.Folder or GUI_NAME
-		if type(isfolder) == "function" and type(makefolder) == "function" and not isfolder(folder) then
-			makefolder(folder)
-		end
-		writefile(keyFilePath(settings), key)
-	end)
-end
-
-function Window:_runKeySystem(settings)
-	settings = type(settings) == "table" and settings or {}
-	local saved = readSavedKey(settings)
-	if saved and verifyKey(settings, saved) then
-		return true
-	end
-
-	local passed = false
-	local gate = create("CanvasGroup", {
-		Name = "KeySystem",
-		AnchorPoint = Vector2.new(0.5, 0.5),
-		Position = UDim2.new(0.5, 0, 0.5, 14),
-		Size = UDim2.fromOffset(360, 0),
-		AutomaticSize = Enum.AutomaticSize.Y,
-		BackgroundColor3 = Theme.Background,
-		BorderSizePixel = 0,
-		GroupTransparency = 1,
-		ZIndex = 20,
-		Parent = self.Gui,
-	})
-	addCorner(gate, UDim.new(0, 10))
-	addStroke(gate, Theme.Stroke)
-	addTopHighlight(gate)
-	addPadding(gate, 20, 20, 18, 18)
-	create("UIListLayout", {
-		SortOrder = Enum.SortOrder.LayoutOrder,
-		Padding = UDim.new(0, 10),
-		Parent = gate,
-	})
-
-	local brandRow = create("Frame", {
-		Size = UDim2.new(1, 0, 0, 40),
-		BackgroundTransparency = 1,
-		LayoutOrder = 1,
-		Parent = gate,
-	})
-	local logo = create("ImageLabel", {
-		AnchorPoint = Vector2.new(0, 0.5),
-		Position = UDim2.new(0, 0, 0.5, 0),
-		Size = UDim2.fromOffset(36, 36),
-		BackgroundTransparency = 1,
-		ImageColor3 = logoColor(settings.Icon),
-		ScaleType = Enum.ScaleType.Fit,
-		Parent = brandRow,
-	})
-	setLogo(logo, settings.Icon)
-	createLabel({
-		Position = UDim2.fromOffset(46, 2),
-		Size = UDim2.new(1, -80, 0, 20),
-		Text = tostring(settings.Title or self._titleLabel.Text),
-		TextSize = 16,
-		FontFace = Fonts.Bold,
-		Parent = brandRow,
-	})
-	createLabel({
-		Position = UDim2.fromOffset(46, 22),
-		Size = UDim2.new(1, -80, 0, 16),
-		Text = tostring(settings.Subtitle or "Enter your key to continue"),
-		TextSize = 12,
-		FontFace = Fonts.Regular,
-		TextColor3 = Theme.Muted,
-		Parent = brandRow,
-	})
-
-	if settings.Note then
-		createLabel({
-			Size = UDim2.new(1, 0, 0, 0),
-			AutomaticSize = Enum.AutomaticSize.Y,
-			Text = tostring(settings.Note),
-			TextSize = 12,
-			FontFace = Fonts.Regular,
-			TextColor3 = Theme.Muted,
-			TextWrapped = true,
-			TextTruncate = Enum.TextTruncate.None,
-			LayoutOrder = 2,
-			Parent = gate,
-		})
-	end
-
-	local inputFrame = create("Frame", {
-		Size = UDim2.new(1, 0, 0, 36),
-		BackgroundColor3 = Theme.Surface,
-		BorderSizePixel = 0,
-		LayoutOrder = 3,
-		Parent = gate,
-	})
-	addCorner(inputFrame, UDim.new(0, 8))
-	local inputStroke = addStroke(inputFrame)
-	createIcon(inputFrame, "key-round", Theme.Muted, UDim2.new(0, 11, 0.5, 0))
-	local keyBox = create("TextBox", {
-		Position = UDim2.fromOffset(36, 0),
-		Size = UDim2.new(1, -46, 1, 0),
-		BackgroundTransparency = 1,
-		Text = "",
-		PlaceholderText = settings.Placeholder or "Paste your key here",
-		PlaceholderColor3 = Theme.Muted,
-		TextColor3 = Theme.Text,
-		TextSize = 13,
-		FontFace = Fonts.Regular,
-		TextXAlignment = Enum.TextXAlignment.Left,
-		ClearTextOnFocus = false,
-		TextTruncate = Enum.TextTruncate.AtEnd,
-		Parent = inputFrame,
-	})
-	keyBox.Focused:Connect(function()
-		tween(inputStroke, { Color = Theme.Accent }, 0.15)
-	end)
-	keyBox.FocusLost:Connect(function()
-		tween(inputStroke, { Color = Theme.Stroke }, 0.15)
-	end)
-
-	local status = createLabel({
-		Size = UDim2.new(1, 0, 0, 16),
-		Text = "",
-		TextSize = 12,
-		FontFace = Fonts.Regular,
-		TextColor3 = Theme.Muted,
-		LayoutOrder = 4,
-		Parent = gate,
-	})
-
-	local buttonRow = create("Frame", {
-		Size = UDim2.new(1, 0, 0, 32),
-		BackgroundTransparency = 1,
-		LayoutOrder = 5,
-		Parent = gate,
-	})
-	create("UIListLayout", {
-		FillDirection = Enum.FillDirection.Horizontal,
-		HorizontalAlignment = Enum.HorizontalAlignment.Right,
-		SortOrder = Enum.SortOrder.LayoutOrder,
-		Padding = UDim.new(0, 8),
-		Parent = buttonRow,
-	})
-
-	local function gateButton(order, text, icon, primary, callback)
-		local button = create("TextButton", {
-			Size = UDim2.fromOffset(0, 32),
-			AutomaticSize = Enum.AutomaticSize.X,
-			BackgroundColor3 = primary and Theme.Accent or Theme.Surface2,
-			Text = "",
-			AutoButtonColor = false,
-			LayoutOrder = order,
-			Parent = buttonRow,
-		})
-		addCorner(button, UDim.new(0, 7))
-		if not primary then
-			addStroke(button)
-		end
-		addPadding(button, 12, 14)
-		create("UIListLayout", {
-			FillDirection = Enum.FillDirection.Horizontal,
-			VerticalAlignment = Enum.VerticalAlignment.Center,
-			SortOrder = Enum.SortOrder.LayoutOrder,
-			Padding = UDim.new(0, 6),
-			Parent = button,
-		})
-		if icon then
-			local image = create("ImageLabel", {
-				Size = UDim2.fromOffset(14, 14),
-				BackgroundTransparency = 1,
-				ImageColor3 = primary and Theme.AccentDark or Theme.Accent,
-				ScaleType = Enum.ScaleType.Fit,
-				LayoutOrder = 1,
-				Parent = button,
-			})
-			if not setIcon(image, icon) then
-				image:Destroy()
-			end
-		end
-		createLabel({
-			Size = UDim2.new(0, 0, 1, 0),
-			AutomaticSize = Enum.AutomaticSize.X,
-			Text = text,
-			TextSize = 13,
-			TextColor3 = primary and Theme.AccentDark or Theme.Text,
-			TextTruncate = Enum.TextTruncate.None,
-			LayoutOrder = 2,
-			Parent = button,
-		})
-		button.MouseButton1Click:Connect(callback)
-		return button
-	end
-
-	if settings.Discord then
-		gateButton(1, "Discord", "message-circle", false, function()
-			NeoxHub:Copy(settings.Discord)
-		end)
-	end
-	if settings.URL or settings.Link then
-		gateButton(2, "Get Key", "link", false, function()
-			NeoxHub:Copy(settings.URL or settings.Link)
-			status.TextColor3 = Theme.Muted
-			status.Text = "Key link copied. Open it in your browser."
-		end)
-	end
-
-	local checking = false
-	local function shake()
-		local base = UDim2.fromScale(0.5, 0.5)
-		for _, offset in ipairs({ 8, -8, 5, -5, 0 }) do
-			gate.Position = base + UDim2.fromOffset(offset, 0)
-			task.wait(0.04)
-		end
-		gate.Position = base
-	end
-
-	local function submit()
-		if checking or passed then
-			return
-		end
-		checking = true
-		status.TextColor3 = Theme.Muted
-		status.Text = "Checking key..."
-		local key = keyBox.Text:match("^%s*(.-)%s*$")
-		local valid, message = verifyKey(settings, key)
-		checking = false
-		if valid then
-			passed = true
-			saveKey(settings, key)
-			status.TextColor3 = Theme.Success
-			status.Text = message or "Key accepted."
-			safeCall(settings.OnSuccess, key)
-		else
-			status.TextColor3 = Theme.Error
-			status.Text = message or "That key is not valid."
-			safeCall(settings.OnFail, key)
-			task.spawn(shake)
-		end
-	end
-
-	gateButton(3, "Verify", "check", true, submit)
-	keyBox.FocusLost:Connect(function(enterPressed)
-		if enterPressed then
-			submit()
-		end
-	end)
-
-	tween(gate, { GroupTransparency = 0, Position = UDim2.fromScale(0.5, 0.5) }, 0.35, Enum.EasingStyle.Quint)
-
-	while not passed and not self._destroyed do
-		task.wait(0.1)
-	end
-
-	tween(gate, { GroupTransparency = 1, Position = UDim2.new(0.5, 0, 0.5, -10) }, 0.25, Enum.EasingStyle.Quint)
-	task.wait(0.27)
-	gate:Destroy()
-	return passed
-end
 
 return NeoxHub
