@@ -9,7 +9,7 @@ local LocalPlayer = Players.LocalPlayer
 
 local NeoxHub = {}
 NeoxHub.Name = "Neox Hub"
-NeoxHub.Version = "3.1.0"
+NeoxHub.Version = "3.2.0"
 NeoxHub.Flags = {}
 NeoxHub.Windows = {}
 
@@ -25,6 +25,77 @@ local function log(message)
 	warn(LOG_PREFIX .. tostring(message))
 end
 
+local KNOWN_OPTIONS = {}
+local KNOWN_OPTIONS_LOWER = {}
+for name in string.gmatch("AU AbsoluteContentSize AbsoluteSize Accent AccentDark Active ActiveOnly AliveCheck Always Anonymous Asc Australia AutoLoad AutoSave BR Background BackgroundColor3 BackgroundTransparency Backspace BasePart Began Body Bold BottomRight Brazil Button ButtonRow Buttons CA CFrame Callback Canada Cancel CancelText CanvasGroup Caption Changed Changes ClearOnFocus Close CloseOnBackdrop Code Collapsed Color Color3 ColorPicker Configs ConfigurationSaving Confirm ConfirmText ConfirmTimeout Content ContentProvider Copied Copy Copyable CoreGui Create CurrentKeybind CurrentOption CurrentValue Custom CustomFont DE Danger Date DateFormat Decal Default DefaultState Delay Delete Depends DependsOn Desc Description Details Discord DiscordButton DiscordLink Divider Dropdown Duration Element EmptyText Enabled Ended Enter Entries Enum EnumItem Error ErrorNotifications Esc Example ExcludeSelf Executor Expired Expiry FPS FR FileName Flag Folder FolderName Format Frame France Free GET Game Germany GetActive GetKey Glow Greeting Group GuiButton GuiName GuiObject GuiService HWID HasKey Header HeaderItems Height Hold Home HttpService Humanoid HumanoidRootPart IN Icon Image ImageButton ImageColor3 ImageLabel ImageRectPosition ImageRectSize ImageTransparency Increment India Info Input Instance JP Japan KeepOnScreen Key KeyInfo KeyPanel Keybind Keybinds LAlt LCtrl LShift Label Language Lifetime Lighting Load Loading LoadingDuration LoadingSteps LoadingSubtitle LoadingText LoadingTitle Localization Lock Locked LockedReason Loop LoopDelay Lowest Main MarketplaceService Max MaxDistance MaxHeight MaxLength MaxNotifications MaxSize Medium Membership Merge Message Method Min MinSize MobileButton MobileIcon Mode Model Mono Monospace Monthly Multi MultiLine Multiline MultipleOptions Muted NL Name NeoxHidden NeoxHub NeoxHubBlur NeoxHubFonts NeoxLoc NeoxLocPlaceholderText NeoxLocText NeoxNoTheme Netherlands NoDrag None Not Notification NotificationPosition Notifications Numeric OK OnCancel OnChanged OnClose OnRelease Open OpenButton Opened Options Page Pages Paragraph Parent Ping Placeholder PlaceholderColor3 PlaceholderText Player PlayerGui Players Popup Position Prefix Premium PremiumButton PremiumLink PremiumText Primary Profile Progress Qd Qn RAlt RCtrl RShift Radius Range Region RegionCity Regular Reminders Render Reset ResetOnUnload Resizable RunService SG Save Scale ScaleType ScreenGui ScrollBarImageColor3 ScrollingFrame Search SearchAfter SearchPlaceholder SearchResults Secondary Section SectionName Sections SemiBold Session ShowFPS ShowPing ShowPromo ShowTime Sidebar Singapore Size Slider Sound Space Standard Stat Stats Step Stepper Stroke StrokeHover Studio Style Subtitle Success Suffix Surface Surface2 Surface3 Tab TabIcon TabSection Tabs Tag TeamCheck TeleportService Tertiary Text TextArea TextBounds TextBox TextButton TextColor3 TextLabel TextScale TextSize TextTransparency Texture Theme ThemeName Time TimeFormat Title Toggle ToggleUIKeybind Tooltip Top TotalTime TouchOnly TransitionIn TransitionOut Translations Transparency TweenService Type TypeName TypeNames UDim2 UICorner UIGradient UIGridLayout UIListLayout UIPadding UIScale UISizeConstraint UIStroke Unavailable Unknown Update UpdateRate Uptime Usage UseDisplayName User UserInputService UserInputType Value Values Variant Vector2 Vector3 Version VirtualUser Visible Volume Warning Weekly Weights Welcome Window", "%S+") do
+	KNOWN_OPTIONS[name] = true
+	KNOWN_OPTIONS_LOWER[string.lower(name)] = name
+end
+local warnedOptions = {}
+
+local function editDistance(a: string, b: string): number
+	local lengthA, lengthB = string.len(a), string.len(b)
+	if math.abs(lengthA - lengthB) > 2 then
+		return 3
+	end
+	local previous = {}
+	for j = 1, lengthB + 1 do
+		previous[j] = j - 1
+	end
+	for i = 1, lengthA do
+		local current = { i }
+		local rowMin = i
+		for j = 1, lengthB do
+			local cost = string.sub(a, i, i) == string.sub(b, j, j) and 0 or 1
+			local value = math.min(previous[j + 1] + 1, current[j] + 1, previous[j] + cost)
+			current[j + 1] = value
+			rowMin = math.min(rowMin, value)
+		end
+		if rowMin > 2 then
+			return 3
+		end
+		previous = current
+	end
+	return previous[lengthB + 1]
+end
+
+local function suggestOption(key)
+	local lowerKey = string.lower(key)
+	local best, bestDistance = nil, #key <= 5 and 1 or 2
+	for name in pairs(KNOWN_OPTIONS) do
+		local distance = editDistance(lowerKey, string.lower(name))
+		if distance <= bestDistance then
+			if distance < bestDistance or not best then
+				best, bestDistance = name, distance
+			end
+		end
+	end
+	return best
+end
+
+local function checkOptionKeys(options)
+	for key, value in pairs(options) do
+		if type(key) == "string" and not KNOWN_OPTIONS[key] and #key >= 3 then
+			local exact = KNOWN_OPTIONS_LOWER[string.lower(key)]
+			if exact then
+				if options[exact] == nil then
+					options[exact] = value
+				end
+				if not warnedOptions[key] then
+					warnedOptions[key] = true
+					log(("option '%s' should be written '%s' (capital letters matter). Neox Hub used it as '%s' for you."):format(key, exact, exact))
+				end
+			elseif not warnedOptions[key] then
+				local suggestion = suggestOption(key)
+				if suggestion then
+					warnedOptions[key] = true
+					log(("unknown option '%s'. Did you mean '%s'?"):format(key, suggestion))
+				end
+			end
+		end
+	end
+end
+
 local function normalizeOptions(input, aliases)
 	local options = {}
 	if type(input) == "string" then
@@ -33,6 +104,7 @@ local function normalizeOptions(input, aliases)
 		for key, value in pairs(input) do
 			options[key] = value
 		end
+		checkOptionKeys(options)
 	end
 	for alias, canonical in pairs(aliases or {}) do
 		if options[canonical] == nil and options[alias] ~= nil then
@@ -46,14 +118,106 @@ local function normalizeOptions(input, aliases)
 	return options
 end
 
+local LIBRARY_SOURCE = debug.info(1, "s")
+
+NeoxHub.Errors = {}
+NeoxHub.ErrorNotifications = true
+NeoxHub._errorListeners = {}
+local lastErrorTimes = {}
+
+local function captureError(err)
+	local userSource, userLine
+	for level = 2, 40 do
+		local source, line = debug.info(level, "sl")
+		if source == nil then
+			break
+		end
+		if source ~= LIBRARY_SOURCE and source ~= "[C]" and line and line > 0 then
+			userSource, userLine = source, line
+			break
+		end
+	end
+	local traceback = ""
+	pcall(function()
+		local lines = string.split(debug.traceback() or "", "\n")
+		local start = 1
+		for index, line in ipairs(lines) do
+			if line:find("captureError", 1, true) then
+				start = index + 1
+				break
+			end
+		end
+		traceback = table.concat(lines, "\n", start)
+	end)
+	return { Error = err, Traceback = traceback, Source = userSource, Line = userLine }
+end
+
+local function describeError(raw)
+	local text = tostring(raw)
+	local location, line, rest = text:match("^(.-):(%d+): (.*)$")
+	if location and #location < 200 and not location:find("\n") then
+		return rest, tonumber(line), location
+	end
+	return text, nil, nil
+end
+
+local function reportError(where, captured)
+	if type(captured) ~= "table" then
+		captured = { Error = captured, Traceback = "" }
+	end
+	local message, line, location = describeError(captured.Error)
+	local insideLibrary = location ~= nil and location == LIBRARY_SOURCE
+	if insideLibrary or not line then
+		line = captured.Line or line
+	end
+	local entry = {
+		Where = where,
+		Message = message,
+		Line = line,
+		InsideLibrary = insideLibrary,
+		Raw = tostring(captured.Error),
+		Traceback = captured.Traceback or "",
+		Time = os.time(),
+	}
+	table.insert(NeoxHub.Errors, entry)
+	if #NeoxHub.Errors > 50 then
+		table.remove(NeoxHub.Errors, 1)
+	end
+
+	local key = where .. "\0" .. message
+	local now = os.clock()
+	if lastErrorTimes[key] and now - lastErrorTimes[key] < 2 then
+		return entry
+	end
+	lastErrorTimes[key] = now
+
+	entry.Summary = message .. (line and (" (line " .. line .. ")") or "")
+	warn(("%serror in %s: %s\n%s"):format(LOG_PREFIX, where, entry.Summary, entry.Traceback))
+	for _, listener in ipairs(table.clone(NeoxHub._errorListeners)) do
+		pcall(listener, entry)
+	end
+	if NeoxHub.ErrorNotifications ~= false and type(NeoxHub._showErrorToast) == "function" then
+		pcall(NeoxHub._showErrorToast, entry)
+	end
+	return entry
+end
+
+local function runProtected(where, callback, ...)
+	if type(callback) ~= "function" then
+		return false
+	end
+	local ok, result = xpcall(callback, captureError, ...)
+	if not ok then
+		reportError(where, result)
+	end
+	return ok, result
+end
+
 local function safeCall(callback, ...)
 	if type(callback) ~= "function" then
 		return
 	end
-	local ok, err = pcall(callback, ...)
-	if not ok then
-		log("callback error: " .. tostring(err))
-	end
+	runProtected("a callback", callback, ...)
 end
 
 local THEME_KEYS = {
@@ -847,9 +1011,42 @@ local function registerElement(tab, options, element, frame, typeName, callbackK
 	local window = tab and tab.Window
 	element._tab = tab
 	callbackKey = callbackKey or "Callback"
+	local displayName = options.Name or options.Title or options.Text or options.Flag
+	local label = displayName ~= nil and ('%s "%s"'):format(typeName, tostring(displayName)) or typeName
+	element._label = label
 	local userCallback = options[callbackKey]
 	local wrapped = window ~= nil
 	local changedListeners = {}
+
+	if userCallback ~= nil and type(userCallback) ~= "function" then
+		log(("%s: %s should be a function, but got a %s. It will be ignored."):format(label, callbackKey, typeof(userCallback)))
+		userCallback = nil
+	end
+	if options.Flag ~= nil and type(options.Flag) ~= "string" then
+		log(("%s: Flag should be a string, but got a %s."):format(label, typeof(options.Flag)))
+		options.Flag = tostring(options.Flag)
+	end
+	if options.Flag and window then
+		local existing = window.Flags[options.Flag]
+		if existing and existing ~= element and not existing._destroyed then
+			log(('%s: Flag "%s" is already used by %s. Every Flag needs to be unique, otherwise saving and loading mixes them up.')
+				:format(label, options.Flag, existing._label or "another element"))
+		end
+	end
+	if typeName == "Slider" and options.Range ~= nil
+		and (type(options.Range) ~= "table" or not tonumber(options.Range[1]) or not tonumber(options.Range[2])) then
+		log(("%s: Range should look like { min, max }, for example { 0, 100 }."):format(label))
+	end
+	if (typeName == "Slider" or typeName == "Stepper") and options.Increment ~= nil
+		and (not tonumber(options.Increment) or tonumber(options.Increment) <= 0) then
+		log(("%s: Increment should be a number above 0."):format(label))
+	end
+	if typeName == "Dropdown" and options.Options ~= nil and type(options.Options) ~= "table" then
+		log(("%s: Options should be a list, for example { \"A\", \"B\" }."):format(label))
+	end
+	if typeName == "Toggle" and options.Loop ~= nil and type(options.Loop) ~= "function" then
+		log(("%s: Loop should be a function."):format(label))
+	end
 
 	function element:OnChanged(listener)
 		if type(listener) ~= "function" then
@@ -873,14 +1070,21 @@ local function registerElement(tab, options, element, frame, typeName, callbackK
 		end
 	end
 
+	if window and callbackKey ~= "Callback" and type(options.Callback) == "function" then
+		local pressCallback = options.Callback
+		options.Callback = function(...)
+			runProtected(label, pressCallback, ...)
+		end
+	end
+
 	if window then
 		options[callbackKey] = function(...)
 			if element._destroyed then
 				return
 			end
-			safeCall(userCallback, ...)
+			runProtected(label, userCallback, ...)
 			for _, listener in ipairs(table.clone(changedListeners)) do
-				safeCall(listener, ...)
+				runProtected(label .. " OnChanged", listener, ...)
 			end
 			if options.Flag then
 				window:_autoSave()
@@ -898,11 +1102,28 @@ local function registerElement(tab, options, element, frame, typeName, callbackK
 			window:_queueDependencies()
 		end
 	end
-	if options.Flag and type(element.Get) == "function" then
+	if type(element.Get) == "function" then
 		local ok, value = pcall(element.Get, element)
 		if ok then
 			element._defaultValue = type(value) == "table" and table.clone(value) or value
 		end
+	end
+	if type(element.Set) == "function" then
+		if element.Reset == nil then
+			function element:Reset()
+				local default = element._defaultValue
+				if type(default) == "table" then
+					default = table.clone(default)
+				end
+				element:Set(default)
+			end
+		end
+		if element.SetValue == nil then
+			element.SetValue = element.Set
+		end
+	end
+	if type(element.Get) == "function" and element.GetValue == nil then
+		element.GetValue = element.Get
 	end
 
 	function element:SetCallback(callback)
@@ -969,6 +1190,20 @@ local function registerElement(tab, options, element, frame, typeName, callbackK
 
 	if frame then
 		decorateElement(element, frame, options, window)
+	end
+
+	if typeName ~= "KeyInfo" then
+		for key, method in pairs(element) do
+			if type(key) == "string" and type(method) == "function" and key:sub(1, 1) ~= "_" then
+				element[key] = function(self, ...)
+					if self ~= element then
+						error(("%s%s: %s was called with a dot. Write element:%s(...) with a colon, not element.%s(...)")
+							:format(LOG_PREFIX, label, key, key, key), 2)
+					end
+					return method(self, ...)
+				end
+			end
+		end
 	end
 	return element
 end
@@ -1066,7 +1301,7 @@ decorateElement = function(element, frame, options, window)
 			if label then
 				setTranslated(label, "Text", text == nil and "" or tostring(text))
 			elseif text ~= nil and text ~= "" then
-				log("SetDesc needs the element to be created with a Desc")
+				log((element._label or "Element") .. ": SetDesc only works if the element was created with a Desc. Add Desc = \"\" when you create it.")
 			end
 		end
 	end
@@ -1353,7 +1588,16 @@ function Tab:Paragraph(input)
 
 	local element = {}
 	function element:Set(text)
-		content.Text = tostring(text)
+		if type(text) == "table" then
+			if text.Title ~= nil then
+				element:SetTitle(text.Title)
+			end
+			text = text.Content
+			if text == nil then
+				return
+			end
+		end
+		content.Text = text == nil and "" or tostring(text)
 	end
 	element.SetContent = element.Set
 	function element:Get()
@@ -1433,8 +1677,8 @@ function Tab:Button(input)
 		tween(titleLabel, { TextColor3 = baseColor }, 0.2)
 	end
 
-	card.MouseButton1Click:Connect(function()
-		if element.Locked then
+	local function activate()
+		if element.Locked or element._destroyed then
 			return
 		end
 		ripple(card, styled and Theme.AccentDark or Theme.Accent)
@@ -1455,7 +1699,62 @@ function Tab:Button(input)
 			disarm()
 		end
 		safeCall(options.Callback)
-	end)
+	end
+	card.MouseButton1Click:Connect(activate)
+
+	local window = self.Window
+	local buttonKey = toKeyCode(options.Keybind)
+	local keyChip = createLabel({
+		AnchorPoint = Vector2.new(1, 0.5),
+		Position = UDim2.new(1, -44, 0.5, 0),
+		Size = UDim2.fromOffset(0, 18),
+		AutomaticSize = Enum.AutomaticSize.X,
+		Text = "",
+		TextSize = 12,
+		TextColor3 = styled and Theme.AccentDark or Theme.Muted,
+		TextTruncate = Enum.TextTruncate.None,
+		Visible = false,
+		Parent = card,
+	})
+	local function renderKey()
+		keyChip.Visible = buttonKey ~= nil
+		keyChip.Text = buttonKey and ("[" .. keyDisplayName(buttonKey) .. "]") or ""
+		setTitleReserve(titleLabel, descLabel, 30 + (buttonKey and (keyChip.TextBounds.X + 14) or 0))
+	end
+	keyChip:GetPropertyChangedSignal("TextBounds"):Connect(renderKey)
+	if window then
+		window:_listen("Began", function(inputObject, gameProcessed)
+			if gameProcessed or buttonKey == nil or inputObject.KeyCode ~= buttonKey then
+				return
+			end
+			if UserInputService:GetFocusedTextBox() then
+				return
+			end
+			activate()
+		end, element)
+		window:_registerKeybind({
+			Name = options.Name or "Button",
+			Element = element,
+			GetKey = function()
+				return buttonKey
+			end,
+			GetActive = function()
+				return false
+			end,
+		})
+	end
+	renderKey()
+
+	function element:SetKeybind(key)
+		buttonKey = toKeyCode(key)
+		renderKey()
+	end
+	function element:GetKeybind()
+		return buttonKey
+	end
+	function element:Press()
+		activate()
+	end
 
 	function element:SetText(text)
 		baseTitle = tostring(text)
@@ -1607,7 +1906,7 @@ function Tab:Toggle(input)
 		local loopHandle
 		local function syncLoop(value)
 			if value == true and not (loopHandle and loopHandle.Running) then
-				loopHandle = window:Loop(options.Loop, options.LoopDelay or options.Delay)
+				loopHandle = window:Loop(options.Loop, options.LoopDelay or options.Delay, options.Name or "Toggle")
 			elseif value ~= true and loopHandle then
 				loopHandle:Stop()
 				loopHandle = nil
@@ -4256,6 +4555,9 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 	if type(options.Localization) == "table" then
 		NeoxHub:SetLocalization(options.Localization)
 	end
+	if options.ErrorNotifications ~= nil then
+		NeoxHub.ErrorNotifications = options.ErrorNotifications ~= false
+	end
 	if tonumber(options.TextScale) then
 		NeoxHub.TextScale = math.clamp(tonumber(options.TextScale), 0.7, 1.3)
 	end
@@ -6747,6 +7049,7 @@ function Window:SetBlur()
 end
 
 function Window:SelectTab(tab)
+	self:_hideTooltip()
 	if type(tab) == "string" then
 		local wanted = tab
 		tab = nil
@@ -7123,7 +7426,7 @@ function Window:Dialog(input)
 			end
 			local text = inputBox and inputBox.Text or nil
 			dialog.Close()
-			safeCall(buttonDef.Callback, text)
+			runProtected(('dialog button "%s"'):format(tostring(buttonDef.Title or buttonDef.Name or "OK")), buttonDef.Callback, text)
 		end
 		if primary then
 			primaryActivate = activate
@@ -7312,8 +7615,28 @@ function Window:_showTooltip(text, owner)
 		if self._destroyed or self._tooltipGeneration ~= generation or self._tooltipOwner ~= owner or not self.Open then
 			return
 		end
+		if typeof(owner) == "Instance" then
+			local current = owner
+			while current and current ~= self.Gui do
+				if current:IsA("GuiObject") and not current.Visible then
+					return
+				end
+				current = current.Parent
+			end
+			if current ~= self.Gui then
+				return
+			end
+		end
 		self._tooltipLabel.Text = tostring(text)
 		self._tooltip.Visible = true
+		task.spawn(function()
+			while self._tooltip.Visible and self._tooltipGeneration == generation and not self._destroyed do
+				task.wait(0.25)
+				if typeof(owner) == "Instance" and (not owner.Parent or not owner.Visible) then
+					self:_hideTooltip(owner)
+				end
+			end
+		end)
 	end)
 end
 
@@ -8097,7 +8420,7 @@ local function showToast(host, input)
 				Parent = button,
 			})
 			button.MouseButton1Click:Connect(function()
-				safeCall(buttonDef.Callback)
+				runProtected(('notification button "%s"'):format(tostring(buttonDef.Title or buttonDef.Name or "Button")), buttonDef.Callback)
 				if buttonDef.Close ~= false then
 					toast:Dismiss()
 				end
@@ -8231,7 +8554,7 @@ local function showToast(host, input)
 			tween(slider, { Position = UDim2.fromOffset(0, 0) }, 0.25, Enum.EasingStyle.Quint)
 			tween(card, { GroupTransparency = 0 }, 0.2)
 		elseif type(options.Callback) == "function" then
-			safeCall(options.Callback)
+			runProtected(('notification "%s"'):format(tostring(options.Title or "")), options.Callback)
 			toast:Dismiss()
 		end
 	end))
@@ -8313,6 +8636,25 @@ function NeoxHub:_notifyFallback(input)
 		end)
 	end
 	return showToast(fallbackHost, input)
+end
+
+NeoxHub._showErrorToast = function(entry)
+	local where = entry.Where or "a callback"
+	NeoxHub:Notify({
+		Title = "Something went wrong",
+		Content = ("In %s: %s"):format(where, entry.Summary or entry.Message or "unknown error"),
+		Type = "Error",
+		Duration = 8,
+		Buttons = {
+			{
+				Title = "Copy details",
+				Callback = function()
+					NeoxHub:Copy(("Neox Hub %s\nWhere: %s\nError: %s\n%s"):format(
+						NeoxHub.Version, where, tostring(entry.Raw), tostring(entry.Traceback or "")))
+				end,
+			},
+		},
+	})
 end
 
 function Window:Destroy()
@@ -8783,7 +9125,7 @@ function Window:HeaderButton(input)
 		self:_hideTooltip(button)
 	end)
 	button.MouseButton1Click:Connect(function()
-		safeCall(options.Callback)
+		runProtected(('header button "%s"'):format(tostring(options.Tooltip or options.Icon or "button")), options.Callback)
 	end)
 
 	local headerButton = { Frame = button }
@@ -8983,7 +9325,7 @@ function NeoxHub:Popup(input)
 		end
 		button.MouseButton1Click:Connect(function()
 			popup.Close()
-			safeCall(buttonDef.Callback)
+			runProtected(('popup button "%s"'):format(tostring(buttonDef.Title or buttonDef.Name or "Button")), buttonDef.Callback)
 		end)
 	end
 
@@ -9471,7 +9813,7 @@ function Window:FloatingButton(input)
 				linked:Set(not linked:Get())
 			end
 		else
-			safeCall(options.Callback)
+			runProtected(('on-screen button "%s"'):format(tostring(options.Title or "Button")), options.Callback)
 		end
 		renderState()
 		local scale = create("UIScale", { Scale = 0.94, Parent = button })
@@ -9533,7 +9875,7 @@ function Window:Popup(input)
 end
 
 do
-	local function startLoop(owner, list, callback, delay)
+	local function startLoop(owner, list, callback, delay, where)
 		local loop = { Running = true }
 		function loop:Stop()
 			loop.Running = false
@@ -9545,12 +9887,15 @@ do
 		end
 		table.insert(list, loop)
 		task.spawn(function()
-			local warned = false
+			local failures = 0
 			while loop.Running and not owner._destroyed do
-				local ok, err = pcall(callback)
-				if not ok and not warned then
-					warned = true
-					log("loop error: " .. tostring(err))
+				local ok, captured = xpcall(callback, captureError)
+				if not ok then
+					failures += 1
+					loop.Errors = failures
+					if failures == 1 or failures % 100 == 0 then
+						reportError(where or "a loop", captured)
+					end
 				end
 				if not loop.Running or owner._destroyed then
 					break
@@ -9576,15 +9921,18 @@ do
 		return loop
 	end
 
-	function Window:Loop(callback, delay)
-		return startLoop(self, self._loops, callback, delay)
+	function Window:Loop(callback, delay, name)
+		if type(callback) ~= "function" then
+			log("Loop needs a function, but got a " .. typeof(callback) .. ".")
+		end
+		return startLoop(self, self._loops, callback, delay, name and ("loop \"" .. tostring(name) .. "\"") or nil)
 	end
 
 	function Window:Connect(signal, callback)
-		assert(signal and type(callback) == "function", "Connect needs a signal and a function")
+		assert(signal and type(callback) == "function", LOG_PREFIX .. "Connect needs a signal and a function")
 		local connection = signal:Connect(function(...)
 			if not self._destroyed then
-				safeCall(callback, ...)
+				runProtected("a connected event", callback, ...)
 			end
 		end)
 		table.insert(self._connections, connection)
@@ -9592,7 +9940,7 @@ do
 	end
 
 	function Window:Spawn(callback, ...)
-		local thread = task.spawn(safeCall, callback, ...)
+		local thread = task.spawn(runProtected, "a spawned task", callback, ...)
 		self:OnDestroy(function()
 			if coroutine.status(thread) ~= "dead" then
 				pcall(task.cancel, thread)
@@ -9700,6 +10048,16 @@ do
 			local ok, value = pcall(element.Get, element)
 			if ok then
 				return value
+			end
+		elseif element == nil then
+			window._missingDependencies = window._missingDependencies or {}
+			if not window._missingDependencies[flag] then
+				window._missingDependencies[flag] = true
+				task.delay(3, function()
+					if not window._destroyed and window.Flags[flag] == nil and NeoxHub.Flags[flag] == nil then
+						log(('DependsOn uses the Flag "%s", but no element has that Flag. Check the spelling.'):format(tostring(flag)))
+					end
+				end)
 			end
 		end
 		return nil
@@ -9894,7 +10252,7 @@ function Tab:ButtonRow(input)
 				return
 			end
 			ripple(button, colorKey and Theme.AccentDark or Theme.Accent)
-			safeCall(definition.Callback)
+			runProtected(('Button "%s"'):format(tostring(name)), definition.Callback)
 		end)
 
 		element.Buttons[index] = {
@@ -10310,5 +10668,178 @@ table.insert(NeoxHub._themeListeners, function()
 		end
 	end
 end)
+
+do
+	function NeoxHub:OnError(callback)
+		if type(callback) ~= "function" then
+			return { Disconnect = function() end }
+		end
+		table.insert(NeoxHub._errorListeners, callback)
+		return {
+			Disconnect = function()
+				local index = table.find(NeoxHub._errorListeners, callback)
+				if index then
+					table.remove(NeoxHub._errorListeners, index)
+				end
+			end,
+		}
+	end
+
+	function NeoxHub:GetErrors()
+		return table.clone(NeoxHub.Errors)
+	end
+
+	function NeoxHub:ClearErrors()
+		table.clear(NeoxHub.Errors)
+	end
+
+	function NeoxHub:SetErrorNotifications(enabled)
+		NeoxHub.ErrorNotifications = enabled ~= false
+	end
+
+	function NeoxHub:Try(name, callback, ...)
+		if type(name) == "function" then
+			return runProtected("your code", name, callback, ...)
+		end
+		return runProtected(tostring(name), callback, ...)
+	end
+
+	function NeoxHub:ReportError(where, message)
+		return reportError(tostring(where or "your code"), { Error = message, Traceback = debug.traceback(nil, 2) or "" })
+	end
+
+	local Utils = NeoxHub.Utils
+
+	function Utils.WaitForCharacter(timeout)
+		local deadline = os.clock() + (tonumber(timeout) or 10)
+		repeat
+			local character = LocalPlayer and LocalPlayer.Character
+			if character and character:FindFirstChildOfClass("Humanoid") and (character:FindFirstChild("HumanoidRootPart") or character.PrimaryPart) then
+				return character
+			end
+			task.wait(0.1)
+		until os.clock() > deadline
+		return nil
+	end
+
+	function Utils.OnCharacter(callback)
+		if type(callback) ~= "function" or not LocalPlayer then
+			return { Disconnect = function() end }
+		end
+		local connection
+		local ok = pcall(function()
+			connection = LocalPlayer.CharacterAdded:Connect(function(character)
+				runProtected("a character callback", callback, character)
+			end)
+		end)
+		if LocalPlayer.Character then
+			task.spawn(runProtected, "a character callback", callback, LocalPlayer.Character)
+		end
+		local handle = {
+			Disconnect = function()
+				if connection then
+					connection:Disconnect()
+					connection = nil
+				end
+			end,
+		}
+		if ok then
+			table.insert(NeoxHub._cleanup, handle.Disconnect)
+		end
+		return handle
+	end
+
+	local function dataPath(name)
+		local clean = tostring(name or "data"):gsub("[^%w%-_ ]", "")
+		if clean == "" then
+			clean = "data"
+		end
+		return "NeoxHub/data/" .. clean .. ".json"
+	end
+
+	function Utils.SaveData(name, data)
+		if type(writefile) ~= "function" then
+			return false, "your executor can't write files"
+		end
+		local ok, err = pcall(function()
+			if type(isfolder) == "function" and type(makefolder) == "function" then
+				if not isfolder("NeoxHub") then
+					makefolder("NeoxHub")
+				end
+				if not isfolder("NeoxHub/data") then
+					makefolder("NeoxHub/data")
+				end
+			end
+			writefile(dataPath(name), HttpService:JSONEncode(data))
+		end)
+		if not ok then
+			log("SaveData failed: " .. tostring(err))
+		end
+		return ok, not ok and tostring(err) or nil
+	end
+
+	function Utils.LoadData(name, default)
+		if type(readfile) ~= "function" or (type(isfile) == "function" and not isfile(dataPath(name))) then
+			return default
+		end
+		local ok, data = pcall(function()
+			return HttpService:JSONDecode(readfile(dataPath(name)))
+		end)
+		if not ok then
+			log("LoadData could not read " .. tostring(name) .. ", using the default instead")
+			return default
+		end
+		return data
+	end
+
+	function Utils.Debounce(callback, seconds)
+		local busy = false
+		seconds = tonumber(seconds) or 0.5
+		return function(...)
+			if busy then
+				return
+			end
+			busy = true
+			task.delay(seconds, function()
+				busy = false
+			end)
+			return callback(...)
+		end
+	end
+
+	local FORGIVING = {
+		"Notify", "Confirm", "Dialog", "Prompt", "Popup", "SetTheme", "AddTheme", "GetValue", "SetValue",
+		"GetValues", "SetValues", "Copy", "Destroy", "Unload", "Loop", "Connect", "OnUnload", "OnError",
+		"GetErrors", "ClearErrors", "SetLanguage", "SetLocalization", "Translate", "GetFlag", "GetThemes",
+		"GetLanguage", "SetErrorNotifications", "Try", "ReportError", "PreloadIcons", "LoadFont",
+	}
+	for _, name in ipairs(FORGIVING) do
+		local method = NeoxHub[name]
+		if type(method) == "function" then
+			NeoxHub[name] = function(self, ...)
+				if self ~= NeoxHub then
+					return method(NeoxHub, self, ...)
+				end
+				return method(self, ...)
+			end
+		end
+	end
+
+	local function guardMethods(class, className)
+		for name, method in pairs(class) do
+			if type(name) == "string" and type(method) == "function" and name:sub(1, 1) ~= "_" then
+				class[name] = function(self, ...)
+					if type(self) ~= "table" or getmetatable(self) ~= class then
+						error(("%s%s.%s(...) was called with a dot. Write %s:%s(...) with a colon instead.")
+							:format(LOG_PREFIX, className, name, className, name), 2)
+					end
+					return method(self, ...)
+				end
+			end
+		end
+	end
+	guardMethods(Tab, "Tab")
+	guardMethods(Window, "Window")
+end
 
 return NeoxHub
