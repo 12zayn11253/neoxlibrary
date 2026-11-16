@@ -9,7 +9,7 @@ local LocalPlayer = Players.LocalPlayer
 
 local NeoxHub = {}
 NeoxHub.Name = "Neox Hub"
-NeoxHub.Version = "3.0.0"
+NeoxHub.Version = "3.1.0"
 NeoxHub.Flags = {}
 NeoxHub.Windows = {}
 
@@ -407,6 +407,7 @@ NeoxHub.TextScale = 0.9
 NeoxHub.NotificationPosition = nil
 local createNotifyHost
 NeoxHub._themeListeners = {}
+NeoxHub._cleanup = {}
 
 local Localization = {
 	Prefix = "loc:",
@@ -844,25 +845,58 @@ local function registerElement(tab, options, element, frame, typeName, callbackK
 	element._listeners = element._listeners or {}
 
 	local window = tab and tab.Window
+	element._tab = tab
 	callbackKey = callbackKey or "Callback"
 	local userCallback = options[callbackKey]
-	local wrapped = options.Flag ~= nil and window ~= nil
+	local wrapped = window ~= nil
+	local changedListeners = {}
+
+	function element:OnChanged(listener)
+		if type(listener) ~= "function" then
+			return { Disconnect = function() end }
+		end
+		table.insert(changedListeners, listener)
+		return {
+			Disconnect = function()
+				local index = table.find(changedListeners, listener)
+				if index then
+					table.remove(changedListeners, index)
+				end
+			end,
+		}
+	end
 
 	if options.Flag then
 		NeoxHub.Flags[options.Flag] = element
 		if window then
 			window.Flags[options.Flag] = element
-			options[callbackKey] = function(...)
-				if type(userCallback) == "function" then
-					userCallback(...)
-				end
-				window:_autoSave()
-			end
 		end
 	end
 
 	if window then
+		options[callbackKey] = function(...)
+			if element._destroyed then
+				return
+			end
+			safeCall(userCallback, ...)
+			for _, listener in ipairs(table.clone(changedListeners)) do
+				safeCall(listener, ...)
+			end
+			if options.Flag then
+				window:_autoSave()
+			end
+			window:_queueDependencies()
+		end
 		table.insert(window._elements, element)
+		local dependsOn = options.DependsOn
+		if dependsOn == nil then
+			dependsOn = options.Depends
+		end
+		if dependsOn ~= nil then
+			element._dependsOn = dependsOn
+			table.insert(window._dependents, element)
+			window:_queueDependencies()
+		end
 	end
 	if options.Flag and type(element.Get) == "function" then
 		local ok, value = pcall(element.Get, element)
@@ -909,8 +943,24 @@ local function registerElement(tab, options, element, frame, typeName, callbackK
 				window.Flags[options.Flag] = nil
 			end
 		end
+		table.clear(changedListeners)
 		if window then
 			window._controlsDirty = true
+			local index = table.find(window._elements, element)
+			if index then
+				table.remove(window._elements, index)
+			end
+			index = table.find(window._dependents, element)
+			if index then
+				table.remove(window._dependents, index)
+			end
+			if window._searchIndex then
+				for entryIndex = #window._searchIndex, 1, -1 do
+					if window._searchIndex[entryIndex].Element == element then
+						table.remove(window._searchIndex, entryIndex)
+					end
+				end
+			end
 		end
 		if frame then
 			frame:Destroy()
@@ -1005,7 +1055,7 @@ decorateElement = function(element, frame, options, window)
 		function element:SetTitle(text)
 			local label = findChild("Title")
 			if label then
-				setTranslated(label, "Text", tostring(text))
+				setTranslated(label, "Text", text == nil and "" or tostring(text))
 			end
 		end
 	end
@@ -1014,8 +1064,8 @@ decorateElement = function(element, frame, options, window)
 		function element:SetDesc(text)
 			local label = findChild("Desc")
 			if label then
-				setTranslated(label, "Text", tostring(text))
-			else
+				setTranslated(label, "Text", text == nil and "" or tostring(text))
+			elseif text ~= nil and text ~= "" then
 				log("SetDesc needs the element to be created with a Desc")
 			end
 		end
@@ -1553,6 +1603,30 @@ function Tab:Toggle(input)
 	renderKey()
 
 	local registered = registerElement(self, options, element, card, "Toggle")
+	if type(options.Loop) == "function" then
+		local loopHandle
+		local function syncLoop(value)
+			if value == true and not (loopHandle and loopHandle.Running) then
+				loopHandle = window:Loop(options.Loop, options.LoopDelay or options.Delay)
+			elseif value ~= true and loopHandle then
+				loopHandle:Stop()
+				loopHandle = nil
+			end
+		end
+		local baseSet = element.Set
+		function element:Set(value, silent)
+			baseSet(self, value, silent)
+			syncLoop(element.Value)
+		end
+		table.insert(element._listeners, function()
+			syncLoop(false)
+		end)
+		task.defer(function()
+			if not element._destroyed then
+				syncLoop(element.Value)
+			end
+		end)
+	end
 	if options.MobileButton and (IS_TOUCH or options.MobileButton == "Always") then
 		window:FloatingButton({ Title = options.Name or "Toggle", Icon = options.MobileIcon, Toggle = element })
 	end
@@ -2415,6 +2489,9 @@ function Tab:Dropdown(input)
 end
 
 function Tab:Input(input)
+	if type(input) == "table" and (input.MultiLine or input.Multiline) then
+		return self:TextArea(input)
+	end
 	local options, card, stroke, _, titleLabel, descLabel = createRowElement(self, input, {
 		Title = "Name",
 		Description = "Desc",
@@ -4143,6 +4220,21 @@ local COMPACT_WIDTH = 560
 local COMPACT_SIDEBAR = 64
 local COMPACT_MIN = Vector2.new(400, 260)
 local DEFAULT_MIN_SIZE = Vector2.new(480, 360)
+
+local function toVector2(value)
+	if typeof(value) == "Vector2" then
+		return value
+	elseif typeof(value) == "UDim2" then
+		return Vector2.new(value.X.Offset, value.Y.Offset)
+	elseif type(value) == "table" then
+		local x, y = tonumber(value[1] or value.X), tonumber(value[2] or value.Y)
+		if x and y then
+			return Vector2.new(x, y)
+		end
+	end
+	return nil
+end
+NeoxHub._toVector2 = toVector2
 local SIDEBAR_WIDTH = 170
 
 function NeoxHub.Window(selfOrOptions, maybeOptions)
@@ -4187,6 +4279,9 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 		_frameSteps = {},
 		_destroyed = false,
 		_elements = {},
+		_dependents = {},
+		_loops = {},
+		_resetOnUnload = options.ResetOnUnload == true,
 		_events = { Open = {}, Close = {}, Destroy = {} },
 		_looseTabOrder = 0,
 		_sectionCount = 0,
@@ -4229,7 +4324,13 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 		Name = "Window",
 		AnchorPoint = Vector2.new(0.5, 0.5),
 		Position = UDim2.fromScale(0.5, 0.5),
-		Size = options.Size or DEFAULT_WINDOW_SIZE,
+		Size = (function()
+			local size = toVector2(options.Size)
+			if not size then
+				return DEFAULT_WINDOW_SIZE
+			end
+			return UDim2.fromOffset(math.max(size.X, 300), math.max(size.Y, 220))
+		end)(),
 		BackgroundTransparency = 1,
 		Parent = screenGui,
 	})
@@ -4619,9 +4720,9 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 	end)
 
 	window:_enableDrag()
-	window.MaxSize = options.MaxSize
+	window.MaxSize = toVector2(options.MaxSize)
 	window.KeepOnScreen = options.KeepOnScreen ~= false
-	window:_enableResize(options.MinSize or DEFAULT_MIN_SIZE)
+	window:_enableResize(toVector2(options.MinSize) or DEFAULT_MIN_SIZE)
 	if options.Resizable == false then
 		window._grip.Visible = false
 	end
@@ -4901,6 +5002,11 @@ function NeoxHub:Confirm(input)
 	return window and window:Confirm(input) or nil
 end
 
+function NeoxHub:Prompt(input)
+	local window = latestWindow()
+	return window and window:Prompt(input) or nil
+end
+
 function NeoxHub:Dialog(input)
 	local window = latestWindow()
 	return window and window:Dialog(input) or nil
@@ -4951,6 +5057,11 @@ end
 function NeoxHub:Destroy()
 	for index = #NeoxHub.Windows, 1, -1 do
 		NeoxHub.Windows[index]:Destroy()
+	end
+	local cleanup = NeoxHub._cleanup
+	NeoxHub._cleanup = {}
+	for _, callback in ipairs(cleanup) do
+		task.spawn(safeCall, callback)
 	end
 end
 NeoxHub.Unload = NeoxHub.Destroy
@@ -5715,6 +5826,7 @@ function Window:LoadConfig(name, silent)
 	self._autoSaveEnabled = autoSaveWas
 	self._autoSaveReady = true
 	self.ConfigName = cleanName
+	self:_queueDependencies()
 	return true
 end
 
@@ -6805,9 +6917,62 @@ function Window:Dialog(input)
 	})
 
 	local contentHeight = 0
+	local inputField, inputBox, inputStroke
+	local inputOptions = type(options.Input) == "table" and options.Input or (options.Input and {} or nil)
+	local inputHeight = inputOptions and 42 or 0
 	local function layout()
-		panel.Size = UDim2.fromOffset(DIALOG_WIDTH, pad + 24 + contentHeight + 12 + 34 + pad)
-		buttonRow.Position = UDim2.fromOffset(pad, pad + 24 + contentHeight + 12)
+		panel.Size = UDim2.fromOffset(DIALOG_WIDTH, pad + 24 + contentHeight + inputHeight + 12 + 34 + pad)
+		if inputField then
+			inputField.Position = UDim2.fromOffset(pad, pad + 24 + contentHeight + 6)
+		end
+		buttonRow.Position = UDim2.fromOffset(pad, pad + 24 + contentHeight + inputHeight + 12)
+	end
+
+	if inputOptions then
+		inputField = create("Frame", {
+			Size = UDim2.new(1, -pad * 2, 0, 34),
+			BackgroundColor3 = Theme.Surface,
+			BackgroundTransparency = 1,
+			BorderSizePixel = 0,
+			ZIndex = 42,
+			Parent = panel,
+		})
+		addCorner(inputField, UDim.new(0, 7))
+		inputStroke = addStroke(inputField, Theme.Stroke, 1)
+		inputStroke.Transparency = 1
+		local maxLength = tonumber(inputOptions.MaxLength)
+		inputBox = create("TextBox", {
+			Position = UDim2.fromOffset(10, 0),
+			Size = UDim2.new(1, -20, 1, 0),
+			BackgroundTransparency = 1,
+			Text = "",
+			PlaceholderText = tostring(inputOptions.Placeholder or ""),
+			PlaceholderColor3 = Theme.Muted,
+			TextColor3 = Theme.Text,
+			TextSize = 13,
+			FontFace = Fonts.Regular,
+			TextXAlignment = Enum.TextXAlignment.Left,
+			ClearTextOnFocus = false,
+			ClipsDescendants = true,
+			TextTransparency = 1,
+			ZIndex = 43,
+			Parent = inputField,
+		})
+		inputBox.Text = tostring(inputOptions.Default or "")
+		inputBox:GetPropertyChangedSignal("Text"):Connect(function()
+			if maxLength and #inputBox.Text > maxLength then
+				inputBox.Text = inputBox.Text:sub(1, maxLength)
+			end
+		end)
+		inputBox.Focused:Connect(function()
+			tween(inputStroke, { Color = Theme.StrokeHover }, 0.15)
+		end)
+		inputBox.FocusLost:Connect(function()
+			tween(inputStroke, { Color = Theme.Stroke }, 0.15)
+		end)
+		table.insert(fades, { inputField, "BackgroundTransparency", 0 })
+		table.insert(fades, { inputStroke, "Transparency", 0 })
+		table.insert(fades, { inputBox, "TextTransparency", 0 })
 	end
 
 	if options.Content then
@@ -6868,6 +7033,21 @@ function Window:Dialog(input)
 		dialog.Close()
 		safeCall(options.OnCancel)
 	end
+
+	function dialog.GetText()
+		return inputBox and inputBox.Text or nil
+	end
+
+	local function inputValid()
+		if not inputBox or not inputOptions.Numeric or tonumber(inputBox.Text) then
+			return true
+		end
+		inputStroke.Color = Theme.Error
+		tween(inputStroke, { Color = Theme.Stroke }, 0.6)
+		return false
+	end
+
+	local primaryActivate
 
 	local buttons = options.Buttons
 	if type(buttons) ~= "table" or #buttons == 0 then
@@ -6934,12 +7114,33 @@ function Window:Dialog(input)
 				tween(buttonStroke, { Color = Theme.Stroke }, 0.2)
 			end
 		end)
-		dialogButton.MouseButton1Click:Connect(function()
+		local function activate()
 			if closed then
 				return
 			end
+			if primary and not inputValid() then
+				return
+			end
+			local text = inputBox and inputBox.Text or nil
 			dialog.Close()
-			safeCall(buttonDef.Callback)
+			safeCall(buttonDef.Callback, text)
+		end
+		if primary then
+			primaryActivate = activate
+		end
+		dialogButton.MouseButton1Click:Connect(activate)
+	end
+
+	if inputBox then
+		inputBox.FocusLost:Connect(function(enterPressed)
+			if enterPressed and primaryActivate then
+				primaryActivate()
+			end
+		end)
+		task.delay(0.3, function()
+			if not closed and inputBox.Parent and not IS_TOUCH then
+				inputBox:CaptureFocus()
+			end
 		end)
 	end
 
@@ -6959,6 +7160,31 @@ function Window:Dialog(input)
 	end
 
 	return dialog
+end
+
+function Window:Prompt(input)
+	local options = normalizeOptions(input, { Text = "Content", Message = "Content", PlaceholderText = "Placeholder" })
+	return self:Dialog({
+		Title = options.Title or "Enter a value",
+		Content = options.Content,
+		Icon = options.Icon,
+		OnCancel = options.OnCancel,
+		CloseOnBackdrop = options.CloseOnBackdrop,
+		Input = {
+			Placeholder = options.Placeholder,
+			Default = options.Default,
+			Numeric = options.Numeric,
+			MaxLength = options.MaxLength,
+		},
+		Buttons = {
+			{ Title = options.CancelText or "Cancel", Callback = function()
+				safeCall(options.OnCancel)
+			end },
+			{ Title = options.ConfirmText or "OK", Variant = "Primary", Callback = function(text)
+				safeCall(options.Callback, options.Numeric and tonumber(text) or text)
+			end },
+		},
+	})
 end
 
 function Window:Confirm(input)
@@ -7573,7 +7799,7 @@ createNotifyHost = function(screenGui, connections, maxCount, positionName)
 		ListLayout = listLayout,
 		Toasts = {},
 		Order = 0,
-		MaxNotifications = maxCount or 4,
+		MaxNotifications = math.clamp(math.floor(tonumber(maxCount) or 4), 1, 10),
 	}
 	local function fit()
 		local screen = screenGui.AbsoluteSize
@@ -8050,7 +8276,11 @@ local function showToast(host, input)
 
 	table.insert(host.Toasts, toast)
 	while #host.Toasts > host.MaxNotifications do
-		host.Toasts[1]:Dismiss()
+		local oldest = host.Toasts[1]
+		oldest:Dismiss()
+		if host.Toasts[1] == oldest then
+			table.remove(host.Toasts, 1)
+		end
 	end
 
 	return toast
@@ -8077,6 +8307,10 @@ function NeoxHub:_notifyFallback(input)
 			Parent = getGuiParent(),
 		})
 		fallbackHost = createNotifyHost(screenGui, {}, 4, NeoxHub.NotificationPosition)
+		table.insert(NeoxHub._cleanup, function()
+			fallbackHost = nil
+			screenGui:Destroy()
+		end)
 	end
 	return showToast(fallbackHost, input)
 end
@@ -8085,7 +8319,18 @@ function Window:Destroy()
 	if self._destroyed then
 		return
 	end
+	if self._resetOnUnload then
+		self._autoSaveEnabled = false
+		for _, element in ipairs(table.clone(self._elements)) do
+			if element._type == "Toggle" and element.Value == true and not element._destroyed then
+				pcall(element.Set, element, false)
+			end
+		end
+	end
 	self._destroyed = true
+	for _, loop in ipairs(self._loops) do
+		loop.Running = false
+	end
 	for _, callback in ipairs(self._events.Destroy) do
 		task.spawn(safeCall, callback)
 	end
@@ -8193,12 +8438,11 @@ end
 Window.SetToggleKey = Window.SetKeybind
 
 function Window:SetSize(size)
-	if typeof(size) == "Vector2" then
-		size = UDim2.fromOffset(size.X, size.Y)
-	end
-	if typeof(size) ~= "UDim2" then
+	local vector = NeoxHub._toVector2(size)
+	if not vector then
 		return
 	end
+	size = UDim2.fromOffset(math.max(vector.X, 300), math.max(vector.Y, 220))
 	self._baseSize = Vector2.new(size.X.Offset, size.Y.Offset)
 	tween(self.Root, { Size = size }, 0.25, Enum.EasingStyle.Quint)
 	task.delay(0.26, function()
@@ -9145,6 +9389,7 @@ function Tab:Image(input)
 end
 
 function Window:FloatingButton(input)
+	local window = self
 	local options = normalizeOptions(input, { Name = "Title", Text = "Title" })
 	local linked = options.Toggle
 	local count = #(self._floating or {})
@@ -9242,12 +9487,17 @@ function Window:FloatingButton(input)
 
 	if linked then
 		task.spawn(function()
+			local lastState
 			while button.Parent and not linked._destroyed do
-				renderState()
-				task.wait(0.25)
+				local state = linked:Get() == true
+				if state ~= lastState then
+					lastState = state
+					renderState()
+				end
+				task.wait(0.2)
 			end
 			if button.Parent and linked._destroyed then
-				button:Destroy()
+				floating:Destroy()
 			end
 		end)
 	end
@@ -9259,6 +9509,14 @@ function Window:FloatingButton(input)
 		button.Visible = visible ~= false
 	end
 	function floating:Destroy()
+		local index = table.find(window._floating, floating)
+		if index then
+			table.remove(window._floating, index)
+		end
+		index = table.find(window._overlays, button)
+		if index then
+			table.remove(window._overlays, index)
+		end
 		button:Destroy()
 	end
 
@@ -9269,6 +9527,776 @@ function Window:FloatingButton(input)
 	return floating
 end
 Window.MobileButton = Window.FloatingButton
+
+function Window:Popup(input)
+	return NeoxHub:Popup(input)
+end
+
+do
+	local function startLoop(owner, list, callback, delay)
+		local loop = { Running = true }
+		function loop:Stop()
+			loop.Running = false
+		end
+		loop.Disconnect = loop.Stop
+		if type(callback) ~= "function" then
+			loop.Running = false
+			return loop
+		end
+		table.insert(list, loop)
+		task.spawn(function()
+			local warned = false
+			while loop.Running and not owner._destroyed do
+				local ok, err = pcall(callback)
+				if not ok and not warned then
+					warned = true
+					log("loop error: " .. tostring(err))
+				end
+				if not loop.Running or owner._destroyed then
+					break
+				end
+				local waitTime = delay
+				if type(waitTime) == "function" then
+					local okDelay, value = pcall(waitTime)
+					waitTime = okDelay and value or 0
+				end
+				waitTime = tonumber(waitTime) or 0
+				if waitTime > 0 then
+					task.wait(waitTime)
+				else
+					task.wait()
+				end
+			end
+			loop.Running = false
+			local index = table.find(list, loop)
+			if index then
+				table.remove(list, index)
+			end
+		end)
+		return loop
+	end
+
+	function Window:Loop(callback, delay)
+		return startLoop(self, self._loops, callback, delay)
+	end
+
+	function Window:Connect(signal, callback)
+		assert(signal and type(callback) == "function", "Connect needs a signal and a function")
+		local connection = signal:Connect(function(...)
+			if not self._destroyed then
+				safeCall(callback, ...)
+			end
+		end)
+		table.insert(self._connections, connection)
+		return connection
+	end
+
+	function Window:Spawn(callback, ...)
+		local thread = task.spawn(safeCall, callback, ...)
+		self:OnDestroy(function()
+			if coroutine.status(thread) ~= "dead" then
+				pcall(task.cancel, thread)
+			end
+		end)
+		return thread
+	end
+
+	Window.OnUnload = Window.OnDestroy
+
+	local globalOwner = { _destroyed = false }
+	local globalLoops = {}
+
+	function NeoxHub:Loop(callback, delay)
+		local window = NeoxHub.Windows[#NeoxHub.Windows]
+		if window then
+			return window:Loop(callback, delay)
+		end
+		local loop = startLoop(globalOwner, globalLoops, callback, delay)
+		table.insert(NeoxHub._cleanup, function()
+			loop:Stop()
+		end)
+		return loop
+	end
+
+	function NeoxHub:Connect(signal, callback)
+		local window = NeoxHub.Windows[#NeoxHub.Windows]
+		if window then
+			return window:Connect(signal, callback)
+		end
+		local connection = signal:Connect(function(...)
+			safeCall(callback, ...)
+		end)
+		table.insert(NeoxHub._cleanup, function()
+			connection:Disconnect()
+		end)
+		return connection
+	end
+
+	function NeoxHub:OnUnload(callback)
+		if type(callback) == "function" then
+			table.insert(NeoxHub._cleanup, callback)
+		end
+	end
+
+	function NeoxHub:GetValues()
+		local values = {}
+		for flag, element in pairs(NeoxHub.Flags) do
+			if type(element.Get) == "function" then
+				local ok, value = pcall(element.Get, element)
+				if ok then
+					values[flag] = value
+				end
+			end
+		end
+		return values
+	end
+
+	function NeoxHub:SetValues(values)
+		if type(values) ~= "table" then
+			return
+		end
+		for flag, value in pairs(values) do
+			NeoxHub:SetValue(flag, value)
+		end
+	end
+end
+
+do
+	local function isTruthy(value)
+		if type(value) == "table" then
+			return next(value) ~= nil
+		elseif type(value) == "string" then
+			return value ~= ""
+		elseif type(value) == "number" then
+			return value ~= 0
+		end
+		return value ~= nil and value ~= false
+	end
+
+	local function matches(value, expected)
+		if expected == nil then
+			return isTruthy(value)
+		end
+		if type(expected) == "table" then
+			for _, option in ipairs(expected) do
+				if matches(value, option) then
+					return true
+				end
+			end
+			return false
+		end
+		if type(value) == "table" then
+			return table.find(value, expected) ~= nil
+		end
+		if typeof(value) == "EnumItem" and type(expected) == "string" then
+			return value.Name == expected
+		end
+		return value == expected
+	end
+
+	local function flagValue(window, flag)
+		local element = window.Flags[flag] or NeoxHub.Flags[flag]
+		if element and type(element.Get) == "function" then
+			local ok, value = pcall(element.Get, element)
+			if ok then
+				return value
+			end
+		end
+		return nil
+	end
+
+	local function evaluate(window, dependency)
+		if type(dependency) == "function" then
+			local ok, result = pcall(dependency)
+			return ok and result and true or false
+		elseif type(dependency) == "string" then
+			return isTruthy(flagValue(window, dependency))
+		elseif type(dependency) == "table" then
+			if dependency.Flag ~= nil then
+				local result = matches(flagValue(window, dependency.Flag), dependency.Value)
+				if dependency.Not then
+					result = not result
+				end
+				return result
+			end
+			for _, part in ipairs(dependency) do
+				if not evaluate(window, part) then
+					return false
+				end
+			end
+		end
+		return true
+	end
+
+	function Window:_queueDependencies()
+		if self._dependencyQueued or self._destroyed or #self._dependents == 0 then
+			return
+		end
+		self._dependencyQueued = true
+		task.defer(function()
+			self._dependencyQueued = false
+			if not self._destroyed then
+				self:_refreshDependencies()
+			end
+		end)
+	end
+
+	function Window:_refreshDependencies()
+		for _, element in ipairs(table.clone(self._dependents)) do
+			if not element._destroyed and type(element.SetVisible) == "function" then
+				local show = evaluate(self, element._dependsOn)
+				if element._dependencyShown ~= show then
+					element._dependencyShown = show
+					element:SetVisible(show)
+				end
+			end
+		end
+	end
+end
+
+function Tab:Clear()
+	local window = self.Window
+	if not window or not self.List then
+		return 0
+	end
+	local doomed = {}
+	for _, element in ipairs(window._elements) do
+		local frame = element._frame
+		if not element._destroyed and element._type ~= "KeyInfo" and typeof(frame) == "Instance"
+			and frame:IsDescendantOf(self.List) then
+			table.insert(doomed, element)
+		end
+	end
+	for _, element in ipairs(doomed) do
+		element:Destroy()
+	end
+	return #doomed
+end
+
+local BUTTON_ROW_STYLES = {
+	Primary = "Accent",
+	Danger = "Error",
+}
+
+function Tab:ButtonRow(input)
+	local options = type(input) == "table" and input or {}
+	local definitions = options.Buttons
+	if type(definitions) ~= "table" then
+		definitions = {}
+		for _, definition in ipairs(options) do
+			table.insert(definitions, definition)
+		end
+	end
+	local count = math.max(#definitions, 1)
+	local gap = 8
+
+	local holder = create("Frame", {
+		Size = UDim2.new(1, 0, 0, ROW_HEIGHT),
+		BackgroundTransparency = 1,
+		LayoutOrder = self:_nextOrder(),
+		Parent = self.List,
+	})
+	holder:SetAttribute(ATTR_NO_DRAG, true)
+	create("UIListLayout", {
+		FillDirection = Enum.FillDirection.Horizontal,
+		SortOrder = Enum.SortOrder.LayoutOrder,
+		Padding = UDim.new(0, gap),
+		Parent = holder,
+	})
+
+	local element = { Buttons = {} }
+	for index, definition in ipairs(definitions) do
+		if type(definition) == "string" then
+			definition = { Name = definition }
+		end
+		local name = definition.Name or definition.Title or ("Button " .. index)
+		local colorKey = BUTTON_ROW_STYLES[definition.Style]
+		local button = create("TextButton", {
+			Name = "Button" .. index,
+			Size = UDim2.new(1 / count, -gap * (count - 1) / count, 1, 0),
+			BackgroundColor3 = colorKey and Theme[colorKey] or Theme.Surface2,
+			BackgroundTransparency = colorKey and 0.12 or 0,
+			BorderSizePixel = 0,
+			Text = "",
+			AutoButtonColor = false,
+			ClipsDescendants = true,
+			LayoutOrder = index,
+			Parent = holder,
+		})
+		button:SetAttribute(ATTR_NO_DRAG, true)
+		addCorner(button)
+		local stroke = addStroke(button, colorKey and Theme[colorKey] or Theme.Stroke, 1)
+		if colorKey then
+			stroke.Transparency = 0.4
+			button.MouseEnter:Connect(function()
+				tween(button, { BackgroundTransparency = 0 }, 0.12)
+				tween(stroke, { Transparency = 0 }, 0.12)
+			end)
+			button.MouseLeave:Connect(function()
+				tween(button, { BackgroundTransparency = 0.12 }, 0.25)
+				tween(stroke, { Transparency = 0.4 }, 0.25)
+			end)
+		else
+			bindHoverStroke(button, stroke)
+		end
+
+		local content = create("Frame", {
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			Position = UDim2.fromScale(0.5, 0.5),
+			Size = UDim2.new(0, 0, 1, 0),
+			AutomaticSize = Enum.AutomaticSize.X,
+			BackgroundTransparency = 1,
+			Parent = button,
+		})
+		create("UIListLayout", {
+			FillDirection = Enum.FillDirection.Horizontal,
+			VerticalAlignment = Enum.VerticalAlignment.Center,
+			SortOrder = Enum.SortOrder.LayoutOrder,
+			Padding = UDim.new(0, 6),
+			Parent = content,
+		})
+		local textColor = colorKey and Theme.AccentDark or Theme.Text
+		if definition.Icon then
+			local iconHolder = createIcon(content, definition.Icon, colorKey and Theme.AccentDark or Theme.Accent, UDim2.new())
+			iconHolder.AnchorPoint = Vector2.zero
+			iconHolder.LayoutOrder = 1
+		end
+		local label = createLabel({
+			Name = "Title",
+			Size = UDim2.new(0, 0, 1, 0),
+			AutomaticSize = Enum.AutomaticSize.X,
+			Text = tostring(name),
+			TextSize = 13,
+			TextColor3 = textColor,
+			TextXAlignment = Enum.TextXAlignment.Center,
+			TextTruncate = Enum.TextTruncate.None,
+			LayoutOrder = 2,
+			Parent = content,
+		})
+
+		local function fitLabel()
+			local available = button.AbsoluteSize.X - 20 - (definition.Icon and 22 or 0)
+			if available > 0 and label.TextBounds.X > available then
+				label.AutomaticSize = Enum.AutomaticSize.None
+				label.Size = UDim2.new(0, available, 1, 0)
+				label.TextTruncate = Enum.TextTruncate.AtEnd
+			else
+				label.AutomaticSize = Enum.AutomaticSize.X
+				label.Size = UDim2.new(0, 0, 1, 0)
+				label.TextTruncate = Enum.TextTruncate.None
+			end
+		end
+		button:GetPropertyChangedSignal("AbsoluteSize"):Connect(fitLabel)
+		task.defer(fitLabel)
+
+		button.MouseButton1Click:Connect(function()
+			if element.Locked then
+				return
+			end
+			ripple(button, colorKey and Theme.AccentDark or Theme.Accent)
+			safeCall(definition.Callback)
+		end)
+
+		element.Buttons[index] = {
+			Frame = button,
+			SetText = function(_, text)
+				setTranslated(label, "Text", tostring(text))
+				fitLabel()
+			end,
+			SetCallback = function(_, callback)
+				definition.Callback = callback
+			end,
+		}
+	end
+
+	function element:GetButton(index)
+		return element.Buttons[index]
+	end
+	function element:SetButtonText(index, text)
+		local button = element.Buttons[index]
+		if button then
+			button:SetText(text)
+		end
+	end
+
+	return registerElement(self, { Name = options.Name, DependsOn = options.DependsOn, Tooltip = options.Tooltip, Locked = options.Locked, LockedReason = options.LockedReason }, element, holder, "ButtonRow")
+end
+Tab.Buttons = Tab.ButtonRow
+
+function Tab:TextArea(input)
+	local options = normalizeOptions(input, {
+		Title = "Name",
+		Description = "Desc",
+		PlaceholderText = "Placeholder",
+		CurrentValue = "Default",
+		Value = "Default",
+	})
+	local minHeight = math.max(tonumber(options.Height) or 84, 40)
+	local maxHeight = math.max(tonumber(options.MaxHeight) or 220, minHeight)
+	local maxLength = tonumber(options.MaxLength)
+
+	local card = create("Frame", {
+		Size = UDim2.new(1, 0, 0, 0),
+		AutomaticSize = Enum.AutomaticSize.Y,
+		BackgroundColor3 = Theme.Surface2,
+		BorderSizePixel = 0,
+		LayoutOrder = self:_nextOrder(),
+		Parent = self.List,
+	})
+	card:SetAttribute(ATTR_NO_DRAG, true)
+	addCorner(card)
+	local stroke = addStroke(card)
+	addPadding(card, 14, 14, 11, 12)
+	create("UIListLayout", {
+		SortOrder = Enum.SortOrder.LayoutOrder,
+		Padding = UDim.new(0, 6),
+		Parent = card,
+	})
+
+	createLabel({
+		Name = "Title",
+		Size = UDim2.new(1, 0, 0, 14),
+		Text = options.Name or "Text",
+		LayoutOrder = 1,
+		Parent = card,
+	})
+	if options.Desc then
+		createLabel({
+			Name = "Desc",
+			Size = UDim2.new(1, 0, 0, 0),
+			AutomaticSize = Enum.AutomaticSize.Y,
+			Text = tostring(options.Desc),
+			TextSize = 12,
+			FontFace = Fonts.Regular,
+			TextColor3 = Theme.Muted,
+			TextWrapped = true,
+			TextTruncate = Enum.TextTruncate.None,
+			LayoutOrder = 2,
+			Parent = card,
+		})
+	end
+
+	local box = create("ScrollingFrame", {
+		Size = UDim2.new(1, 0, 0, minHeight),
+		BackgroundColor3 = Theme.Surface,
+		BorderSizePixel = 0,
+		CanvasSize = UDim2.new(),
+		AutomaticCanvasSize = Enum.AutomaticSize.Y,
+		ScrollBarThickness = 3,
+		ScrollBarImageColor3 = Theme.Muted,
+		ScrollingDirection = Enum.ScrollingDirection.Y,
+		LayoutOrder = 3,
+		Parent = card,
+	})
+	addCorner(box, UDim.new(0, 6))
+	local boxStroke = addStroke(box)
+	addPadding(box, 8, 8, 6, 6)
+
+	local function clampLength(text)
+		text = tostring(text or "")
+		if maxLength and #text > maxLength then
+			return text:sub(1, maxLength)
+		end
+		return text
+	end
+
+	local textBox = create("TextBox", {
+		Size = UDim2.new(1, 0, 0, minHeight - 12),
+		AutomaticSize = Enum.AutomaticSize.Y,
+		BackgroundTransparency = 1,
+		Text = "",
+		PlaceholderText = tostring(options.Placeholder or ""),
+		PlaceholderColor3 = Theme.Muted,
+		TextColor3 = Theme.Text,
+		TextSize = 13,
+		FontFace = options.Monospace and MONO_FONT or Fonts.Regular,
+		TextXAlignment = Enum.TextXAlignment.Left,
+		TextYAlignment = Enum.TextYAlignment.Top,
+		TextWrapped = true,
+		MultiLine = true,
+		ClearTextOnFocus = false,
+		Parent = box,
+	})
+	textBox.Text = clampLength(options.Default)
+
+	local function fitBox()
+		local wanted = textBox.TextBounds.Y + 14
+		box.Size = UDim2.new(1, 0, 0, math.clamp(wanted, minHeight, maxHeight))
+	end
+
+	textBox:GetPropertyChangedSignal("Text"):Connect(function()
+		local clamped = clampLength(textBox.Text)
+		if clamped ~= textBox.Text then
+			textBox.Text = clamped
+			return
+		end
+		if textBox:IsFocused() then
+			safeCall(options.OnChanged, textBox.Text)
+			if (tonumber(textBox.CursorPosition) or -1) >= #textBox.Text then
+				task.defer(function()
+					box.CanvasPosition = Vector2.new(0, math.max(box.AbsoluteCanvasSize.Y - box.AbsoluteWindowSize.Y, 0))
+				end)
+			end
+		end
+	end)
+	textBox:GetPropertyChangedSignal("TextBounds"):Connect(fitBox)
+	task.defer(fitBox)
+
+	textBox.Focused:Connect(function()
+		tween(boxStroke, { Color = Theme.StrokeHover }, 0.15)
+	end)
+	textBox.FocusLost:Connect(function()
+		tween(boxStroke, { Color = Theme.Stroke }, 0.15)
+		safeCall(options.Callback, textBox.Text)
+	end)
+
+	local element = {}
+	function element:Set(text, silent)
+		textBox.Text = clampLength(text)
+		flashStroke(stroke)
+		if not silent then
+			safeCall(options.Callback, textBox.Text)
+		end
+	end
+	function element:Get()
+		return textBox.Text
+	end
+	function element:SetPlaceholder(text)
+		textBox.PlaceholderText = tostring(text)
+	end
+	function element:Focus()
+		textBox:CaptureFocus()
+	end
+	function element:Clear()
+		element:Set("")
+	end
+
+	return registerElement(self, options, element, card, "TextArea")
+end
+
+do
+	local Utils = {}
+	NeoxHub.Utils = Utils
+
+	function Utils.GetCharacter(player)
+		player = player or LocalPlayer
+		return player and player.Character or nil
+	end
+
+	function Utils.GetHumanoid(player)
+		local character = Utils.GetCharacter(player)
+		return character and character:FindFirstChildOfClass("Humanoid") or nil
+	end
+
+	function Utils.GetRoot(player)
+		local character = Utils.GetCharacter(player)
+		if not character then
+			return nil
+		end
+		return character:FindFirstChild("HumanoidRootPart") or character.PrimaryPart
+	end
+
+	function Utils.IsAlive(player)
+		local humanoid = Utils.GetHumanoid(player)
+		return humanoid ~= nil and humanoid.Health > 0
+	end
+
+	function Utils.GetPlayers(excludeSelf)
+		local list = {}
+		for _, player in ipairs(Players:GetPlayers()) do
+			if not (excludeSelf and player == LocalPlayer) then
+				table.insert(list, player)
+			end
+		end
+		return list
+	end
+
+	function Utils.GetPlayer(query)
+		if typeof(query) == "Instance" then
+			return query
+		end
+		query = string.lower(tostring(query or ""))
+		if query == "" then
+			return nil
+		end
+		local partial
+		for _, player in ipairs(Players:GetPlayers()) do
+			local name, display = string.lower(player.Name), string.lower(player.DisplayName or player.Name)
+			if name == query or display == query then
+				return player
+			end
+			if not partial and (name:sub(1, #query) == query or display:sub(1, #query) == query) then
+				partial = player
+			end
+		end
+		return partial
+	end
+
+	function Utils.GetClosestPlayer(options)
+		options = type(options) == "table" and options or {}
+		local root = Utils.GetRoot()
+		if not root then
+			return nil
+		end
+		local best, bestDistance = nil, tonumber(options.MaxDistance) or math.huge
+		for _, player in ipairs(Players:GetPlayers()) do
+			local eligible = player ~= LocalPlayer
+				and not (options.TeamCheck and player.Team ~= nil and player.Team == LocalPlayer.Team)
+				and (options.AliveCheck == false or Utils.IsAlive(player))
+			if eligible then
+				local otherRoot = Utils.GetRoot(player)
+				if otherRoot then
+					local distance = (otherRoot.Position - root.Position).Magnitude
+					if distance < bestDistance then
+						best, bestDistance = player, distance
+					end
+				end
+			end
+		end
+		return best, best and bestDistance or nil
+	end
+
+	function Utils.Teleport(target, offset)
+		local root = Utils.GetRoot()
+		if not root then
+			return false
+		end
+		local goal
+		if typeof(target) == "CFrame" then
+			goal = target
+		elseif typeof(target) == "Vector3" then
+			goal = CFrame.new(target)
+		elseif typeof(target) == "Instance" then
+			if target:IsA("Player") then
+				local otherRoot = Utils.GetRoot(target)
+				goal = otherRoot and otherRoot.CFrame
+			elseif target:IsA("BasePart") then
+				goal = target.CFrame
+			elseif target:IsA("Model") then
+				goal = target:GetPivot()
+			end
+		end
+		if not goal then
+			return false
+		end
+		if typeof(offset) == "Vector3" then
+			goal *= CFrame.new(offset)
+		elseif typeof(offset) == "CFrame" then
+			goal *= offset
+		end
+		local character = root.Parent
+		local ok = pcall(function()
+			if character and character:IsA("Model") then
+				character:PivotTo(goal)
+			else
+				root.CFrame = goal
+			end
+		end)
+		return ok
+	end
+
+	function Utils.Rejoin()
+		local TeleportService = game:GetService("TeleportService")
+		if #Players:GetPlayers() <= 1 then
+			return pcall(TeleportService.Teleport, TeleportService, game.PlaceId, LocalPlayer)
+		end
+		return pcall(TeleportService.TeleportToPlaceInstance, TeleportService, game.PlaceId, game.JobId, LocalPlayer)
+	end
+
+	function Utils.ServerHop(options)
+		options = type(options) == "table" and options or {}
+		local lowest = options.Lowest == true
+		local ok, servers = pcall(function()
+			local url = ("https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=%s&limit=100&excludeFullGames=true")
+				:format(game.PlaceId, lowest and "Asc" or "Desc")
+			return HttpService:JSONDecode(game:HttpGet(url)).data
+		end)
+		if not ok or type(servers) ~= "table" then
+			return false, "could not load the server list"
+		end
+		local choices = {}
+		for _, server in ipairs(servers) do
+			if type(server) == "table" and server.id ~= game.JobId then
+				local playing, maximum = tonumber(server.playing), tonumber(server.maxPlayers)
+				if playing and maximum and playing < maximum then
+					table.insert(choices, server.id)
+				end
+			end
+		end
+		if #choices == 0 then
+			return false, "no other servers found"
+		end
+		local TeleportService = game:GetService("TeleportService")
+		local choice = lowest and choices[1] or choices[math.random(#choices)]
+		return pcall(TeleportService.TeleportToPlaceInstance, TeleportService, game.PlaceId, choice, LocalPlayer)
+	end
+
+	local antiAfkConnection
+	function Utils.AntiAFK(enabled)
+		if enabled == false then
+			if antiAfkConnection then
+				antiAfkConnection:Disconnect()
+				antiAfkConnection = nil
+			end
+			return false
+		end
+		if antiAfkConnection then
+			return true
+		end
+		local ok, connection = pcall(function()
+			local VirtualUser = game:GetService("VirtualUser")
+			return LocalPlayer.Idled:Connect(function()
+				pcall(function()
+					VirtualUser:CaptureController()
+					VirtualUser:ClickButton2(Vector2.zero)
+				end)
+			end)
+		end)
+		if not ok or not connection then
+			return false
+		end
+		antiAfkConnection = connection
+		table.insert(NeoxHub._cleanup, function()
+			Utils.AntiAFK(false)
+		end)
+		return true
+	end
+
+	function Utils.GetExecutor()
+		return getExecutorName()
+	end
+
+	function Utils.FormatNumber(number, decimals)
+		number = tonumber(number) or 0
+		local suffixes = { "", "K", "M", "B", "T", "Qd", "Qn" }
+		local index, value = 1, math.abs(number)
+		while value >= 1000 and index < #suffixes do
+			value /= 1000
+			index += 1
+		end
+		local text = string.format("%." .. math.clamp(tonumber(decimals) or 1, 0, 4) .. "f", value)
+		if text:find("%.") then
+			text = text:gsub("0+$", ""):gsub("%.$", "")
+		end
+		return (number < 0 and "-" or "") .. text .. suffixes[index]
+	end
+
+	function Utils.FormatTime(seconds)
+		seconds = math.max(math.floor(tonumber(seconds) or 0), 0)
+		local hours, minutes, rest = seconds // 3600, (seconds % 3600) // 60, seconds % 60
+		if hours > 0 then
+			return string.format("%d:%02d:%02d", hours, minutes, rest)
+		end
+		return string.format("%d:%02d", minutes, rest)
+	end
+
+	NeoxHub.GetExecutor = function()
+		return getExecutorName()
+	end
+end
+
+Tab.CreateButtonRow = Tab.ButtonRow
+Tab.CreateTextArea = Tab.TextArea
 
 Tab.CreateStat = Tab.Stat
 Tab.CreateImage = Tab.Image
