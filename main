@@ -9,7 +9,7 @@ local LocalPlayer = Players.LocalPlayer
 
 local NeoxHub = {}
 NeoxHub.Name = "Neox Hub"
-NeoxHub.Version = "3.2.11"
+NeoxHub.Version = "3.2.12"
 NeoxHub.Flags = {}
 NeoxHub.Windows = {}
 
@@ -7134,6 +7134,9 @@ function Window:Tab(input, icon)
 		sidebarOrder = section._base + section._count
 		tab._section = section
 		table.insert(section.Tabs, tab)
+		if section._refreshCount then
+			section:_refreshCount()
+		end
 	else
 		self._looseTabOrder += 1
 		sidebarOrder = self._looseTabOrder
@@ -9207,19 +9210,29 @@ function Window:TabSection(input)
 
 	local header = create("TextButton", {
 		Name = "TabSection",
-		Size = UDim2.new(1, 0, 0, 34),
+		Size = UDim2.new(1, 0, 0, 46),
 		BackgroundTransparency = 1,
 		Text = "",
 		AutoButtonColor = false,
 		LayoutOrder = section._base,
 		Parent = self.TabList,
 	})
+	create("Frame", {
+		Name = "Divider",
+		Position = UDim2.fromOffset(6, 10),
+		Size = UDim2.new(1, -12, 0, 1),
+		BackgroundColor3 = Theme.Stroke,
+		BorderSizePixel = 0,
+		Parent = header,
+	})
 	local inner = create("Frame", {
-		Position = UDim2.fromOffset(0, 8),
-		Size = UDim2.new(1, 0, 0, 26),
+		Position = UDim2.fromOffset(0, 18),
+		Size = UDim2.new(1, 0, 0, 28),
+		BackgroundColor3 = Theme.Surface2,
 		BackgroundTransparency = 1,
 		Parent = header,
 	})
+	addCorner(inner, UDim.new(0, 7))
 	local textLeft = 6
 	if options.Icon then
 		createIcon(inner, options.Icon, Theme.Muted, UDim2.new(0, 6, 0.5, 0))
@@ -9236,6 +9249,26 @@ function Window:TabSection(input)
 		Parent = inner,
 	})
 	local chevron = createChevron(inner, 1, -4)
+	local countLabel = createLabel({
+		Name = "Count",
+		AnchorPoint = Vector2.new(1, 0.5),
+		Position = UDim2.new(1, -28, 0.5, 0),
+		Size = UDim2.fromOffset(28, 18),
+		Text = "",
+		TextSize = 11,
+		FontFace = Fonts.Bold,
+		TextColor3 = Theme.Muted,
+		TextXAlignment = Enum.TextXAlignment.Right,
+		Visible = false,
+		Parent = inner,
+	})
+	titleLabel.Size = UDim2.new(1, -(textLeft + 58), 1, 0)
+
+	function section:_refreshCount()
+		local count = #section.Tabs
+		countLabel.Text = tostring(count)
+		countLabel.Visible = not section.Opened and count > 0
+	end
 	section._header = header
 
 	local function refreshIndicator()
@@ -9254,6 +9287,7 @@ function Window:TabSection(input)
 				tab._button.Visible = section.Opened
 			end
 		end
+		section:_refreshCount()
 		refreshIndicator()
 	end
 
@@ -9281,9 +9315,11 @@ function Window:TabSection(input)
 			return
 		end
 		tween(titleLabel, { TextColor3 = Theme.Text }, 0.15)
+		tween(inner, { BackgroundTransparency = 0.5 }, 0.15)
 	end)
 	header.MouseLeave:Connect(function()
 		tween(titleLabel, { TextColor3 = Theme.Muted }, 0.2)
+		tween(inner, { BackgroundTransparency = 1 }, 0.2)
 	end)
 
 	function section:_applyCompact(compact)
