@@ -7,20 +7,20 @@ local Players = game:GetService("Players")
 
 local LocalPlayer = Players.LocalPlayer
 
-local NeoxHub = {}
-NeoxHub.Name = "Neox Hub"
-NeoxHub.Version = "3.2.15"
-NeoxHub.Flags = {}
-NeoxHub.Windows = {}
+local Nucleus = {}
+Nucleus.Name = "Nucleus UI"
+Nucleus.Version = "3.2.16"
+Nucleus.Flags = {}
+Nucleus.Windows = {}
 
-local LIB_NAME = "Neox Hub"
-local LOG_PREFIX = "[Neox Hub] "
-local GUI_NAME = "NeoxHub"
-local FONT_FOLDER = "NeoxHubFonts"
-local ATTR_NO_THEME = "NeoxNoTheme"
+local LIB_NAME = "Nucleus UI"
+local LOG_PREFIX = "[Nucleus UI] "
+local GUI_NAME = "NucleusUI"
+local FONT_FOLDER = "NucleusUIFonts"
+local ATTR_NO_THEME = "NucleusNoTheme"
 local ATTR_NO_DRAG = "NoDrag"
-local ATTR_HIDDEN = "NeoxHidden"
-local ATTR_STROKE_BASE = "NeoxStrokeBase"
+local ATTR_HIDDEN = "NucleusHidden"
+local ATTR_STROKE_BASE = "NucleusStrokeBase"
 
 local function log(message)
 	warn(LOG_PREFIX .. tostring(message))
@@ -28,7 +28,7 @@ end
 
 local KNOWN_OPTIONS = {}
 local KNOWN_OPTIONS_LOWER = {}
-for name in string.gmatch("AU AbsoluteContentSize AbsoluteSize Accent AccentDark Active ActiveOnly AliveCheck Always Anonymous Asc Australia AutoLoad AutoSave BR Background BackgroundColor3 BackgroundTransparency Backspace BasePart Began Body Bold BottomRight Brazil Button ButtonRow Buttons CA CFrame Callback Canada Cancel CancelText CanvasGroup Caption Changed Changes ClearOnFocus Close CloseOnBackdrop Code Collapsed Color Color3 ColorPicker Configs ConfigurationSaving Confirm ConfirmText ConfirmTimeout Content ContentProvider Copied Copy Copyable CoreGui Create CurrentKeybind CurrentOption CurrentValue Custom CustomFont DE Danger Date DateFormat Decal Default DefaultState Delay Delete Depends DependsOn Desc Description Details Discord DiscordButton DiscordLink Divider Dropdown Duration Element EmptyText Enabled Ended Enter Entries Enum EnumItem Error ErrorNotifications Esc Example ExcludeSelf Executor Expired Expiry FPS FR FileName Flag Folder FolderName Format Frame France Free GET Game Germany GetActive GetKey Glow Greeting Group GuiButton GuiName GuiObject GuiService HWID HasKey Header HeaderItems Height Hold Home HttpService Humanoid HumanoidRootPart IN Icon Image ImageButton ImageColor3 ImageLabel ImageRectPosition ImageRectSize ImageTransparency Increment India Info Input Instance JP Japan KeepOnScreen Key KeyInfo KeyPanel Keybind Keybinds LAlt LCtrl LShift Label Language Lifetime Lighting Load Loading LoadingDuration LoadingSteps LoadingSubtitle LoadingText LoadingTitle Localization Lock Locked LockedReason Loop LoopDelay Lowest Main MarketplaceService Max MaxDistance MaxHeight MaxLength MaxNotifications MaxSize Medium Membership Merge Message Method Min MinSize MobileButton MobileIcon Mode Model MinimizeButton Mono Monospace Monthly Multi MultiLine Multiline MultipleOptions Muted NL Name NeoxHidden NeoxHub NeoxHubBlur NeoxHubFonts NeoxLoc NeoxLocPlaceholderText NeoxLocText NeoxNoTheme Netherlands NoDrag None Not Notification NotificationPosition Notifications Numeric OK OnCancel OnChanged OnClose OnRelease Open OpenButton Opened Options Page Pages Paragraph Parent Ping Placeholder PlaceholderColor3 PlaceholderText Player PlayerGui Players Popup Position Prefix Premium PremiumBanner PremiumButton Perks Price PopupDelay Cooldown HeaderButton ExpiryButtons OnClick OnShown ShowWithoutKey ButtonText Link PremiumLink PremiumText Primary Profile Progress Qd Qn RAlt RCtrl RShift Radius Range Region RegionCity Regular Reminders Render Reset ResetOnUnload Resizable RunService SG Save Scale ScaleType ScreenGui ScrollBarImageColor3 ScrollingFrame Search SearchAfter SearchPlaceholder SearchResults Secondary Section SectionName Sections SemiBold Session ShowFPS ShowPing ShowPromo ShowTime Sidebar SidebarCollapsed Singapore Size Slider Sound Space Standard Stat Stats Step Stepper Stroke StrokeHover Studio Style Subtitle Success Suffix Surface Surface2 Surface3 Tab TabIcon TabSection Tabs Tag TeamCheck TeleportService Tertiary Text TextArea TextBounds TextBox TextButton TextColor3 TextLabel TextScale TextSize TextTransparency Texture Theme ThemeName Time TimeFormat Title Toggle ToggleUIKeybind Tooltip Top TotalTime TouchOnly TransitionIn TransitionOut Translations Transparency TweenService Type TypeName TypeNames UDim2 UICorner UIGradient UIGridLayout UIListLayout UIPadding UIScale UISizeConstraint UIStroke Unavailable Unknown Update UpdateRate Uptime Usage UseDisplayName User UserInputService UserInputType Value Values Variant Vector2 Vector3 Version VirtualUser Visible Volume Warning Weekly Weights Welcome Window", "%S+") do
+for name in string.gmatch("AU AbsoluteContentSize AbsoluteSize Accent AccentDark Active ActiveOnly AliveCheck Always Anonymous Asc Australia AutoLoad AutoSave BR Background BackgroundColor3 BackgroundTransparency Backspace BasePart Began Body Bold BottomRight Brazil Button ButtonRow Buttons CA CFrame Callback Canada Cancel CancelText CanvasGroup Caption Changed Changes ClearOnFocus Close CloseOnBackdrop Code Collapsed Color Color3 ColorPicker Configs ConfigurationSaving Confirm ConfirmText ConfirmTimeout Content ContentProvider Copied Copy Copyable CoreGui Create CurrentKeybind CurrentOption CurrentValue Custom CustomFont DE Danger Date DateFormat Decal Default DefaultState Delay Delete Depends DependsOn Desc Description Details Discord DiscordButton DiscordLink Divider Dropdown Duration Element EmptyText Enabled Ended Enter Entries Enum EnumItem Error ErrorNotifications Esc Example ExcludeSelf Executor Expired Expiry FPS FR FileName Flag Folder FolderName Format Frame France Free GET Game Germany GetActive GetKey Glow Greeting Group GuiButton GuiName GuiObject GuiService HWID HasKey Header HeaderItems Height Hold Home HttpService Humanoid HumanoidRootPart IN Icon Image ImageButton ImageColor3 ImageLabel ImageRectPosition ImageRectSize ImageTransparency Increment India Info Input Instance JP Japan KeepOnScreen Key KeyInfo KeyPanel Keybind Keybinds LAlt LCtrl LShift Label Language Lifetime Lighting Load Loading LoadingDuration LoadingSteps LoadingSubtitle LoadingText LoadingTitle Localization Lock Locked LockedReason Loop LoopDelay Lowest Main MarketplaceService Max MaxDistance MaxHeight MaxLength MaxNotifications MaxSize Medium Membership Merge Message Method Min MinSize MobileButton MobileIcon Mode Model MinimizeButton Mono Monospace Monthly Multi MultiLine Multiline MultipleOptions Muted NL Name NucleusHidden Nucleus NucleusUIBlur NucleusUIFonts NucleusLoc NucleusLocPlaceholderText NucleusLocText NucleusNoTheme Netherlands NoDrag None Not Notification NotificationPosition Notifications Numeric OK OnCancel OnChanged OnClose OnRelease Open OpenButton Opened Options Page Pages Paragraph Parent Ping Placeholder PlaceholderColor3 PlaceholderText Player PlayerGui Players Popup Position Prefix Premium PremiumBanner PremiumButton Perks Price PopupDelay Cooldown HeaderButton ExpiryButtons OnClick OnShown ShowWithoutKey ButtonText Link PremiumLink PremiumText Primary Profile Progress Qd Qn RAlt RCtrl RShift Radius Range Region RegionCity Regular Reminders Render Reset ResetOnUnload Resizable RunService SG Save Scale ScaleType ScreenGui ScrollBarImageColor3 ScrollingFrame Search SearchAfter SearchPlaceholder SearchResults Secondary Section SectionName Sections SemiBold Session ShowFPS ShowPing ShowPromo ShowTime Sidebar SidebarCollapsed Singapore Size Slider Sound Space Standard Stat Stats Step Stepper Stroke StrokeHover Studio Style Subtitle Success Suffix Surface Surface2 Surface3 Tab TabIcon TabSection Tabs Tag TeamCheck TeleportService Tertiary Text TextArea TextBounds TextBox TextButton TextColor3 TextLabel TextScale TextSize TextTransparency Texture Theme ThemeName Time TimeFormat Title Toggle ToggleUIKeybind Tooltip Top TotalTime TouchOnly TransitionIn TransitionOut Translations Transparency TweenService Type TypeName TypeNames UDim2 UICorner UIGradient UIGridLayout UIListLayout UIPadding UIScale UISizeConstraint UIStroke Unavailable Unknown Update UpdateRate Uptime Usage UseDisplayName User UserInputService UserInputType Value Values Variant Vector2 Vector3 Version VirtualUser Visible Volume Warning Weekly Weights Welcome Window", "%S+") do
 	KNOWN_OPTIONS[name] = true
 	KNOWN_OPTIONS_LOWER[string.lower(name)] = name
 end
@@ -84,7 +84,7 @@ local function checkOptionKeys(options)
 				end
 				if not warnedOptions[key] then
 					warnedOptions[key] = true
-					log(("option '%s' should be written '%s' (capital letters matter). Neox Hub used it as '%s' for you."):format(key, exact, exact))
+					log(("option '%s' should be written '%s' (capital letters matter). Nucleus UI used it as '%s' for you."):format(key, exact, exact))
 				end
 			elseif not warnedOptions[key] then
 				local suggestion = suggestOption(key)
@@ -121,9 +121,9 @@ end
 
 local LIBRARY_SOURCE = debug.info(1, "s")
 
-NeoxHub.Errors = {}
-NeoxHub.ErrorNotifications = true
-NeoxHub._errorListeners = {}
+Nucleus.Errors = {}
+Nucleus.ErrorNotifications = true
+Nucleus._errorListeners = {}
 local lastErrorTimes = {}
 
 local function captureError(err)
@@ -180,9 +180,9 @@ local function reportError(where, captured)
 		Traceback = captured.Traceback or "",
 		Time = os.time(),
 	}
-	table.insert(NeoxHub.Errors, entry)
-	if #NeoxHub.Errors > 50 then
-		table.remove(NeoxHub.Errors, 1)
+	table.insert(Nucleus.Errors, entry)
+	if #Nucleus.Errors > 50 then
+		table.remove(Nucleus.Errors, 1)
 	end
 
 	local key = where .. "\0" .. message
@@ -194,11 +194,11 @@ local function reportError(where, captured)
 
 	entry.Summary = message .. (line and (" (line " .. line .. ")") or "")
 	warn(("%serror in %s: %s\n%s"):format(LOG_PREFIX, where, entry.Summary, entry.Traceback))
-	for _, listener in ipairs(table.clone(NeoxHub._errorListeners)) do
+	for _, listener in ipairs(table.clone(Nucleus._errorListeners)) do
 		pcall(listener, entry)
 	end
-	if NeoxHub.ErrorNotifications ~= false and type(NeoxHub._showErrorToast) == "function" then
-		pcall(NeoxHub._showErrorToast, entry)
+	if Nucleus.ErrorNotifications ~= false and type(Nucleus._showErrorToast) == "function" then
+		pcall(Nucleus._showErrorToast, entry)
 	end
 	return entry
 end
@@ -257,7 +257,7 @@ local function withStatusColors(theme)
 	return theme
 end
 
-NeoxHub.Themes = {
+Nucleus.Themes = {
 	Default = withStatusColors({
 		Background = rgb(14, 14, 14),
 		Surface = rgb(17, 17, 18),
@@ -338,10 +338,10 @@ NeoxHub.Themes = {
 	}),
 }
 
-NeoxHub.Theme = table.clone(NeoxHub.Themes.Default)
-NeoxHub.ThemeName = "Default"
+Nucleus.Theme = table.clone(Nucleus.Themes.Default)
+Nucleus.ThemeName = "Default"
 
-NeoxHub.Assets = {
+Nucleus.Assets = {
 	Shadow = "rbxassetid://6014261993",
 	Glow = "rbxassetid://8992230677",
 	Logo = "rbxassetid://89821990558052",
@@ -350,7 +350,7 @@ NeoxHub.Assets = {
 
 local DEFAULT_FONT_FAMILY = "rbxasset://fonts/families/GothamSSm.json"
 
-NeoxHub.Fonts = {
+Nucleus.Fonts = {
 	Regular = Font.new(DEFAULT_FONT_FAMILY, Enum.FontWeight.Regular),
 	Medium = Font.new(DEFAULT_FONT_FAMILY, Enum.FontWeight.Medium),
 	Bold = Font.new(DEFAULT_FONT_FAMILY, Enum.FontWeight.Bold),
@@ -371,7 +371,7 @@ local FONT_WEIGHTS = {
 	Bold = { 700, Enum.FontWeight.Bold },
 }
 
-function NeoxHub:LoadFont(input)
+function Nucleus:LoadFont(input)
 	input = normalizeOptions(input, {})
 	if type(writefile) ~= "function" or type(isfile) ~= "function" or type(getcustomasset) ~= "function" then
 		log("custom fonts need writefile, isfile and getcustomasset")
@@ -447,7 +447,7 @@ function NeoxHub:LoadFont(input)
 		return fallback
 	end
 
-	local fonts = NeoxHub.Fonts
+	local fonts = Nucleus.Fonts
 	fonts.Regular = fontFor("Regular", fonts.Regular)
 	fonts.Medium = fontFor("Medium", fontFor("Regular", fonts.Medium))
 	fonts.Bold = fontFor("SemiBold", fontFor("Bold", fonts.Bold))
@@ -473,7 +473,7 @@ local function getIconPack()
 	return iconPack
 end
 
-function NeoxHub:PreloadIcons()
+function Nucleus:PreloadIcons()
 	return getIconPack() ~= false
 end
 
@@ -522,12 +522,12 @@ local function resolveIcon(icon)
 	return nil
 end
 
-local Theme = NeoxHub.Theme
-local Assets = NeoxHub.Assets
-local Fonts = NeoxHub.Fonts
+local Theme = Nucleus.Theme
+local Assets = Nucleus.Assets
+local Fonts = Nucleus.Fonts
 
 local IS_TOUCH = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
-NeoxHub.Touch = IS_TOUCH
+Nucleus.Touch = IS_TOUCH
 
 local ROW_HEIGHT = 42
 local ROW_HEIGHT_DESC = 56
@@ -580,11 +580,11 @@ local function tween(object, goals, duration, style, direction)
 	return track
 end
 
-NeoxHub.TextScale = 0.9
-NeoxHub.NotificationPosition = nil
+Nucleus.TextScale = 0.9
+Nucleus.NotificationPosition = nil
 local createNotifyHost
-NeoxHub._themeListeners = {}
-NeoxHub._cleanup = {}
+Nucleus._themeListeners = {}
+Nucleus._cleanup = {}
 
 local Localization = {
 	Prefix = "loc:",
@@ -592,7 +592,7 @@ local Localization = {
 	Language = "en",
 	Translations = {},
 }
-NeoxHub._localization = Localization
+Nucleus._localization = Localization
 
 local function translate(text)
 	if type(text) ~= "string" then
@@ -613,14 +613,14 @@ local TRANSLATED_PROPERTIES = { Text = true, PlaceholderText = true }
 local function setTranslated(instance, property, value)
 	local text, key = translate(value)
 	instance[property] = text
-	instance:SetAttribute("NeoxLoc" .. property, key)
+	instance:SetAttribute("NucleusLoc" .. property, key)
 end
 
 local function create(className, properties, children)
 	local instance = Instance.new(className)
 	for property, value in pairs(properties) do
 		if property == "TextSize" then
-			instance.TextSize = math.max(8, math.floor(value * (NeoxHub.TextScale or 1) + 0.5))
+			instance.TextSize = math.max(8, math.floor(value * (Nucleus.TextScale or 1) + 0.5))
 		elseif TRANSLATED_PROPERTIES[property] and type(value) == "string" then
 			setTranslated(instance, property, value)
 		elseif property ~= "Parent" then
@@ -1093,7 +1093,7 @@ local function registerElement(tab, options, element, frame, typeName, callbackK
 	end
 
 	if options.Flag then
-		NeoxHub.Flags[options.Flag] = element
+		Nucleus.Flags[options.Flag] = element
 		if window then
 			window.Flags[options.Flag] = element
 		end
@@ -1186,8 +1186,8 @@ local function registerElement(tab, options, element, frame, typeName, callbackK
 		end
 		element._listeners = {}
 		if options.Flag then
-			if NeoxHub.Flags[options.Flag] == element then
-				NeoxHub.Flags[options.Flag] = nil
+			if Nucleus.Flags[options.Flag] == element then
+				Nucleus.Flags[options.Flag] = nil
 			end
 			if window and window.Flags[options.Flag] == element then
 				window.Flags[options.Flag] = nil
@@ -1624,7 +1624,7 @@ function Tab:Paragraph(input)
 
 	if copyButton then
 		copyButton.MouseButton1Click:Connect(function()
-			NeoxHub:Copy(content.Text)
+			Nucleus:Copy(content.Text)
 		end)
 	end
 
@@ -3935,7 +3935,7 @@ function Tab:ConfigManager(input)
 		Callback = function()
 			local text = window:ExportConfig()
 			if text then
-				NeoxHub:Copy(text)
+				Nucleus:Copy(text)
 			end
 		end,
 	})
@@ -3999,12 +3999,12 @@ function Tab:ThemePicker(input)
 	return self:Dropdown({
 		Name = options.Name or "Theme",
 		Desc = options.Desc,
-		Options = NeoxHub:GetThemes(),
-		Default = NeoxHub.ThemeName,
+		Options = Nucleus:GetThemes(),
+		Default = Nucleus.ThemeName,
 		Flag = options.Flag,
 		Callback = function(themeName)
 			if themeName then
-				NeoxHub:SetTheme(themeName)
+				Nucleus:SetTheme(themeName)
 			end
 			safeCall(userCallback, themeName)
 		end,
@@ -4049,7 +4049,7 @@ local function getKeyStatus()
 		Expiry = expiry,
 	}
 end
-NeoxHub._getKeyStatus = getKeyStatus
+Nucleus._getKeyStatus = getKeyStatus
 
 local function formatDuration(seconds)
 	seconds = math.max(0, math.floor(seconds))
@@ -4339,14 +4339,14 @@ local function createKeyPanel(window, parent, layoutOrder, input)
 	local premiumButton
 	if options.PremiumLink then
 		premiumButton = addPanelButton(1, options.PremiumButton or "Get Premium", "crown", true, function()
-			NeoxHub:Copy(options.PremiumLink)
+			Nucleus:Copy(options.PremiumLink)
 		end)
 	end
 	local extraButtons = 0
 	if options.DiscordLink then
 		extraButtons += 1
 		addPanelButton(2, options.DiscordButton or "Discord", "discord", false, function()
-			NeoxHub:Copy(options.DiscordLink)
+			Nucleus:Copy(options.DiscordLink)
 		end)
 	end
 	for index, buttonDef in ipairs(options.Buttons or {}) do
@@ -4381,7 +4381,7 @@ local function createKeyPanel(window, parent, layoutOrder, input)
 					if window._premium then
 						window:_premiumClicked("reminder")
 					else
-						NeoxHub:Copy(link)
+						Nucleus:Copy(link)
 					end
 				end },
 			}
@@ -4581,7 +4581,6 @@ Window.__index = Window
 
 local DEFAULT_WINDOW_SIZE = UDim2.fromOffset(746, 496)
 local COMPACT_WIDTH = 560
-local TAB_INDENT = 10
 local COMPACT_SIDEBAR = 64
 local COMPACT_MIN = Vector2.new(400, 260)
 local DEFAULT_MIN_SIZE = Vector2.new(480, 360)
@@ -4620,13 +4619,13 @@ local function toVector2(value)
 	end
 	return nil
 end
-NeoxHub._toVector2 = toVector2
+Nucleus._toVector2 = toVector2
 local SIDEBAR_WIDTH = 156
 
-function NeoxHub.Window(selfOrOptions, maybeOptions)
+function Nucleus.Window(selfOrOptions, maybeOptions)
 
 	local input = maybeOptions
-	if selfOrOptions ~= NeoxHub and maybeOptions == nil then
+	if selfOrOptions ~= Nucleus and maybeOptions == nil then
 		input = selfOrOptions
 	end
 
@@ -4637,16 +4636,16 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 	})
 
 	if options.Theme ~= nil then
-		NeoxHub:SetTheme(options.Theme)
+		Nucleus:SetTheme(options.Theme)
 	end
 	if type(options.Localization) == "table" then
-		NeoxHub:SetLocalization(options.Localization)
+		Nucleus:SetLocalization(options.Localization)
 	end
 	if options.ErrorNotifications ~= nil then
-		NeoxHub.ErrorNotifications = options.ErrorNotifications ~= false
+		Nucleus.ErrorNotifications = options.ErrorNotifications ~= false
 	end
 	if tonumber(options.TextScale) then
-		NeoxHub.TextScale = math.clamp(tonumber(options.TextScale), 0.7, 1.3)
+		Nucleus.TextScale = math.clamp(tonumber(options.TextScale), 0.7, 1.3)
 	end
 
 	local toggleKey = toKeyCode(options.Keybind) or Enum.KeyCode.RightControl
@@ -5130,7 +5129,7 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 		window._minimizeButton = minimizeButton
 	end
 
-	window._notifyHost = createNotifyHost(screenGui, window._connections, options.MaxNotifications or 4, options.NotificationPosition or NeoxHub.NotificationPosition)
+	window._notifyHost = createNotifyHost(screenGui, window._connections, options.MaxNotifications or 4, options.NotificationPosition or Nucleus.NotificationPosition)
 	window.NotifyHolder = window._notifyHost.Holder
 	window._toasts = window._notifyHost.Toasts
 	window.MaxNotifications = window._notifyHost.MaxNotifications
@@ -5197,6 +5196,13 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 	local saving = options.ConfigurationSaving
 	if type(saving) == "table" and saving.Enabled ~= false then
 		window.ConfigFolder = saving.FolderName or GUI_NAME
+		if not saving.FolderName and type(isfolder) == "function" then
+			local okNew, hasNew = pcall(isfolder, GUI_NAME)
+			local okOld, hasOld = pcall(isfolder, "NeoxHub")
+			if okNew and okOld and not hasNew and hasOld then
+				window.ConfigFolder = "NeoxHub"
+			end
+		end
 		window.ConfigName = saving.FileName or "default"
 		window._autoSaveEnabled = saving.AutoSave == true
 		window._autoLoad = saving.AutoLoad == true
@@ -5252,7 +5258,7 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 	end
 
 	window._introDone = false
-	table.insert(NeoxHub.Windows, window)
+	table.insert(Nucleus.Windows, window)
 
 	window:_setupPremium(options)
 	window:_buildHome(type(options.Home) == "table" and options.Home or {})
@@ -5285,7 +5291,7 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 
 	return window
 end
-NeoxHub.CreateWindow = NeoxHub.Window
+Nucleus.CreateWindow = Nucleus.Window
 
 local function remapProperty(instance, property, colorMap)
 	local replacement = colorMap[instance[property]:ToHex()]
@@ -5347,7 +5353,7 @@ local function recolorInstance(instance, colorMap)
 end
 
 local function recolorAllWindows(colorMap)
-	for _, window in ipairs(NeoxHub.Windows) do
+	for _, window in ipairs(Nucleus.Windows) do
 		if window.Gui and window.Gui.Parent then
 			for _, descendant in ipairs(window.Gui:GetDescendants()) do
 				recolorInstance(descendant, colorMap)
@@ -5363,7 +5369,7 @@ local THEME_ALIASES = {
 local function resolveTheme(themeInput)
 	if type(themeInput) == "string" then
 		themeInput = THEME_ALIASES[themeInput] or themeInput
-		local preset = NeoxHub.Themes[themeInput]
+		local preset = Nucleus.Themes[themeInput]
 		if not preset then
 			log("unknown theme: " .. themeInput)
 			return nil
@@ -5371,7 +5377,7 @@ local function resolveTheme(themeInput)
 		return table.clone(preset), themeInput
 	elseif type(themeInput) == "table" then
 		local baseName = themeInput.Base or "Default"
-		local base = NeoxHub.Themes[THEME_ALIASES[baseName] or baseName] or NeoxHub.Themes.Default
+		local base = Nucleus.Themes[THEME_ALIASES[baseName] or baseName] or Nucleus.Themes.Default
 		local theme = table.clone(base)
 		for _, key in ipairs(THEME_KEYS) do
 			if typeof(themeInput[key]) == "Color3" then
@@ -5384,9 +5390,9 @@ local function resolveTheme(themeInput)
 	return nil
 end
 
-function NeoxHub:GetThemes()
+function Nucleus:GetThemes()
 	local names = {}
-	for name in pairs(NeoxHub.Themes) do
+	for name in pairs(Nucleus.Themes) do
 		if name ~= "Default" then
 			table.insert(names, name)
 		end
@@ -5396,18 +5402,18 @@ function NeoxHub:GetThemes()
 	return names
 end
 
-function NeoxHub:AddTheme(name, colors)
+function Nucleus:AddTheme(name, colors)
 	assert(type(name) == "string" and name ~= "", "AddTheme needs a name")
 	local theme = resolveTheme(colors)
 	if theme then
-		NeoxHub.Themes[name] = theme
+		Nucleus.Themes[name] = theme
 	end
 	return theme ~= nil
 end
 
 local themeGeneration = 0
 
-function NeoxHub:SetTheme(themeInput)
+function Nucleus:SetTheme(themeInput)
 	local newTheme, newName = resolveTheme(themeInput)
 	if not newTheme then
 		return false
@@ -5429,10 +5435,10 @@ function NeoxHub:SetTheme(themeInput)
 	for _, key in ipairs(THEME_KEYS) do
 		Theme[key] = newTheme[key]
 	end
-	NeoxHub.ThemeName = newName
+	Nucleus.ThemeName = newName
 
 	recolorAllWindows(colorMap)
-	for _, listener in ipairs(NeoxHub._themeListeners) do
+	for _, listener in ipairs(Nucleus._themeListeners) do
 		safeCall(listener)
 	end
 
@@ -5454,46 +5460,46 @@ function NeoxHub:SetTheme(themeInput)
 end
 
 local function latestWindow()
-	return NeoxHub.Windows[#NeoxHub.Windows]
+	return Nucleus.Windows[#Nucleus.Windows]
 end
 
-function NeoxHub:Notify(input)
+function Nucleus:Notify(input)
 	local window = latestWindow()
 	if window then
 		return window:Notify(input)
 	end
-	return NeoxHub:_notifyFallback(input)
+	return Nucleus:_notifyFallback(input)
 end
 
-function NeoxHub:Confirm(input)
+function Nucleus:Confirm(input)
 	local window = latestWindow()
 	return window and window:Confirm(input) or nil
 end
 
-function NeoxHub:Prompt(input)
+function Nucleus:Prompt(input)
 	local window = latestWindow()
 	return window and window:Prompt(input) or nil
 end
 
-function NeoxHub:Dialog(input)
+function Nucleus:Dialog(input)
 	local window = latestWindow()
 	return window and window:Dialog(input) or nil
 end
 
-function NeoxHub:GetFlag(flag)
-	return NeoxHub.Flags[flag]
+function Nucleus:GetFlag(flag)
+	return Nucleus.Flags[flag]
 end
 
-function NeoxHub:GetValue(flag)
-	local element = NeoxHub.Flags[flag]
+function Nucleus:GetValue(flag)
+	local element = Nucleus.Flags[flag]
 	if element and type(element.Get) == "function" then
 		return element:Get()
 	end
 	return nil
 end
 
-function NeoxHub:SetValue(flag, value, silent)
-	local element = NeoxHub.Flags[flag]
+function Nucleus:SetValue(flag, value, silent)
+	local element = Nucleus.Flags[flag]
 	if element and type(element.Set) == "function" then
 		element:Set(value, silent)
 		return true
@@ -5501,19 +5507,19 @@ function NeoxHub:SetValue(flag, value, silent)
 	return false
 end
 
-function NeoxHub:Copy(text)
+function Nucleus:Copy(text)
 	text = tostring(text or "")
 	local copyFn = setclipboard
 		or toclipboard
 		or (syn and syn.write_clipboard)
 		or (Clipboard and Clipboard.set)
 	if type(copyFn) ~= "function" then
-		NeoxHub:Notify({ Title = "Copy unavailable", Content = "Your executor has no clipboard support.", Type = "Error", Duration = 3 })
+		Nucleus:Notify({ Title = "Copy unavailable", Content = "Your executor has no clipboard support.", Type = "Error", Duration = 3 })
 		return false
 	end
 	local ok = pcall(copyFn, text)
 	local preview = #text > 60 and (text:sub(1, 57) .. "...") or text
-	NeoxHub:Notify({
+	Nucleus:Notify({
 		Title = ok and "Copied to clipboard" or "Copy failed",
 		Content = preview ~= "" and preview or nil,
 		Type = ok and "Success" or "Error",
@@ -5522,17 +5528,17 @@ function NeoxHub:Copy(text)
 	return ok
 end
 
-function NeoxHub:Destroy()
-	for index = #NeoxHub.Windows, 1, -1 do
-		NeoxHub.Windows[index]:Destroy()
+function Nucleus:Destroy()
+	for index = #Nucleus.Windows, 1, -1 do
+		Nucleus.Windows[index]:Destroy()
 	end
-	local cleanup = NeoxHub._cleanup
-	NeoxHub._cleanup = {}
+	local cleanup = Nucleus._cleanup
+	Nucleus._cleanup = {}
 	for _, callback in ipairs(cleanup) do
 		task.spawn(safeCall, callback)
 	end
 end
-NeoxHub.Unload = NeoxHub.Destroy
+Nucleus.Unload = Nucleus.Destroy
 
 local function isVisiblyAt(guiObject, stopAt, point)
 	local current = guiObject
@@ -5964,8 +5970,7 @@ end
 
 function Window:_layoutTabButton(tab)
 	local compact = self._compact == true
-	local nested = tab._section ~= nil and not compact
-	tab._button.Size = UDim2.new(1, nested and -TAB_INDENT or 0, 0, 34)
+	tab._button.Size = UDim2.new(1, 0, 0, 34)
 	tab._label.Visible = not compact
 	if tab._icon then
 		tab._icon.AnchorPoint = compact and Vector2.new(0.5, 0.5) or Vector2.new(0, 0.5)
@@ -6126,7 +6131,7 @@ function Window:_createOpenButton(buttonOptions)
 			pill.Size = UDim2.fromOffset(0, height)
 			icon.Size = UDim2.fromOffset(tall and 26 or 22, tall and 26 or 22)
 			pillLabel.Position = UDim2.fromOffset(tall and 34 or 30, 0)
-			pillLabel.TextSize = math.floor((tall and 15 or 13) * NeoxHub.TextScale + 0.5)
+			pillLabel.TextSize = math.floor((tall and 15 or 13) * Nucleus.TextScale + 0.5)
 			autoPosition = UDim2.fromOffset(inset.Min.X + 10, centerY)
 		else
 			pill.AnchorPoint = Vector2.new(0.5, 0)
@@ -7877,7 +7882,7 @@ function Window:SetIcon(icon)
 end
 
 function Window:SetTheme(themeInput)
-	return NeoxHub:SetTheme(themeInput)
+	return Nucleus:SetTheme(themeInput)
 end
 
 function Window:SetScale(scale)
@@ -8920,7 +8925,7 @@ function Window:SetNotificationPosition(positionName)
 end
 
 local fallbackHost
-function NeoxHub:_notifyFallback(input)
+function Nucleus:_notifyFallback(input)
 	if not fallbackHost or not fallbackHost.Holder.Parent then
 		local screenGui = create("ScreenGui", {
 			Name = GUI_NAME .. "Notifications",
@@ -8930,8 +8935,8 @@ function NeoxHub:_notifyFallback(input)
 			ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
 			Parent = getGuiParent(),
 		})
-		fallbackHost = createNotifyHost(screenGui, {}, 4, NeoxHub.NotificationPosition)
-		table.insert(NeoxHub._cleanup, function()
+		fallbackHost = createNotifyHost(screenGui, {}, 4, Nucleus.NotificationPosition)
+		table.insert(Nucleus._cleanup, function()
 			fallbackHost = nil
 			screenGui:Destroy()
 		end)
@@ -8939,9 +8944,9 @@ function NeoxHub:_notifyFallback(input)
 	return showToast(fallbackHost, input)
 end
 
-NeoxHub._showErrorToast = function(entry)
+Nucleus._showErrorToast = function(entry)
 	local where = entry.Where or "a callback"
-	NeoxHub:Notify({
+	Nucleus:Notify({
 		Title = "Something went wrong",
 		Content = ("In %s: %s"):format(where, entry.Summary or entry.Message or "unknown error"),
 		Type = "Error",
@@ -8950,8 +8955,8 @@ NeoxHub._showErrorToast = function(entry)
 			{
 				Title = "Copy details",
 				Callback = function()
-					NeoxHub:Copy(("Neox Hub %s\nWhere: %s\nError: %s\n%s"):format(
-						NeoxHub.Version, where, tostring(entry.Raw), tostring(entry.Traceback or "")))
+					Nucleus:Copy(("Nucleus UI %s\nWhere: %s\nError: %s\n%s"):format(
+						Nucleus.Version, where, tostring(entry.Raw), tostring(entry.Traceback or "")))
 				end,
 			},
 		},
@@ -8978,9 +8983,9 @@ function Window:Destroy()
 		task.spawn(safeCall, callback)
 	end
 
-	local index = table.find(NeoxHub.Windows, self)
+	local index = table.find(Nucleus.Windows, self)
 	if index then
-		table.remove(NeoxHub.Windows, index)
+		table.remove(Nucleus.Windows, index)
 	end
 
 	for _, connection in ipairs(self._connections) do
@@ -8994,8 +8999,8 @@ function Window:Destroy()
 	table.clear(self._frameSteps)
 
 	for flag, element in pairs(self.Flags) do
-		if NeoxHub.Flags[flag] == element then
-			NeoxHub.Flags[flag] = nil
+		if Nucleus.Flags[flag] == element then
+			Nucleus.Flags[flag] = nil
 		end
 	end
 	self.Flags = {}
@@ -9009,10 +9014,10 @@ function Window:Destroy()
 	end)
 end
 
-local ATTR_LOC_TEXT = "NeoxLocText"
-local ATTR_LOC_PLACEHOLDER = "NeoxLocPlaceholderText"
+local ATTR_LOC_TEXT = "NucleusLocText"
+local ATTR_LOC_PLACEHOLDER = "NucleusLocPlaceholderText"
 
-function NeoxHub:SetLocalization(settings)
+function Nucleus:SetLocalization(settings)
 	settings = type(settings) == "table" and settings or {}
 	if type(settings.Prefix) == "string" then
 		Localization.Prefix = settings.Prefix
@@ -9028,13 +9033,13 @@ function NeoxHub:SetLocalization(settings)
 			end
 		end
 	end
-	NeoxHub:SetLanguage(settings.Language or Localization.Language)
+	Nucleus:SetLanguage(settings.Language or Localization.Language)
 end
 
-function NeoxHub:SetLanguage(language)
+function Nucleus:SetLanguage(language)
 	Localization.Language = tostring(language or Localization.Default)
 	local prefix = Localization.Prefix
-	for _, window in ipairs(NeoxHub.Windows) do
+	for _, window in ipairs(Nucleus.Windows) do
 		if window.Gui then
 			for _, descendant in ipairs(window.Gui:GetDescendants()) do
 				local textKey = descendant:GetAttribute(ATTR_LOC_TEXT)
@@ -9050,11 +9055,11 @@ function NeoxHub:SetLanguage(language)
 	end
 end
 
-function NeoxHub:GetLanguage()
+function Nucleus:GetLanguage()
 	return Localization.Language
 end
 
-function NeoxHub:Translate(key)
+function Nucleus:Translate(key)
 	return (translate(Localization.Prefix .. tostring(key)))
 end
 
@@ -9081,7 +9086,7 @@ end
 Window.SetToggleKey = Window.SetKeybind
 
 function Window:SetSize(size)
-	local vector = NeoxHub._toVector2(size)
+	local vector = Nucleus._toVector2(size)
 	if not vector then
 		return
 	end
@@ -9196,10 +9201,10 @@ function Window:TabSection(input)
 		BackgroundTransparency = 1,
 		Parent = header,
 	})
-	local textLeft = 6
+	local textLeft = 12
 	if options.Icon then
-		createIcon(inner, options.Icon, Theme.Muted, UDim2.new(0, 6, 0.5, 0))
-		textLeft = 28
+		createIcon(inner, options.Icon, Theme.Muted, UDim2.new(0, 12, 0.5, 0))
+		textLeft = 36
 	end
 	local titleLabel = createLabel({
 		Name = "Title",
@@ -9463,9 +9468,9 @@ local POPUP_VARIANTS = {
 	Tertiary = true,
 }
 
-function NeoxHub:Popup(input)
+function Nucleus:Popup(input)
 	local options = normalizeOptions(input, { Text = "Content", Message = "Content" })
-	local window = NeoxHub.Windows[#NeoxHub.Windows]
+	local window = Nucleus.Windows[#Nucleus.Windows]
 	local ownGui
 	local parentGui = window and window.Gui
 	if not parentGui then
@@ -9896,7 +9901,7 @@ function Tab:Code(input)
 		tween(copyLabel, { TextColor3 = Theme.Muted }, 0.2)
 	end)
 	copyButton.MouseButton1Click:Connect(function()
-		NeoxHub:Copy(source)
+		Nucleus:Copy(source)
 		copyLabel.Text = "Copied"
 		task.delay(1.5, function()
 			if copyLabel.Parent then
@@ -10330,10 +10335,10 @@ do
 		"Instant access every time you play",
 		"Supports future updates",
 	}
-	local COOLDOWN_FILE = "NeoxHub/premium.json"
+	local COOLDOWN_FILE = "NucleusUI/premium.json"
 
 	local function isFreeUser(window)
-		local status = NeoxHub._getKeyStatus()
+		local status = Nucleus._getKeyStatus()
 		if window._premium and window._premium.ShowWithoutKey then
 			return not status.Premium
 		end
@@ -10354,19 +10359,19 @@ do
 			if type(writefile) ~= "function" then
 				return
 			end
-			if type(isfolder) == "function" and type(makefolder) == "function" and not isfolder("NeoxHub") then
-				makefolder("NeoxHub")
+			if type(isfolder) == "function" and type(makefolder) == "function" and not isfolder("NucleusUI") then
+				makefolder("NucleusUI")
 			end
 			writefile(COOLDOWN_FILE, HttpService:JSONEncode({ LastShown = time }))
 		end)
 	end
 
-	function NeoxHub:IsPremium()
-		return NeoxHub._getKeyStatus().Premium == true
+	function Nucleus:IsPremium()
+		return Nucleus._getKeyStatus().Premium == true
 	end
 
-	function NeoxHub:GetKeyStatus()
-		return NeoxHub._getKeyStatus()
+	function Nucleus:GetKeyStatus()
+		return Nucleus._getKeyStatus()
 	end
 
 	function Window:_premiumClicked(source)
@@ -10374,7 +10379,7 @@ do
 		if not premium then
 			return
 		end
-		NeoxHub:Copy(premium.Link)
+		Nucleus:Copy(premium.Link)
 		safeCall(premium.OnClick, source)
 	end
 
@@ -10396,7 +10401,7 @@ do
 			table.insert(lines, tostring(premium.Price))
 		end
 		safeCall(premium.OnShown, source or "manual")
-		return NeoxHub:Popup({
+		return Nucleus:Popup({
 			Title = premium.Title,
 			Icon = "crown",
 			Content = table.concat(lines, "\n"),
@@ -10516,7 +10521,7 @@ do
 		})
 		button.MouseButton1Click:Connect(function()
 			if options.Link then
-				NeoxHub:Copy(options.Link)
+				Nucleus:Copy(options.Link)
 			elseif window._premium then
 				window:ShowPremium("banner")
 			end
@@ -10528,7 +10533,7 @@ do
 		end
 		local registered = registerElement(self, options, element, card, "PremiumBanner")
 		local function refresh()
-			local status = NeoxHub._getKeyStatus()
+			local status = Nucleus._getKeyStatus()
 			local show = not status.Premium and (status.HasKey or options.ShowWithoutKey == true)
 			card.Visible = element.Visible ~= false and show
 		end
@@ -10558,7 +10563,7 @@ function Window:IsSidebarCollapsed()
 end
 
 function Window:Popup(input)
-	return NeoxHub:Popup(input)
+	return Nucleus:Popup(input)
 end
 
 do
@@ -10641,41 +10646,41 @@ do
 	local globalOwner = { _destroyed = false }
 	local globalLoops = {}
 
-	function NeoxHub:Loop(callback, delay)
-		local window = NeoxHub.Windows[#NeoxHub.Windows]
+	function Nucleus:Loop(callback, delay)
+		local window = Nucleus.Windows[#Nucleus.Windows]
 		if window then
 			return window:Loop(callback, delay)
 		end
 		local loop = startLoop(globalOwner, globalLoops, callback, delay)
-		table.insert(NeoxHub._cleanup, function()
+		table.insert(Nucleus._cleanup, function()
 			loop:Stop()
 		end)
 		return loop
 	end
 
-	function NeoxHub:Connect(signal, callback)
-		local window = NeoxHub.Windows[#NeoxHub.Windows]
+	function Nucleus:Connect(signal, callback)
+		local window = Nucleus.Windows[#Nucleus.Windows]
 		if window then
 			return window:Connect(signal, callback)
 		end
 		local connection = signal:Connect(function(...)
 			safeCall(callback, ...)
 		end)
-		table.insert(NeoxHub._cleanup, function()
+		table.insert(Nucleus._cleanup, function()
 			connection:Disconnect()
 		end)
 		return connection
 	end
 
-	function NeoxHub:OnUnload(callback)
+	function Nucleus:OnUnload(callback)
 		if type(callback) == "function" then
-			table.insert(NeoxHub._cleanup, callback)
+			table.insert(Nucleus._cleanup, callback)
 		end
 	end
 
-	function NeoxHub:GetValues()
+	function Nucleus:GetValues()
 		local values = {}
-		for flag, element in pairs(NeoxHub.Flags) do
+		for flag, element in pairs(Nucleus.Flags) do
 			if type(element.Get) == "function" then
 				local ok, value = pcall(element.Get, element)
 				if ok then
@@ -10686,12 +10691,12 @@ do
 		return values
 	end
 
-	function NeoxHub:SetValues(values)
+	function Nucleus:SetValues(values)
 		if type(values) ~= "table" then
 			return
 		end
 		for flag, value in pairs(values) do
-			NeoxHub:SetValue(flag, value)
+			Nucleus:SetValue(flag, value)
 		end
 	end
 end
@@ -10730,7 +10735,7 @@ do
 	end
 
 	local function flagValue(window, flag)
-		local element = window.Flags[flag] or NeoxHub.Flags[flag]
+		local element = window.Flags[flag] or Nucleus.Flags[flag]
 		if element and type(element.Get) == "function" then
 			local ok, value = pcall(element.Get, element)
 			if ok then
@@ -10741,7 +10746,7 @@ do
 			if not window._missingDependencies[flag] then
 				window._missingDependencies[flag] = true
 				task.delay(3, function()
-					if not window._destroyed and window.Flags[flag] == nil and NeoxHub.Flags[flag] == nil then
+					if not window._destroyed and window.Flags[flag] == nil and Nucleus.Flags[flag] == nil then
 						log(('DependsOn uses the Flag "%s", but no element has that Flag. Check the spelling.'):format(tostring(flag)))
 					end
 				end)
@@ -11123,7 +11128,7 @@ end
 
 do
 	local Utils = {}
-	NeoxHub.Utils = Utils
+	Nucleus.Utils = Utils
 
 	function Utils.GetCharacter(player)
 		player = player or LocalPlayer
@@ -11303,7 +11308,7 @@ do
 			return false
 		end
 		antiAfkConnection = connection
-		table.insert(NeoxHub._cleanup, function()
+		table.insert(Nucleus._cleanup, function()
 			Utils.AntiAFK(false)
 		end)
 		return true
@@ -11337,7 +11342,7 @@ do
 		return string.format("%d:%02d", minutes, rest)
 	end
 
-	NeoxHub.GetExecutor = function()
+	Nucleus.GetExecutor = function()
 		return getExecutorName()
 	end
 end
@@ -11350,7 +11355,7 @@ Tab.CreateImage = Tab.Image
 Tab.CreateCode = Tab.Code
 Tab.CreateSpace = Tab.Space
 
-table.insert(NeoxHub._themeListeners, function()
+table.insert(Nucleus._themeListeners, function()
 	for element in pairs(codeElements) do
 		if not element._destroyed then
 			element:_rerender()
@@ -11359,45 +11364,45 @@ table.insert(NeoxHub._themeListeners, function()
 end)
 
 do
-	function NeoxHub:OnError(callback)
+	function Nucleus:OnError(callback)
 		if type(callback) ~= "function" then
 			return { Disconnect = function() end }
 		end
-		table.insert(NeoxHub._errorListeners, callback)
+		table.insert(Nucleus._errorListeners, callback)
 		return {
 			Disconnect = function()
-				local index = table.find(NeoxHub._errorListeners, callback)
+				local index = table.find(Nucleus._errorListeners, callback)
 				if index then
-					table.remove(NeoxHub._errorListeners, index)
+					table.remove(Nucleus._errorListeners, index)
 				end
 			end,
 		}
 	end
 
-	function NeoxHub:GetErrors()
-		return table.clone(NeoxHub.Errors)
+	function Nucleus:GetErrors()
+		return table.clone(Nucleus.Errors)
 	end
 
-	function NeoxHub:ClearErrors()
-		table.clear(NeoxHub.Errors)
+	function Nucleus:ClearErrors()
+		table.clear(Nucleus.Errors)
 	end
 
-	function NeoxHub:SetErrorNotifications(enabled)
-		NeoxHub.ErrorNotifications = enabled ~= false
+	function Nucleus:SetErrorNotifications(enabled)
+		Nucleus.ErrorNotifications = enabled ~= false
 	end
 
-	function NeoxHub:Try(name, callback, ...)
+	function Nucleus:Try(name, callback, ...)
 		if type(name) == "function" then
 			return runProtected("your code", name, callback, ...)
 		end
 		return runProtected(tostring(name), callback, ...)
 	end
 
-	function NeoxHub:ReportError(where, message)
+	function Nucleus:ReportError(where, message)
 		return reportError(tostring(where or "your code"), { Error = message, Traceback = debug.traceback(nil, 2) or "" })
 	end
 
-	local Utils = NeoxHub.Utils
+	local Utils = Nucleus.Utils
 
 	function Utils.WaitForCharacter(timeout)
 		local deadline = os.clock() + (tonumber(timeout) or 10)
@@ -11433,7 +11438,7 @@ do
 			end,
 		}
 		if ok then
-			table.insert(NeoxHub._cleanup, handle.Disconnect)
+			table.insert(Nucleus._cleanup, handle.Disconnect)
 		end
 		return handle
 	end
@@ -11443,7 +11448,7 @@ do
 		if clean == "" then
 			clean = "data"
 		end
-		return "NeoxHub/data/" .. clean .. ".json"
+		return "NucleusUI/data/" .. clean .. ".json"
 	end
 
 	function Utils.SaveData(name, data)
@@ -11452,11 +11457,11 @@ do
 		end
 		local ok, err = pcall(function()
 			if type(isfolder) == "function" and type(makefolder) == "function" then
-				if not isfolder("NeoxHub") then
-					makefolder("NeoxHub")
+				if not isfolder("NucleusUI") then
+					makefolder("NucleusUI")
 				end
-				if not isfolder("NeoxHub/data") then
-					makefolder("NeoxHub/data")
+				if not isfolder("NucleusUI/data") then
+					makefolder("NucleusUI/data")
 				end
 			end
 			writefile(dataPath(name), HttpService:JSONEncode(data))
@@ -11468,11 +11473,18 @@ do
 	end
 
 	function Utils.LoadData(name, default)
-		if type(readfile) ~= "function" or (type(isfile) == "function" and not isfile(dataPath(name))) then
+		if type(readfile) ~= "function" then
 			return default
 		end
+		local path = dataPath(name)
+		if type(isfile) == "function" and not isfile(path) then
+			path = path:gsub("^NucleusUI/", "NeoxHub/")
+			if not isfile(path) then
+				return default
+			end
+		end
 		local ok, data = pcall(function()
-			return HttpService:JSONDecode(readfile(dataPath(name)))
+			return HttpService:JSONDecode(readfile(path))
 		end)
 		if not ok then
 			log("LoadData could not read " .. tostring(name) .. ", using the default instead")
@@ -11503,11 +11515,11 @@ do
 		"GetLanguage", "SetErrorNotifications", "Try", "ReportError", "PreloadIcons", "LoadFont",
 	}
 	for _, name in ipairs(FORGIVING) do
-		local method = NeoxHub[name]
+		local method = Nucleus[name]
 		if type(method) == "function" then
-			NeoxHub[name] = function(self, ...)
-				if self ~= NeoxHub then
-					return method(NeoxHub, self, ...)
+			Nucleus[name] = function(self, ...)
+				if self ~= Nucleus then
+					return method(Nucleus, self, ...)
 				end
 				return method(self, ...)
 			end
@@ -11531,4 +11543,4 @@ do
 	guardMethods(Window, "Window")
 end
 
-return NeoxHub
+return Nucleus
