@@ -10,7 +10,7 @@ local LocalPlayer = Players.LocalPlayer
 local Nucleus = {}
 local Const = {}
 Nucleus.Name = "Nucleus UI"
-Nucleus.Version = "4.4.1"
+Nucleus.Version = "4.4.2"
 Nucleus.Flags = {}
 Nucleus.Windows = {}
 
@@ -708,7 +708,11 @@ local function tween(object, goals, duration, style, direction)
 	end
 	if duration <= 0 then
 		for property, value in pairs(goals) do
-			object[property] = value
+			if property ~= "GroupTransparency" or object:IsA("CanvasGroup") then
+				object[property] = value
+			elseif object:IsA("GuiObject") then
+				object.Visible = value < 1
+			end
 		end
 		return nil
 	end
@@ -764,9 +768,12 @@ local function setTranslated(instance, property, value)
 end
 
 local function create(className, properties, children)
-	local instance = Instance.new(className)
+	local plainGroup = className == "CanvasGroup" and IS_TOUCH
+	local instance = Instance.new(plainGroup and "Frame" or className)
 	for property, value in pairs(properties) do
-		if property == "TextSize" then
+		if plainGroup and property == "GroupTransparency" then
+			continue
+		elseif property == "TextSize" then
 			instance.TextSize = math.max(8, math.floor(value * (Nucleus.TextScale or 1) + 0.5))
 		elseif Const.TRANSLATED_PROPERTIES[property] and type(value) == "string" then
 			setTranslated(instance, property, value)
@@ -5048,18 +5055,31 @@ function Nucleus.Window(selfOrOptions, maybeOptions)
 		Parent = root,
 	})
 
-	local body = create("CanvasGroup", {
+	local body = create("Frame", {
 		Name = "Body",
 		Active = true,
 		Size = UDim2.fromScale(1, 1),
 		BackgroundColor3 = Theme.Background,
 		BorderSizePixel = 0,
+		ClipsDescendants = true,
 		Parent = root,
 	})
 	window.Body = body
 	addCorner(body, UDim.new(0, Appearance.WindowRadius))
 	window.BodyStroke = addStroke(body, Theme.Stroke)
-	addTopHighlight(body)
+
+	local fader = create("Frame", {
+		Name = "Fader",
+		Size = UDim2.fromScale(1, 1),
+		BackgroundColor3 = Theme.Background,
+		BackgroundTransparency = 1,
+		BorderSizePixel = 0,
+		Visible = false,
+		ZIndex = 1000,
+		Parent = body,
+	})
+	addCorner(fader, UDim.new(0, Appearance.WindowRadius))
+	window._fader = fader
 
 	local sidebar = create("Frame", {
 		Name = "Sidebar",
@@ -5119,6 +5139,7 @@ function Nucleus.Window(selfOrOptions, maybeOptions)
 		BackgroundTransparency = 1,
 		BorderSizePixel = 0,
 		ScrollBarThickness = 0,
+		ScrollingDirection = Enum.ScrollingDirection.Y,
 		AutomaticCanvasSize = Enum.AutomaticSize.Y,
 		CanvasSize = UDim2.new(),
 		ZIndex = 2,
@@ -5169,6 +5190,7 @@ function Nucleus.Window(selfOrOptions, maybeOptions)
 			BackgroundTransparency = 1,
 			BorderSizePixel = 0,
 			ScrollBarThickness = 0,
+			ScrollingDirection = Enum.ScrollingDirection.Y,
 			AutomaticCanvasSize = Enum.AutomaticSize.Y,
 			CanvasSize = UDim2.new(),
 			Visible = false,
@@ -5553,7 +5575,7 @@ function Nucleus.Window(selfOrOptions, maybeOptions)
 	screenGui.Parent = options.Parent or getGuiParent()
 
 	window.Scale.Scale = 0.9
-	body.GroupTransparency = 1
+	window:_setFade(0)
 	window.Shadow.ImageTransparency = 1
 	window.BodyStroke.Transparency = 1
 	root.Visible = false
@@ -6041,7 +6063,7 @@ function Window:_playIntro(fromLoader)
 		self._autoSaveReady = true
 	end)
 
-	local root, body, shadow, scale = self.Root, self.Body, self.Shadow, self.Scale
+	local root, shadow, scale = self.Root, self.Shadow, self.Scale
 
 	if self.CurrentTab then
 		self:_revealCards(self.CurrentTab, fromLoader and 0.15 or 0.25)
@@ -6052,14 +6074,14 @@ function Window:_playIntro(fromLoader)
 
 		scale.Scale = self._fitScale or 1
 		root.Position = self:_restPosition()
-		tween(body, { GroupTransparency = 0 }, 0.3)
+		self:_fadeIn(0.3)
 		tween(self.BodyStroke, { Transparency = 0 }, 0.3)
 		tween(shadow, { ImageTransparency = 0.6 }, 0.3)
 	else
 		root.Position = self:_restPosition() + UDim2.fromOffset(0, 24)
 		tween(scale, { Scale = self._fitScale or 1 }, 0.5, Enum.EasingStyle.Back)
 		tween(root, { Position = self:_restPosition() }, 0.5, Enum.EasingStyle.Quint)
-		tween(body, { GroupTransparency = 0 }, 0.35)
+		self:_fadeIn(0.35)
 		tween(self.BodyStroke, { Transparency = 0 }, 0.35)
 		tween(shadow, { ImageTransparency = 0.6 }, 0.5)
 	end
@@ -7626,9 +7648,10 @@ function Window:Tab(input, icon)
 		Size = UDim2.new(1, 0, 1, -listTop),
 		BackgroundTransparency = 1,
 		BorderSizePixel = 0,
-		ScrollBarThickness = 2,
-		ScrollBarImageColor3 = Theme.Accent,
-		ScrollBarImageTransparency = 0.5,
+		ScrollBarThickness = 3,
+		ScrollBarImageColor3 = Theme.Muted,
+		ScrollBarImageTransparency = 0.55,
+		ScrollingDirection = Enum.ScrollingDirection.Y,
 		AutomaticCanvasSize = Enum.AutomaticSize.Y,
 		CanvasSize = UDim2.new(),
 		Parent = page,
@@ -7850,6 +7873,7 @@ function Window:Dialog(input)
 		ZIndex = 40,
 		Parent = self.Body,
 	})
+	addCorner(backdrop, UDim.new(0, Appearance.WindowRadius))
 
 	local panel = create("TextButton", {
 		AnchorPoint = Vector2.new(0.5, 0.5),
@@ -8237,12 +8261,12 @@ function Window:Toggle(open)
 	if open then
 		self.Root.Visible = true
 		tween(self.Scale, { Scale = self._fitScale or 1 }, 0.4, Enum.EasingStyle.Back)
-		tween(self.Body, { GroupTransparency = 0 }, 0.25)
+		self:_fadeIn(0.25)
 		tween(self.BodyStroke, { Transparency = 0 }, 0.25)
 		tween(self.Shadow, { ImageTransparency = 0.6 }, 0.3)
 	else
 		tween(self.Scale, { Scale = (self._fitScale or 1) * 0.94 }, 0.2, Enum.EasingStyle.Quint)
-		tween(self.Body, { GroupTransparency = 1 }, 0.16)
+		self:_fadeOut(0.16)
 		tween(self.BodyStroke, { Transparency = 1 }, 0.12)
 		tween(self.Shadow, { ImageTransparency = 1 }, 0.16)
 		if IS_TOUCH then
@@ -8254,6 +8278,45 @@ function Window:Toggle(open)
 			end
 		end)
 	end
+end
+
+function Window:_setFade(amount)
+	self._fadeGeneration = (self._fadeGeneration or 0) + 1
+	local fader = self._fader
+	fader.BackgroundColor3 = Theme.Background
+	fader.BackgroundTransparency = amount
+	fader.Visible = amount < 1
+end
+
+function Window:_fadeIn(duration)
+	self._fadeGeneration = (self._fadeGeneration or 0) + 1
+	local generation = self._fadeGeneration
+	local fader = self._fader
+	fader.BackgroundColor3 = Theme.Background
+	if IS_TOUCH or not duration or duration <= 0 then
+		fader.BackgroundTransparency = 1
+		fader.Visible = false
+		return
+	end
+	fader.Visible = true
+	tween(fader, { BackgroundTransparency = 1 }, duration)
+	task.delay(duration, function()
+		if self._fadeGeneration == generation and not self._destroyed then
+			fader.Visible = false
+		end
+	end)
+end
+
+function Window:_fadeOut(duration)
+	self._fadeGeneration = (self._fadeGeneration or 0) + 1
+	local fader = self._fader
+	fader.BackgroundColor3 = Theme.Background
+	fader.Visible = true
+	if IS_TOUCH or not duration or duration <= 0 then
+		fader.BackgroundTransparency = 0
+		return
+	end
+	tween(fader, { BackgroundTransparency = 0 }, duration * 0.7)
 end
 
 function Window:SetKeepOnScreen(keep)
@@ -9248,7 +9311,9 @@ local function showToast(host, input)
 		end
 		if moved then
 			slider.Position = UDim2.fromOffset(dx, 0)
-			card.GroupTransparency = math.clamp(math.abs(dx) / 220, 0, 0.6)
+			if card:IsA("CanvasGroup") then
+				card.GroupTransparency = math.clamp(math.abs(dx) / 220, 0, 0.6)
+			end
 		end
 	end))
 	table.insert(dragConnections, UserInputService.InputEnded:Connect(function(inputObject)
@@ -9423,7 +9488,7 @@ function Window:Destroy()
 	self.Flags = {}
 
 	tween(self.Scale, { Scale = 0.9 }, 0.2)
-	tween(self.Body, { GroupTransparency = 1 }, 0.2)
+	self:_fadeOut(0.2)
 	tween(self.BodyStroke, { Transparency = 1 }, 0.12)
 	tween(self.Shadow, { ImageTransparency = 1 }, 0.2)
 	task.delay(0.22, function()
@@ -9582,6 +9647,7 @@ function Window:SetBackground(image, transparency)
 			ZIndex = 0,
 			Parent = self.Body,
 		})
+		addCorner(self._background, UDim.new(0, Appearance.WindowRadius))
 		self._background:SetAttribute(Const.ATTR_NO_THEME, true)
 	end
 	if image == nil or image == false or image == "" then
