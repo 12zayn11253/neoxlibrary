@@ -9,7 +9,7 @@ local LocalPlayer = Players.LocalPlayer
 
 local Nucleus = {}
 Nucleus.Name = "Nucleus UI"
-Nucleus.Version = "4.0.0"
+Nucleus.Version = "4.1.0"
 Nucleus.Flags = {}
 Nucleus.Windows = {}
 
@@ -28,7 +28,7 @@ end
 
 local KNOWN_OPTIONS = {}
 local KNOWN_OPTIONS_LOWER = {}
-for name in string.gmatch("AU AbsoluteContentSize AbsoluteSize Accent AccentDark Active ActiveOnly AliveCheck Always Anonymous Asc Australia AutoLoad AutoSave BR Background BackgroundColor3 BackgroundTransparency Backspace BasePart Began Body Bold BottomRight Brazil Button ButtonRow Buttons CA CFrame Callback Canada Cancel CancelText CanvasGroup Caption Changed Changes ClearOnFocus Close CloseOnBackdrop Code Collapsed Color Color3 ColorPicker Configs ConfigurationSaving Confirm ConfirmText ConfirmTimeout Content ContentProvider Copied Copy Copyable CoreGui Create CurrentKeybind CurrentOption CurrentValue Custom CustomFont DE Danger Date DateFormat Decal Default DefaultState Delay Delete Depends DependsOn Desc Description Details Discord DiscordButton DiscordLink Divider Dropdown Duration Element EmptyText Enabled Ended Enter Entries Enum EnumItem Error ErrorNotifications Esc Example ExcludeSelf Executor Expired Expiry FPS FR FileName Flag Folder FolderName Format Frame France Free GET Game Germany GetActive GetKey Glow Greeting Group GuiButton GuiName GuiObject GuiService HWID HasKey Header HeaderItems Height Hold Home HttpService Humanoid HumanoidRootPart IN Icon Image ImageButton ImageColor3 ImageLabel ImageRectPosition ImageRectSize ImageTransparency Increment India Info Input Instance JP Japan KeepOnScreen Key KeyInfo KeyPanel Keybind Keybinds LAlt LCtrl LShift Label Language Lifetime Lighting Load Loading LoadingDuration LoadingSteps LoadingSubtitle LoadingText LoadingTitle Localization Lock Locked LockedReason Loop LoopDelay Lowest Main MarketplaceService Max MaxDistance MaxHeight MaxLength MaxNotifications MaxSize Medium Membership Merge Message Method Min MinSize MobileButton MobileIcon Mode Model MinimizeButton Mono Monospace Monthly Multi MultiLine Multiline MultipleOptions Muted NL Name NucleusHidden Nucleus NucleusUIBlur NucleusUIFonts NucleusLoc NucleusLocPlaceholderText NucleusLocText NucleusNoTheme Netherlands NoDrag None Not Notification NotificationPosition Notifications Numeric OK OnCancel OnChanged OnClose OnRelease Open OpenButton Opened Options Page Pages Paragraph Parent Ping Placeholder PlaceholderColor3 PlaceholderText Player PlayerGui Players Popup Position Prefix Premium PremiumBanner PremiumButton Perks Price PopupDelay Cooldown HeaderButton ExpiryButtons OnClick OnShown ShowWithoutKey ButtonText Link PremiumLink PremiumText Primary Profile Progress Qd Qn RAlt RCtrl RShift Radius Range Region RegionCity Regular Reminders Render Reset ResetOnUnload Resizable RunService SG Save Scale ScaleType ScreenGui ScrollBarImageColor3 ScrollingFrame Search SearchAfter SearchPlaceholder SearchResults Secondary Section SectionName Sections SemiBold Session ShowFPS ShowPing ShowPromo ShowTime Sidebar SidebarCollapsed Singapore Size Slider Sound Space Standard Stat Stats Step Stepper Stroke StrokeHover Studio Style Subtitle Success Suffix Surface Surface2 Surface3 Tab TabIcon TabSection Tabs Tag TeamCheck TeleportService Tertiary Text TextArea TextBounds TextBox TextButton TextColor3 TextLabel TextScale TextSize TextTransparency Texture Theme ThemeName Time TimeFormat Title Toggle ToggleUIKeybind Tooltip Top TotalTime TouchOnly TransitionIn TransitionOut Translations Transparency TweenService Type TypeName TypeNames UDim2 UICorner UIGradient UIGridLayout UIListLayout UIPadding UIScale UISizeConstraint UIStroke Unavailable Unknown Update UpdateRate Uptime Usage UseDisplayName User UserInputService UserInputType Value Values Variant Vector2 Vector3 Version VirtualUser Visible Volume Warning Weekly Weights Welcome Window Appearance WindowRadius CardRadius CardBorder SidebarWidth Spacing Shadow TabHighlight Fill Outline Data Labels Texts Protected Badge TimeLeft NoKey NeverExpires Ends", "%S+") do
+for name in string.gmatch("AU AbsoluteContentSize AbsoluteSize Accent AccentDark Active ActiveOnly AliveCheck Always Anonymous Asc Australia AutoLoad AutoSave BR Background BackgroundColor3 BackgroundTransparency Backspace BasePart Began Body Bold BottomRight Brazil Button ButtonRow Buttons CA CFrame Callback Canada Cancel CancelText CanvasGroup Caption Changed Changes ClearOnFocus Close CloseOnBackdrop Code Collapsed Color Color3 ColorPicker Configs ConfigurationSaving Confirm ConfirmText ConfirmTimeout Content ContentProvider Copied Copy Copyable CoreGui Create CurrentKeybind CurrentOption CurrentValue Custom CustomFont DE Danger Date DateFormat Decal Default DefaultState Delay Delete Depends DependsOn Desc Description Details Discord DiscordButton DiscordLink Divider Dropdown Duration Element EmptyText Enabled Ended Enter Entries Enum EnumItem Error ErrorNotifications Esc Example ExcludeSelf Executor Expired Expiry FPS FR FileName Flag Folder FolderName Format Frame France Free GET Game Germany GetActive GetKey Glow Greeting Group GuiButton GuiName GuiObject GuiService HWID HasKey Header HeaderItems Height Hold Home HttpService Humanoid HumanoidRootPart IN Icon Image ImageButton ImageColor3 ImageLabel ImageRectPosition ImageRectSize ImageTransparency Increment India Info Input Instance JP Japan KeepOnScreen Key KeyInfo KeyPanel Keybind Keybinds LAlt LCtrl LShift Label Language Lifetime Lighting Load Loading LoadingDuration LoadingSteps LoadingSubtitle LoadingText LoadingTitle Localization Lock Locked LockedReason Loop LoopDelay Lowest Main MarketplaceService Max MaxDistance MaxHeight MaxLength MaxNotifications MaxSize Medium Membership Merge Message Method Min MinSize MobileButton MobileIcon Mode Model MinimizeButton Mono Monospace Monthly Multi MultiLine Multiline MultipleOptions Muted NL Name NucleusHidden Nucleus NucleusUIBlur NucleusUIFonts NucleusLoc NucleusLocPlaceholderText NucleusLocText NucleusNoTheme Netherlands NoDrag None Not Notification NotificationPosition Notifications Numeric OK OnCancel OnChanged OnClose OnRelease Open OpenButton Opened Options Page Pages Paragraph Parent Ping Placeholder PlaceholderColor3 PlaceholderText Player PlayerGui Players Popup Position Prefix Premium PremiumBanner PremiumButton Perks Price PopupDelay Cooldown HeaderButton ExpiryButtons OnClick OnShown ShowWithoutKey ButtonText Link PremiumLink PremiumText Primary Profile Progress Qd Qn RAlt RCtrl RShift Radius Range Region RegionCity Regular Reminders Render Reset ResetOnUnload Resizable RunService SG Save Scale ScaleType ScreenGui ScrollBarImageColor3 ScrollingFrame Search SearchAfter SearchPlaceholder SearchResults Secondary Section SectionName Sections SemiBold Session ShowFPS ShowPing ShowPromo ShowTime Sidebar SidebarCollapsed Singapore Size Slider Sound Space Standard Stat Stats Step Stepper Stroke StrokeHover Studio Style Subtitle Success Suffix Surface Surface2 Surface3 Tab TabIcon TabSection Tabs Tag TeamCheck TeleportService Tertiary Text TextArea TextBounds TextBox TextButton TextColor3 TextLabel TextScale TextSize TextTransparency Texture Theme ThemeName Time TimeFormat Title Toggle ToggleUIKeybind Tooltip Top TotalTime TouchOnly TransitionIn TransitionOut Translations Transparency TweenService Type TypeName TypeNames UDim2 UICorner UIGradient UIGridLayout UIListLayout UIPadding UIScale UISizeConstraint UIStroke Unavailable Unknown Update UpdateRate Uptime Usage UseDisplayName User UserInputService UserInputType Value Values Variant Vector2 Vector3 Version VirtualUser Visible Volume Warning Weekly Weights Welcome Window Appearance WindowRadius CardRadius CardBorder SidebarWidth Spacing Shadow TabHighlight Fill Outline Data Labels Texts Protected Badge TimeLeft NoKey NeverExpires Ends Ocean Crimson Amber Violet Slate Obsidian Mint Light Badge Settings SettingsTab AccentPicker Interface Server Unload History FlagPrefix", "%S+") do
 	KNOWN_OPTIONS[name] = true
 	KNOWN_OPTIONS_LOWER[string.lower(name)] = name
 end
@@ -335,6 +335,113 @@ Nucleus.Themes = {
 		Text = rgb(240, 228, 232),
 		Muted = rgb(169, 144, 153),
 		Glow = rgb(240, 214, 222),
+	}),
+	Ocean = withStatusColors({
+		Background = rgb(10, 15, 17),
+		Surface = rgb(13, 19, 22),
+		Surface2 = rgb(21, 30, 34),
+		Surface3 = rgb(28, 40, 45),
+		Stroke = rgb(25, 36, 41),
+		StrokeHover = rgb(58, 85, 95),
+		Accent = rgb(120, 220, 230),
+		AccentDark = rgb(8, 22, 26),
+		Text = rgb(226, 236, 238),
+		Muted = rgb(138, 158, 163),
+		Glow = rgb(208, 232, 236),
+	}),
+	Crimson = withStatusColors({
+		Background = rgb(16, 11, 11),
+		Surface = rgb(21, 14, 14),
+		Surface2 = rgb(32, 21, 21),
+		Surface3 = rgb(43, 27, 27),
+		Stroke = rgb(38, 24, 24),
+		StrokeHover = rgb(96, 54, 54),
+		Accent = rgb(255, 128, 128),
+		AccentDark = rgb(32, 10, 10),
+		Text = rgb(240, 228, 228),
+		Muted = rgb(168, 142, 142),
+		Glow = rgb(240, 210, 210),
+	}),
+	Amber = withStatusColors({
+		Background = rgb(16, 14, 9),
+		Surface = rgb(21, 18, 12),
+		Surface2 = rgb(32, 28, 19),
+		Surface3 = rgb(43, 37, 24),
+		Stroke = rgb(37, 32, 21),
+		StrokeHover = rgb(92, 79, 48),
+		Accent = rgb(255, 210, 110),
+		AccentDark = rgb(30, 22, 6),
+		Text = rgb(240, 236, 224),
+		Muted = rgb(166, 157, 134),
+		Glow = rgb(240, 230, 200),
+	}),
+	Violet = withStatusColors({
+		Background = rgb(13, 11, 19),
+		Surface = rgb(17, 14, 25),
+		Surface2 = rgb(28, 23, 39),
+		Surface3 = rgb(38, 31, 53),
+		Stroke = rgb(32, 27, 46),
+		StrokeHover = rgb(78, 64, 112),
+		Accent = rgb(176, 148, 255),
+		AccentDark = rgb(16, 10, 32),
+		Text = rgb(234, 230, 244),
+		Muted = rgb(152, 146, 172),
+		Glow = rgb(220, 212, 240),
+	}),
+	Slate = withStatusColors({
+		Background = rgb(15, 17, 20),
+		Surface = rgb(19, 22, 26),
+		Surface2 = rgb(29, 33, 38),
+		Surface3 = rgb(38, 43, 50),
+		Stroke = rgb(33, 37, 43),
+		StrokeHover = rgb(76, 85, 98),
+		Accent = rgb(200, 212, 228),
+		AccentDark = rgb(16, 19, 24),
+		Text = rgb(228, 232, 238),
+		Muted = rgb(146, 154, 166),
+		Glow = rgb(214, 222, 232),
+	}),
+	Obsidian = withStatusColors({
+		Background = rgb(3, 3, 3),
+		Surface = rgb(7, 7, 8),
+		Surface2 = rgb(17, 17, 19),
+		Surface3 = rgb(27, 27, 30),
+		Stroke = rgb(23, 23, 26),
+		StrokeHover = rgb(64, 64, 70),
+		Accent = rgb(245, 245, 248),
+		AccentDark = rgb(5, 5, 6),
+		Text = rgb(240, 240, 243),
+		Muted = rgb(140, 140, 146),
+		Glow = rgb(230, 230, 235),
+	}),
+	Mint = withStatusColors({
+		Background = rgb(10, 16, 14),
+		Surface = rgb(13, 21, 18),
+		Surface2 = rgb(21, 32, 28),
+		Surface3 = rgb(28, 43, 37),
+		Stroke = rgb(24, 37, 32),
+		StrokeHover = rgb(54, 90, 76),
+		Accent = rgb(130, 235, 190),
+		AccentDark = rgb(8, 26, 18),
+		Text = rgb(226, 240, 234),
+		Muted = rgb(138, 163, 153),
+		Glow = rgb(208, 238, 224),
+	}),
+	Light = withStatusColors({
+		Background = rgb(243, 243, 245),
+		Surface = rgb(235, 235, 238),
+		Surface2 = rgb(253, 253, 254),
+		Surface3 = rgb(224, 224, 228),
+		Stroke = rgb(219, 219, 224),
+		StrokeHover = rgb(178, 178, 186),
+		Accent = rgb(30, 30, 34),
+		AccentDark = rgb(249, 249, 251),
+		Text = rgb(24, 24, 28),
+		Muted = rgb(108, 108, 116),
+		Glow = rgb(44, 44, 50),
+		Warning = rgb(196, 120, 30),
+		Success = rgb(40, 150, 80),
+		Error = rgb(205, 60, 60),
 	}),
 }
 
@@ -5578,6 +5685,19 @@ local function resolveTheme(themeInput)
 	return nil
 end
 
+function Nucleus:SetAccent(color)
+	if color ~= nil and typeof(color) ~= "Color3" then
+		log("SetAccent needs a Color3, like Color3.fromRGB(120, 200, 255), or nil to use the theme's own accent")
+		return false
+	end
+	Nucleus._accent = color
+	return Nucleus:SetTheme(Nucleus._themeInput or Nucleus.ThemeName)
+end
+
+function Nucleus:GetAccent()
+	return Theme.Accent
+end
+
 function Nucleus:GetThemes()
 	local names = {}
 	for name in pairs(Nucleus.Themes) do
@@ -5601,10 +5721,24 @@ end
 
 local themeGeneration = 0
 
+local function accentContrast(color)
+	local luminance = 0.299 * color.R + 0.587 * color.G + 0.114 * color.B
+	if luminance > 0.55 then
+		return Color3.fromRGB(17, 17, 19)
+	end
+	return Color3.fromRGB(251, 251, 252)
+end
+
 function Nucleus:SetTheme(themeInput)
 	local newTheme, newName = resolveTheme(themeInput)
 	if not newTheme then
 		return false
+	end
+	Nucleus._themeInput = themeInput
+	local accent = Nucleus._accent
+	if accent then
+		newTheme.Accent = accent
+		newTheme.AccentDark = accentContrast(accent)
 	end
 
 	local colorMap = {}
@@ -6166,6 +6300,10 @@ function Window:_layoutTabButton(tab)
 	end
 	if tab._initial then
 		tab._initial.Visible = compact and not tab._icon
+	end
+	if tab._badge then
+		tab._badge.Visible = not compact and tab._badgeText ~= nil
+		tab:_fitBadge()
 	end
 end
 
@@ -7477,6 +7615,9 @@ function Window:Tab(input, icon)
 	if section and not section.Opened and not self._compact then
 		button.Visible = false
 		button:SetAttribute(ATTR_HIDDEN, true)
+	end
+	if options.Badge ~= nil then
+		tab:SetBadge(options.Badge)
 	end
 	self:_layoutTabButton(tab)
 
@@ -9112,6 +9253,20 @@ local function showToast(host, input)
 end
 
 function Window:Notify(input)
+	local entry = { Time = os.time() }
+	if type(input) == "table" then
+		entry.Title = tostring(input.Title or input.Name or "")
+		entry.Content = tostring(input.Content or input.Text or input.Message or "")
+		entry.Type = input.Type
+	else
+		entry.Title = tostring(input or "")
+		entry.Content = ""
+	end
+	self._notifyHistory = self._notifyHistory or {}
+	table.insert(self._notifyHistory, 1, entry)
+	if #self._notifyHistory > 50 then
+		table.remove(self._notifyHistory)
+	end
 	return showToast(self._notifyHost, input)
 end
 
@@ -11704,11 +11859,250 @@ do
 		end
 	end
 
+	function Tab:SetBadge(value)
+		if value == nil or value == false or value == "" or value == 0 then
+			self._badgeText = nil
+		else
+			self._badgeText = tostring(value)
+		end
+		if not self._badge and self._badgeText then
+			local badge = create("Frame", {
+				Name = "Badge",
+				AnchorPoint = Vector2.new(1, 0.5),
+				Position = UDim2.new(1, -8, 0.5, 0),
+				Size = UDim2.fromOffset(0, 16),
+				AutomaticSize = Enum.AutomaticSize.X,
+				BackgroundColor3 = Theme.Accent,
+				BackgroundTransparency = 0.82,
+				BorderSizePixel = 0,
+				ZIndex = 2,
+				Parent = self._button,
+			})
+			addCorner(badge, UDim.new(1, 0))
+			addPadding(badge, 6, 6)
+			self._badgeLabel = createLabel({
+				Size = UDim2.new(0, 0, 1, 0),
+				AutomaticSize = Enum.AutomaticSize.X,
+				Text = "",
+				TextSize = 10,
+				FontFace = Fonts.Bold,
+				TextColor3 = Theme.Accent,
+				TextTruncate = Enum.TextTruncate.None,
+				ZIndex = 2,
+				Parent = badge,
+			})
+			self._badge = badge
+			badge:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
+				self:_fitBadge()
+			end)
+		end
+		if self._badge then
+			if self._badgeText then
+				self._badgeLabel.Text = self._badgeText
+			end
+			self._badge.Visible = self._badgeText ~= nil and not self.Window._compact
+			self:_fitBadge()
+		end
+		return self
+	end
+
+	function Tab:GetBadge()
+		return self._badgeText
+	end
+
+	function Tab:_fitBadge()
+		local label = self._label
+		if not label then
+			return
+		end
+		local reserve = 0
+		if self._badge and self._badge.Visible then
+			local scale = self.Window.Scale and self.Window.Scale.Scale or 1
+			reserve = self._badge.AbsoluteSize.X / math.max(scale, 0.01) + 6
+		end
+		label.Size = UDim2.new(1, -(self._labelX + 8 + reserve), 1, 0)
+	end
+
+	function Tab:AccentPicker(input)
+		local options = normalizeOptions(input, { Title = "Name", Description = "Desc" })
+		local userCallback = options.Callback
+		return self:ColorPicker({
+			Name = options.Name or "Accent colour",
+			Desc = options.Desc,
+			Default = options.Default or Theme.Accent,
+			Flag = options.Flag,
+			Callback = function(color)
+				Nucleus:SetAccent(color)
+				safeCall(userCallback, color)
+			end,
+		})
+	end
+
+	Tab.CreateAccentPicker = Tab.AccentPicker
+
+	local NOTIFY_POSITION_NAMES = { "TopRight", "BottomRight", "TopLeft", "BottomLeft", "Top", "Bottom" }
+
+	function Window:GetNotificationHistory()
+		local copy = {}
+		for index, entry in ipairs(self._notifyHistory or {}) do
+			copy[index] = table.clone(entry)
+		end
+		return copy
+	end
+
+	function Window:ClearNotificationHistory()
+		self._notifyHistory = {}
+	end
+
+	function Window:ShowNotificationHistory(limit)
+		limit = math.clamp(tonumber(limit) or 8, 1, 50)
+		local lines = {}
+		for index, entry in ipairs(self._notifyHistory or {}) do
+			if index > limit then
+				break
+			end
+			local line = os.date("%H:%M", entry.Time) .. "  " .. entry.Title
+			if entry.Content ~= "" then
+				line ..= ": " .. entry.Content
+			end
+			table.insert(lines, line)
+		end
+		return self:Dialog({
+			Title = "Recent notifications",
+			Content = #lines > 0 and table.concat(lines, "\n") or "No notifications yet.",
+			Buttons = {
+				{ Title = "Clear", Callback = function()
+					self:ClearNotificationHistory()
+				end },
+				{ Title = "Close", Variant = "Primary" },
+			},
+		})
+	end
+
+	function Window:SettingsTab(input)
+		local options = normalizeOptions(input, { Title = "Name" })
+		local prefix = tostring(options.FlagPrefix or "Nucleus")
+		local tab = self:Tab({
+			Name = options.Name or "Settings",
+			Icon = options.Icon or "settings",
+			Section = options.Section,
+		})
+
+		if options.Interface ~= false then
+			tab:Section("Interface")
+			if options.Theme ~= false then
+				tab:ThemePicker({ Flag = prefix .. "Theme" })
+			end
+			if options.Accent ~= false then
+				tab:AccentPicker({ Flag = prefix .. "Accent" })
+			end
+			if options.Scale ~= false then
+				tab:Slider({
+					Name = "Interface size",
+					Min = 50,
+					Max = 150,
+					Step = 5,
+					Suffix = "%",
+					Default = math.floor(self:GetScale() * 100 + 0.5),
+					Flag = prefix .. "Scale",
+					OnRelease = true,
+					Callback = function(value)
+						self:SetScale(value / 100)
+					end,
+				})
+			end
+			if options.Keybind ~= false and not IS_TOUCH then
+				tab:Keybind({
+					Name = "Show / hide key",
+					Default = self.Keybind and self.Keybind.Name or "RightControl",
+					Flag = prefix .. "ToggleKey",
+					OnChanged = function(keyCode)
+						if keyCode then
+							self:SetKeybind(keyCode)
+						end
+					end,
+				})
+			end
+			if options.Notifications ~= false then
+				tab:Dropdown({
+					Name = "Notification position",
+					Options = NOTIFY_POSITION_NAMES,
+					Default = self._notifyHost and self._notifyHost.Position or NOTIFY_POSITION_NAMES[1],
+					Flag = prefix .. "NotifyPosition",
+					Callback = function(position)
+						if type(position) == "string" then
+							self:SetNotificationPosition(position)
+						end
+					end,
+				})
+			end
+			if options.Sidebar ~= false then
+				tab:Toggle({
+					Name = "Compact sidebar",
+					Default = self:IsSidebarCollapsed(),
+					Flag = prefix .. "CompactSidebar",
+					Callback = function(on)
+						self:SetSidebarCollapsed(on)
+					end,
+				})
+			end
+			if options.Anonymous ~= false then
+				tab:Toggle({
+					Name = "Hide my name and avatar",
+					Default = false,
+					Flag = prefix .. "Anonymous",
+					Callback = function(on)
+						self:SetAnonymous(on)
+					end,
+				})
+			end
+			if options.History ~= false then
+				tab:Button({
+					Name = "Recent notifications",
+					Callback = function()
+						self:ShowNotificationHistory()
+					end,
+				})
+			end
+		end
+
+		if options.Configs ~= false then
+			tab:ConfigManager()
+		end
+
+		if options.Server ~= false then
+			tab:Section("Server")
+			tab:ButtonRow({
+				{ Name = "Rejoin", Icon = "refresh-cw", Callback = function()
+					Nucleus.Utils.Rejoin()
+				end },
+				{ Name = "Server hop", Icon = "shuffle", Callback = function()
+					Nucleus.Utils.ServerHop()
+				end },
+			})
+		end
+
+		if options.Unload ~= false then
+			tab:Section("Script")
+			tab:Button({
+				Name = "Unload " .. tostring(self._titleLabel and self._titleLabel.Text or LIB_NAME),
+				Style = "Danger",
+				Confirm = "Click again to unload",
+				Callback = function()
+					self:Destroy()
+				end,
+			})
+		end
+
+		return tab
+	end
+
 	local FORGIVING = {
 		"Notify", "Confirm", "Dialog", "Prompt", "Popup", "SetTheme", "AddTheme", "GetValue", "SetValue",
 		"GetValues", "SetValues", "Copy", "Destroy", "Unload", "Loop", "Connect", "OnUnload", "OnError",
 		"GetErrors", "ClearErrors", "SetLanguage", "SetLocalization", "Translate", "GetFlag", "GetThemes",
 		"GetLanguage", "SetErrorNotifications", "Try", "ReportError", "PreloadIcons", "LoadFont",
+		"SetAccent", "GetAccent", "SetFont", "SetKeySource", "GetKeyStatus", "IsPremium",
 	}
 	for _, name in ipairs(FORGIVING) do
 		local method = Nucleus[name]
