@@ -8,22 +8,23 @@ local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 
 local Nucleus = {}
+local Const = {}
 Nucleus.Name = "Nucleus UI"
-Nucleus.Version = "4.4.0"
+Nucleus.Version = "4.4.1"
 Nucleus.Flags = {}
 Nucleus.Windows = {}
 
-local LIB_NAME = "Nucleus UI"
-local LOG_PREFIX = "[Nucleus UI] "
-local GUI_NAME = "NucleusUI"
-local FONT_FOLDER = "NucleusUIFonts"
-local ATTR_NO_THEME = "NucleusNoTheme"
-local ATTR_NO_DRAG = "NoDrag"
-local ATTR_HIDDEN = "NucleusHidden"
-local ATTR_STROKE_BASE = "NucleusStrokeBase"
+Const.LIB_NAME = "Nucleus UI"
+Const.LOG_PREFIX = "[Nucleus UI] "
+Const.GUI_NAME = "NucleusUI"
+Const.FONT_FOLDER = "NucleusUIFonts"
+Const.ATTR_NO_THEME = "NucleusNoTheme"
+Const.ATTR_NO_DRAG = "NoDrag"
+Const.ATTR_HIDDEN = "NucleusHidden"
+Const.ATTR_STROKE_BASE = "NucleusStrokeBase"
 
 local function log(message)
-	warn(LOG_PREFIX .. tostring(message))
+	warn(Const.LOG_PREFIX .. tostring(message))
 end
 
 local KNOWN_OPTIONS = {}
@@ -193,7 +194,7 @@ local function reportError(where, captured)
 	lastErrorTimes[key] = now
 
 	entry.Summary = message .. (line and (" (line " .. line .. ")") or "")
-	warn(("%serror in %s: %s\n%s"):format(LOG_PREFIX, where, entry.Summary, entry.Traceback))
+	warn(("%serror in %s: %s\n%s"):format(Const.LOG_PREFIX, where, entry.Summary, entry.Traceback))
 	for _, listener in ipairs(table.clone(Nucleus._errorListeners)) do
 		pcall(listener, entry)
 	end
@@ -242,14 +243,14 @@ local function rgb(r, g, b)
 	return Color3.fromRGB(r, g, b)
 end
 
-local STATUS_COLORS = {
+Const.STATUS_COLORS = {
 	Warning = rgb(240, 176, 108),
 	Success = rgb(150, 220, 170),
 	Error = rgb(240, 120, 120),
 }
 
 local function withStatusColors(theme)
-	for key, color in pairs(STATUS_COLORS) do
+	for key, color in pairs(Const.STATUS_COLORS) do
 		if theme[key] == nil then
 			theme[key] = color
 		end
@@ -455,12 +456,12 @@ Nucleus.Assets = {
 	ResizeGrip = "rbxassetid://120997033468887",
 }
 
-local DEFAULT_FONT_FAMILY = "rbxasset://fonts/families/GothamSSm.json"
+Const.DEFAULT_FONT_FAMILY = "rbxasset://fonts/families/GothamSSm.json"
 
 Nucleus.Fonts = {
-	Regular = Font.new(DEFAULT_FONT_FAMILY, Enum.FontWeight.Regular),
-	Medium = Font.new(DEFAULT_FONT_FAMILY, Enum.FontWeight.Medium),
-	Bold = Font.new(DEFAULT_FONT_FAMILY, Enum.FontWeight.Bold),
+	Regular = Font.new(Const.DEFAULT_FONT_FAMILY, Enum.FontWeight.Regular),
+	Medium = Font.new(Const.DEFAULT_FONT_FAMILY, Enum.FontWeight.Medium),
+	Bold = Font.new(Const.DEFAULT_FONT_FAMILY, Enum.FontWeight.Bold),
 }
 
 local KNOWN_FONTS = {
@@ -515,7 +516,7 @@ function Nucleus:LoadFont(input)
 		return false
 	end
 
-	local folder = input.Folder or FONT_FOLDER
+	local folder = input.Folder or Const.FONT_FOLDER
 	pcall(function()
 		if type(isfolder) == "function" and type(makefolder) == "function" and not isfolder(folder) then
 			makefolder(folder)
@@ -584,7 +585,7 @@ function Nucleus:LoadFont(input)
 	return true
 end
 
-local ICON_PACK_URL = "https://raw.githubusercontent.com/Footagesus/Icons/refs/heads/main/lucide/dist/Icons.lua"
+Const.ICON_PACK_URL = "https://raw.githubusercontent.com/Footagesus/Icons/refs/heads/main/lucide/dist/Icons.lua"
 local iconPack
 
 local function getIconPack()
@@ -592,7 +593,7 @@ local function getIconPack()
 		return iconPack
 	end
 	local ok, result = pcall(function()
-		return loadstring(game:HttpGet(ICON_PACK_URL))()
+		return loadstring(game:HttpGet(Const.ICON_PACK_URL))()
 	end)
 	if ok and type(result) == "table" then
 		iconPack = result
@@ -675,10 +676,10 @@ local Fonts = Nucleus.Fonts
 local IS_TOUCH = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
 Nucleus.Touch = IS_TOUCH
 
-local ROW_HEIGHT = 42
-local ROW_HEIGHT_DESC = 56
-local OPTION_HEIGHT = 30
-local CHIP_HEIGHT = 24
+Const.ROW_HEIGHT = 42
+Const.ROW_HEIGHT_DESC = 56
+Const.OPTION_HEIGHT = 30
+Const.CHIP_HEIGHT = 24
 
 local function removeLeftoverBlur()
 	pcall(function()
@@ -754,7 +755,7 @@ local function translate(text)
 	return pack[key] or fallback[key] or key, key
 end
 
-local TRANSLATED_PROPERTIES = { Text = true, PlaceholderText = true }
+Const.TRANSLATED_PROPERTIES = { Text = true, PlaceholderText = true }
 
 local function setTranslated(instance, property, value)
 	local text, key = translate(value)
@@ -767,7 +768,7 @@ local function create(className, properties, children)
 	for property, value in pairs(properties) do
 		if property == "TextSize" then
 			instance.TextSize = math.max(8, math.floor(value * (Nucleus.TextScale or 1) + 0.5))
-		elseif TRANSLATED_PROPERTIES[property] and type(value) == "string" then
+		elseif Const.TRANSLATED_PROPERTIES[property] and type(value) == "string" then
 			setTranslated(instance, property, value)
 		elseif property ~= "Parent" then
 			instance[property] = value
@@ -801,7 +802,7 @@ local function addStroke(parent, color, transparency, thickness)
 	})
 end
 
-local APPEARANCE_DEFAULTS = {
+Const.APPEARANCE_DEFAULTS = {
 	WindowRadius = 12,
 	CardRadius = 10,
 	CardBorder = false,
@@ -811,20 +812,20 @@ local APPEARANCE_DEFAULTS = {
 	TabHighlight = "Fill",
 }
 
-local APPEARANCE_LIMITS = {
+Const.APPEARANCE_LIMITS = {
 	WindowRadius = { 0, 24 },
 	CardRadius = { 0, 18 },
 	SidebarWidth = { 120, 220 },
 	Spacing = { 2, 16 },
 }
 
-local TAB_HIGHLIGHTS = { Fill = true, Outline = true }
+Const.TAB_HIGHLIGHTS = { Fill = true, Outline = true }
 
-local Appearance = table.clone(APPEARANCE_DEFAULTS)
+local Appearance = table.clone(Const.APPEARANCE_DEFAULTS)
 Nucleus.Appearance = Appearance
 
 local function applyAppearance(input)
-	for key, value in pairs(APPEARANCE_DEFAULTS) do
+	for key, value in pairs(Const.APPEARANCE_DEFAULTS) do
 		Appearance[key] = value
 	end
 	if input == nil then
@@ -835,12 +836,12 @@ local function applyAppearance(input)
 		return
 	end
 	for key, value in pairs(input) do
-		local default = APPEARANCE_DEFAULTS[key]
+		local default = Const.APPEARANCE_DEFAULTS[key]
 		if key == "Font" then
 			Nucleus:SetFont(value)
 		elseif default == nil then
 			local known = { "Font" }
-			for name in pairs(APPEARANCE_DEFAULTS) do
+			for name in pairs(Const.APPEARANCE_DEFAULTS) do
 				table.insert(known, name)
 			end
 			table.sort(known)
@@ -848,7 +849,7 @@ local function applyAppearance(input)
 		elseif type(default) == "number" then
 			local number = tonumber(value)
 			if number then
-				local limits = APPEARANCE_LIMITS[key]
+				local limits = Const.APPEARANCE_LIMITS[key]
 				Appearance[key] = math.clamp(math.floor(number + 0.5), limits[1], limits[2])
 			else
 				log(("Appearance.%s should be a number"):format(key))
@@ -856,7 +857,7 @@ local function applyAppearance(input)
 		elseif type(default) == "boolean" then
 			Appearance[key] = value == true
 		elseif key == "TabHighlight" then
-			if TAB_HIGHLIGHTS[value] then
+			if Const.TAB_HIGHLIGHTS[value] then
 				Appearance[key] = value
 			else
 				log('Appearance.TabHighlight should be "Fill" or "Outline"')
@@ -870,7 +871,7 @@ local function styleCard(card)
 	addCorner(card, UDim.new(0, Appearance.CardRadius))
 	local baseKey = Appearance.CardBorder and "Stroke" or "Surface2"
 	local stroke = addStroke(card, Theme[baseKey])
-	stroke:SetAttribute(ATTR_STROKE_BASE, baseKey)
+	stroke:SetAttribute(Const.ATTR_STROKE_BASE, baseKey)
 	return stroke
 end
 
@@ -1149,7 +1150,7 @@ local function ripple(target, color)
 end
 
 local function strokeBase(stroke)
-	return Theme[stroke:GetAttribute(ATTR_STROKE_BASE) or "Stroke"] or Theme.Stroke
+	return Theme[stroke:GetAttribute(Const.ATTR_STROKE_BASE) or "Stroke"] or Theme.Stroke
 end
 
 local function flashStroke(stroke)
@@ -1174,7 +1175,7 @@ local function bindHoverStroke(guiObject, stroke)
 	end)
 end
 
-local SHORT_KEY_NAMES = {
+Const.SHORT_KEY_NAMES = {
 	[Enum.KeyCode.LeftControl] = "LCtrl",
 	[Enum.KeyCode.RightControl] = "RCtrl",
 	[Enum.KeyCode.LeftShift] = "LShift",
@@ -1190,7 +1191,7 @@ local function keyDisplayName(keyCode)
 	if keyCode == nil then
 		return "None"
 	end
-	return SHORT_KEY_NAMES[keyCode] or keyCode.Name
+	return Const.SHORT_KEY_NAMES[keyCode] or keyCode.Name
 end
 
 local function toKeyCode(value)
@@ -1437,7 +1438,7 @@ local function registerElement(tab, options, element, frame, typeName, callbackK
 				element[key] = function(self, ...)
 					if self ~= element then
 						error(("%s%s: %s was called with a dot. Write element:%s(...) with a colon, not element.%s(...)")
-							:format(LOG_PREFIX, label, key, key, key), 2)
+							:format(Const.LOG_PREFIX, label, key, key, key), 2)
 					end
 					return method(self, ...)
 				end
@@ -1460,7 +1461,7 @@ local function createCard(tab, className, height)
 		properties.Text = ""
 	end
 	local card = create(className, properties)
-	card:SetAttribute(ATTR_NO_DRAG, true)
+	card:SetAttribute(Const.ATTR_NO_DRAG, true)
 	local stroke = styleCard(card)
 	return card, stroke
 end
@@ -1468,7 +1469,7 @@ end
 local function createTitleBlock(parent, title, description, rightReserve)
 	local titleLabel, descLabel
 	if description then
-		local top = (ROW_HEIGHT_DESC - 38) / 2
+		local top = (Const.ROW_HEIGHT_DESC - 38) / 2
 		titleLabel = createLabel({
 			Name = "Title",
 			Position = UDim2.fromOffset(14, top),
@@ -1500,7 +1501,7 @@ end
 
 local function createRowElement(tab, input, aliases, className, rightReserve, defaultTitle)
 	local options = normalizeOptions(input, aliases)
-	local height = options.Desc and ROW_HEIGHT_DESC or ROW_HEIGHT
+	local height = options.Desc and Const.ROW_HEIGHT_DESC or Const.ROW_HEIGHT
 	local card, stroke = createCard(tab, className or "Frame", height)
 	bindHoverStroke(card, stroke)
 	local titleLabel, descLabel
@@ -1549,7 +1550,7 @@ decorateElement = function(element, frame, options, window)
 		element.Visible = visible ~= false
 		frame.Visible = element.Visible
 
-		frame:SetAttribute(ATTR_HIDDEN, not element.Visible)
+		frame:SetAttribute(Const.ATTR_HIDDEN, not element.Visible)
 	end
 
 	element.Locked = false
@@ -1579,7 +1580,7 @@ decorateElement = function(element, frame, options, window)
 			local badge = create("Frame", {
 				AnchorPoint = Vector2.new(1, 0.5),
 				Position = UDim2.new(1, -10, 0.5, 0),
-				Size = UDim2.fromOffset(0, CHIP_HEIGHT),
+				Size = UDim2.fromOffset(0, Const.CHIP_HEIGHT),
 				AutomaticSize = Enum.AutomaticSize.X,
 				BackgroundColor3 = Theme.Surface,
 				BorderSizePixel = 0,
@@ -1841,7 +1842,7 @@ function Tab:Paragraph(input)
 	return registerElement(self, options, element, card, "Paragraph")
 end
 
-local BUTTON_STYLES = {
+Const.BUTTON_STYLES = {
 	Primary = "Accent",
 	Danger = "Error",
 }
@@ -1849,9 +1850,9 @@ local BUTTON_STYLES = {
 function Tab:Button(input)
 	local options = normalizeOptions(input, { Title = "Name", Description = "Desc" })
 
-	local styleColorKey = BUTTON_STYLES[options.Style]
+	local styleColorKey = Const.BUTTON_STYLES[options.Style]
 	local styled = styleColorKey ~= nil
-	local height = options.Desc and ROW_HEIGHT_DESC or ROW_HEIGHT
+	local height = options.Desc and Const.ROW_HEIGHT_DESC or Const.ROW_HEIGHT
 	local card, stroke = createCard(self, "TextButton", height)
 	card.ClipsDescendants = true
 
@@ -2182,7 +2183,7 @@ function Tab:Slider(input)
 	local stepper = createStepper(minimum, maximum, step)
 	local window = self.Window
 
-	local height = ROW_HEIGHT_DESC + 4 + (options.Desc and 18 or 0)
+	local height = Const.ROW_HEIGHT_DESC + 4 + (options.Desc and 18 or 0)
 	local card, stroke = createCard(self, "Frame", height)
 	bindHoverStroke(card, stroke)
 
@@ -2501,7 +2502,7 @@ function Tab:Slider(input)
 	return registerElement(self, options, element, card, "Slider")
 end
 
-local DROPDOWN_CHIP_MAX_TEXT = 146
+Const.DROPDOWN_CHIP_MAX_TEXT = 146
 
 function Tab:Dropdown(input)
 	local options = normalizeOptions(input, {
@@ -2539,7 +2540,7 @@ function Tab:Dropdown(input)
 	local chip = create("Frame", {
 		AnchorPoint = Vector2.new(1, 0.5),
 		Position = UDim2.new(1, -10, 0.5, 0),
-		Size = UDim2.fromOffset(60, CHIP_HEIGHT),
+		Size = UDim2.fromOffset(60, Const.CHIP_HEIGHT),
 		BackgroundColor3 = Theme.Surface,
 		BorderSizePixel = 0,
 		ClipsDescendants = true,
@@ -2561,7 +2562,7 @@ function Tab:Dropdown(input)
 
 	local measureLabel = createLabel({
 		Position = UDim2.fromOffset(0, 1000),
-		Size = UDim2.fromOffset(0, CHIP_HEIGHT),
+		Size = UDim2.fromOffset(0, Const.CHIP_HEIGHT),
 		AutomaticSize = Enum.AutomaticSize.X,
 		TextSize = 13,
 		TextTransparency = 1,
@@ -2572,7 +2573,7 @@ function Tab:Dropdown(input)
 
 	local function truncatedSelection()
 		measureLabel.Text = fullText
-		if measureLabel.TextBounds.X <= DROPDOWN_CHIP_MAX_TEXT then
+		if measureLabel.TextBounds.X <= Const.DROPDOWN_CHIP_MAX_TEXT then
 			return fullText
 		end
 		local length = utf8.len(fullText)
@@ -2586,7 +2587,7 @@ function Tab:Dropdown(input)
 		while low < high do
 			local mid = math.ceil((low + high) / 2)
 			measureLabel.Text = prefix(mid) .. ".."
-			if measureLabel.TextBounds.X <= DROPDOWN_CHIP_MAX_TEXT then
+			if measureLabel.TextBounds.X <= Const.DROPDOWN_CHIP_MAX_TEXT then
 				low = mid
 			else
 				high = mid - 1
@@ -2599,9 +2600,9 @@ function Tab:Dropdown(input)
 		local width = math.clamp(selectionLabel.TextBounds.X + 10 + 34, 60, 190)
 		setTitleReserve(titleLabel, descLabel, width + 20)
 		if instant then
-			chip.Size = UDim2.fromOffset(width, CHIP_HEIGHT)
+			chip.Size = UDim2.fromOffset(width, Const.CHIP_HEIGHT)
 		else
-			tween(chip, { Size = UDim2.fromOffset(width, CHIP_HEIGHT) }, 0.2)
+			tween(chip, { Size = UDim2.fromOffset(width, Const.CHIP_HEIGHT) }, 0.2)
 		end
 	end
 	selectionLabel:GetPropertyChangedSignal("TextBounds"):Connect(function()
@@ -2627,7 +2628,7 @@ function Tab:Dropdown(input)
 	local openGeneration = 0
 
 	local searchFrame = create("Frame", {
-		Size = UDim2.new(1, 0, 0, OPTION_HEIGHT),
+		Size = UDim2.new(1, 0, 0, Const.OPTION_HEIGHT),
 		BackgroundColor3 = Theme.Surface,
 		BackgroundTransparency = 1,
 		BorderSizePixel = 0,
@@ -2728,7 +2729,7 @@ function Tab:Dropdown(input)
 
 	local function openHeight()
 		local count = visibleOptionCount() + (searchFrame.Visible and 1 or 0)
-		return headerHeight + count * (OPTION_HEIGHT + 4) + 8
+		return headerHeight + count * (Const.OPTION_HEIGHT + 4) + 8
 	end
 
 	local function fadeRow(row, open)
@@ -2825,7 +2826,7 @@ function Tab:Dropdown(input)
 			end
 
 			local rowButton = create("TextButton", {
-				Size = UDim2.new(1, 0, 0, OPTION_HEIGHT),
+				Size = UDim2.new(1, 0, 0, Const.OPTION_HEIGHT),
 				BackgroundColor3 = Theme.Surface,
 				BackgroundTransparency = 1,
 				Text = "",
@@ -3178,7 +3179,7 @@ function Tab:Keybind(input)
 	local chip = create("TextButton", {
 		AnchorPoint = Vector2.new(1, 0.5),
 		Position = UDim2.new(1, -10, 0.5, 0),
-		Size = UDim2.fromOffset(44, CHIP_HEIGHT),
+		Size = UDim2.fromOffset(44, Const.CHIP_HEIGHT),
 		BackgroundColor3 = Theme.Surface,
 		BorderSizePixel = 0,
 		Text = "",
@@ -3209,9 +3210,9 @@ function Tab:Keybind(input)
 		local width = math.max(keyLabel.TextBounds.X + 20, 36)
 		setTitleReserve(titleLabel, descLabel, width + 20)
 		if instant then
-			chip.Size = UDim2.fromOffset(width, CHIP_HEIGHT)
+			chip.Size = UDim2.fromOffset(width, Const.CHIP_HEIGHT)
 		else
-			tween(chip, { Size = UDim2.fromOffset(width, CHIP_HEIGHT) }, 0.2)
+			tween(chip, { Size = UDim2.fromOffset(width, Const.CHIP_HEIGHT) }, 0.2)
 		end
 	end
 	keyLabel:GetPropertyChangedSignal("TextBounds"):Connect(function()
@@ -3357,7 +3358,7 @@ local function parseColor(value)
 end
 
 local function exemptFromTheme(instance)
-	instance:SetAttribute(ATTR_NO_THEME, true)
+	instance:SetAttribute(Const.ATTR_NO_THEME, true)
 	return instance
 end
 
@@ -3645,8 +3646,8 @@ function Tab:ColorPicker(input)
 	return registerElement(self, options, element, card, "ColorPicker")
 end
 
-local HOLD_DELAY = 0.4
-local HOLD_REPEAT = 0.07
+Const.HOLD_DELAY = 0.4
+Const.HOLD_REPEAT = 0.07
 
 function Tab:Stepper(input)
 	local options, card, stroke, _, titleLabel, descLabel = createRowElement(self, input, {
@@ -3667,7 +3668,7 @@ function Tab:Stepper(input)
 	local control = create("Frame", {
 		AnchorPoint = Vector2.new(1, 0.5),
 		Position = UDim2.new(1, -10, 0.5, 0),
-		Size = UDim2.fromOffset(0, CHIP_HEIGHT),
+		Size = UDim2.fromOffset(0, Const.CHIP_HEIGHT),
 		AutomaticSize = Enum.AutomaticSize.X,
 		BackgroundColor3 = Theme.Surface,
 		BorderSizePixel = 0,
@@ -3684,7 +3685,7 @@ function Tab:Stepper(input)
 
 	local function createStepButton(text, order)
 		local button = create("TextButton", {
-			Size = UDim2.fromOffset(CHIP_HEIGHT, CHIP_HEIGHT),
+			Size = UDim2.fromOffset(Const.CHIP_HEIGHT, Const.CHIP_HEIGHT),
 			BackgroundTransparency = 1,
 			Text = text,
 			TextColor3 = Theme.Muted,
@@ -3783,10 +3784,10 @@ function Tab:Stepper(input)
 			local thisPress = pressId
 			held = true
 			nudge(direction)
-			task.delay(HOLD_DELAY, function()
+			task.delay(Const.HOLD_DELAY, function()
 				while held and pressId == thisPress and not element.Locked and not element._destroyed and button.Parent do
 					nudge(direction)
-					task.wait(HOLD_REPEAT)
+					task.wait(Const.HOLD_REPEAT)
 				end
 			end)
 		end)
@@ -3818,10 +3819,10 @@ function Tab:Progress(input)
 		Value = "Default",
 	})
 
-	local card, stroke = createCard(self, "Frame", options.Desc and ROW_HEIGHT_DESC + 10 or ROW_HEIGHT + 10)
+	local card, stroke = createCard(self, "Frame", options.Desc and Const.ROW_HEIGHT_DESC + 10 or Const.ROW_HEIGHT + 10)
 	bindHoverStroke(card, stroke)
 
-	local top = options.Desc and (ROW_HEIGHT_DESC - 38) / 2 - 2 or 12
+	local top = options.Desc and (Const.ROW_HEIGHT_DESC - 38) / 2 - 2 or 12
 	createLabel({
 		Name = "Title",
 		Position = UDim2.fromOffset(14, top),
@@ -3913,7 +3914,7 @@ end
 function Tab:Group(input)
 	local options = normalizeOptions(input, { Title = "Name", Description = "Desc" })
 	local window = self.Window
-	local headerHeight = options.Desc and ROW_HEIGHT_DESC or ROW_HEIGHT
+	local headerHeight = options.Desc and Const.ROW_HEIGHT_DESC or Const.ROW_HEIGHT
 	local open = not (options.Collapsed == true or options.Opened == false)
 
 	local card, stroke = createCard(self, "Frame", headerHeight)
@@ -4221,7 +4222,7 @@ function Tab:ThemePicker(input)
 	})
 end
 
-local KEY_TYPE_NAMES = {
+Const.KEY_TYPE_NAMES = {
 	lifetime = "Lifetime",
 	["1month"] = "Monthly",
 	monthly = "Monthly",
@@ -4230,7 +4231,7 @@ local KEY_TYPE_NAMES = {
 	free = "Free",
 }
 
-local KEY_DETAIL_LABELS = {
+Const.KEY_DETAIL_LABELS = {
 	Usage = "Usage",
 	Discord = "Discord",
 	HWID = "HWID",
@@ -4357,7 +4358,7 @@ local function createKeyPanel(window, parent, layoutOrder, input)
 
 	local function snapshot()
 		local data, status = readKeyData()
-		local names = options.TypeNames or KEY_TYPE_NAMES
+		local names = options.TypeNames or Const.KEY_TYPE_NAMES
 		local typeName
 		if status.HasKey then
 			typeName = status.Type ~= nil and (names[status.Type] or status.Type) or text("Active", "Active")
@@ -4388,7 +4389,7 @@ local function createKeyPanel(window, parent, layoutOrder, input)
 		LayoutOrder = layoutOrder,
 		Parent = parent,
 	})
-	card:SetAttribute(ATTR_NO_DRAG, true)
+	card:SetAttribute(Const.ATTR_NO_DRAG, true)
 	styleCard(card)
 	addPadding(card, 14, 14, 12, 12)
 	create("UIListLayout", {
@@ -4519,7 +4520,7 @@ local function createKeyPanel(window, parent, layoutOrder, input)
 			createLabel({
 				Position = UDim2.fromOffset(10, 5),
 				Size = UDim2.new(1, -20, 0, 13),
-				Text = tostring(labels[name] or KEY_DETAIL_LABELS[name] or name),
+				Text = tostring(labels[name] or Const.KEY_DETAIL_LABELS[name] or name),
 				TextSize = 11,
 				FontFace = Fonts.Regular,
 				TextColor3 = Theme.Muted,
@@ -4778,12 +4779,12 @@ function Tab:SetTitle(text)
 	end
 end
 
-local NO_CREATE_ALIAS = { Select = true, SetTitle = true }
+Const.NO_CREATE_ALIAS = { Select = true, SetTitle = true }
 for methodName, method in pairs(table.clone(Tab)) do
 	if type(method) == "function"
 		and methodName:sub(1, 1) ~= "_"
 		and methodName:sub(1, 6) ~= "Create"
-		and not NO_CREATE_ALIAS[methodName]
+		and not Const.NO_CREATE_ALIAS[methodName]
 	then
 		Tab["Create" .. methodName] = method
 	end
@@ -4814,7 +4815,7 @@ local function getGameName()
 	return "Unknown game"
 end
 
-local COUNTRY_NAMES = {
+Const.COUNTRY_NAMES = {
 	US = "United States",
 	GB = "United Kingdom",
 	DE = "Germany",
@@ -4843,7 +4844,7 @@ local function fetchRegion(done, countryOnly)
 				if type(body) == "string" then
 					local data = HttpService:JSONDecode(body)
 					if type(data) == "table" and data.country then
-						local country = COUNTRY_NAMES[data.country] or data.country
+						local country = Const.COUNTRY_NAMES[data.country] or data.country
 						if data.city and not countryOnly then
 							region = data.city .. ", " .. country
 						else
@@ -4857,14 +4858,14 @@ local function fetchRegion(done, countryOnly)
 	end)
 end
 
-local NOTIFY_ICONS = {
+Const.NOTIFY_ICONS = {
 	Info = "info",
 	Success = "circle-check",
 	Warning = "triangle-alert",
 	Error = "circle-x",
 }
 
-local NOTIFY_TYPES = {
+Const.NOTIFY_TYPES = {
 	Info = "Accent",
 	Success = "Success",
 	Warning = "Warning",
@@ -4874,11 +4875,11 @@ local NOTIFY_TYPES = {
 local Window = {}
 Window.__index = Window
 
-local DEFAULT_WINDOW_SIZE = UDim2.fromOffset(746, 496)
-local COMPACT_WIDTH = 560
-local COMPACT_SIDEBAR = 64
-local COMPACT_MIN = Vector2.new(400, 260)
-local DEFAULT_MIN_SIZE = Vector2.new(480, 360)
+Const.DEFAULT_WINDOW_SIZE = UDim2.fromOffset(746, 496)
+Const.COMPACT_WIDTH = 560
+Const.COMPACT_SIDEBAR = 64
+Const.COMPACT_MIN = Vector2.new(400, 260)
+Const.DEFAULT_MIN_SIZE = Vector2.new(480, 360)
 
 local function getTopbarInset()
 	local ok, inset = pcall(function()
@@ -5007,7 +5008,7 @@ function Nucleus.Window(selfOrOptions, maybeOptions)
 	table.insert(window._connections, UserInputService.InputEnded:Connect(dispatcher("Ended")))
 
 	local screenGui = create("ScreenGui", {
-		Name = options.GuiName or GUI_NAME,
+		Name = options.GuiName or Const.GUI_NAME,
 		IgnoreGuiInset = true,
 		ResetOnSpawn = false,
 		DisplayOrder = 999,
@@ -5022,7 +5023,7 @@ function Nucleus.Window(selfOrOptions, maybeOptions)
 		Size = (function()
 			local size = toVector2(options.Size)
 			if not size then
-				return DEFAULT_WINDOW_SIZE
+				return Const.DEFAULT_WINDOW_SIZE
 			end
 			return UDim2.fromOffset(math.max(size.X, 300), math.max(size.Y, 220))
 		end)(),
@@ -5093,7 +5094,7 @@ function Nucleus.Window(selfOrOptions, maybeOptions)
 	window._titleLabel = createLabel({
 		Position = UDim2.fromOffset(54, 16),
 		Size = UDim2.new(1, -58, 0, 20),
-		Text = options.Title or LIB_NAME,
+		Text = options.Title or Const.LIB_NAME,
 		TextSize = 18,
 		Parent = brand,
 	})
@@ -5188,7 +5189,7 @@ function Nucleus.Window(selfOrOptions, maybeOptions)
 		end)
 	end
 	if IS_TOUCH then
-		tabList:SetAttribute(ATTR_NO_DRAG, true)
+		tabList:SetAttribute(Const.ATTR_NO_DRAG, true)
 	end
 	addPadding(tabList, 10, 10, 4, 4)
 	create("UIListLayout", {
@@ -5222,7 +5223,7 @@ function Nucleus.Window(selfOrOptions, maybeOptions)
 		BorderSizePixel = 0,
 		Parent = sidebar,
 	})
-	profile:SetAttribute(ATTR_NO_DRAG, true)
+	profile:SetAttribute(Const.ATTR_NO_DRAG, true)
 	window._profile = profile
 	addCorner(profile, UDim.new(0, 8))
 	addStroke(profile)
@@ -5343,7 +5344,7 @@ function Nucleus.Window(selfOrOptions, maybeOptions)
 		ZIndex = 6,
 		Parent = content,
 	})
-	sidebarButton:SetAttribute(ATTR_NO_DRAG, true)
+	sidebarButton:SetAttribute(Const.ATTR_NO_DRAG, true)
 	addCorner(sidebarButton, UDim.new(0, 7))
 	local sidebarIcon = create("ImageLabel", {
 		AnchorPoint = Vector2.new(0.5, 0.5),
@@ -5422,7 +5423,7 @@ function Nucleus.Window(selfOrOptions, maybeOptions)
 			ZIndex = 5,
 			Parent = content,
 		})
-		minimizeButton:SetAttribute(ATTR_NO_DRAG, true)
+		minimizeButton:SetAttribute(Const.ATTR_NO_DRAG, true)
 		addPadding(minimizeButton, 0, 0, 1, 0)
 		addCorner(minimizeButton, UDim.new(0, 8))
 		minimizeButton.MouseEnter:Connect(function()
@@ -5499,16 +5500,16 @@ function Nucleus.Window(selfOrOptions, maybeOptions)
 	window:_enableDrag()
 	window.MaxSize = toVector2(options.MaxSize)
 	window.KeepOnScreen = options.KeepOnScreen ~= false
-	window:_enableResize(toVector2(options.MinSize) or DEFAULT_MIN_SIZE)
+	window:_enableResize(toVector2(options.MinSize) or Const.DEFAULT_MIN_SIZE)
 	if options.Resizable == false then
 		window._grip.Visible = false
 	end
 
 	local saving = options.ConfigurationSaving
 	if type(saving) == "table" and saving.Enabled ~= false then
-		window.ConfigFolder = saving.FolderName or GUI_NAME
+		window.ConfigFolder = saving.FolderName or Const.GUI_NAME
 		if not saving.FolderName and type(isfolder) == "function" then
-			local okNew, hasNew = pcall(isfolder, GUI_NAME)
+			local okNew, hasNew = pcall(isfolder, Const.GUI_NAME)
 			local okOld, hasOld = pcall(isfolder, "NeoxHub")
 			if okNew and okOld and not hasNew and hasOld then
 				window.ConfigFolder = "NeoxHub"
@@ -5518,7 +5519,7 @@ function Nucleus.Window(selfOrOptions, maybeOptions)
 		window._autoSaveEnabled = saving.AutoSave == true
 		window._autoLoad = saving.AutoLoad == true
 	else
-		window.ConfigFolder = GUI_NAME
+		window.ConfigFolder = Const.GUI_NAME
 		window.ConfigName = "default"
 		window._autoSaveEnabled = false
 	end
@@ -5630,14 +5631,14 @@ local function remapGradient(gradient, colorMap)
 end
 
 local function isThemeExempt(instance)
-	if instance:GetAttribute(ATTR_NO_THEME) then
+	if instance:GetAttribute(Const.ATTR_NO_THEME) then
 		return true
 	end
 
 	local parent = instance.Parent
 	return parent ~= nil
 		and (instance:IsA("UIStroke") or instance:IsA("UIGradient"))
-		and parent:GetAttribute(ATTR_NO_THEME) == true
+		and parent:GetAttribute(Const.ATTR_NO_THEME) == true
 end
 
 local function recolorInstance(instance, colorMap)
@@ -5676,13 +5677,13 @@ local function recolorAllWindows(colorMap)
 	end
 end
 
-local THEME_ALIASES = {
+Const.THEME_ALIASES = {
 	Mono = "Default",
 }
 
 local function resolveTheme(themeInput)
 	if type(themeInput) == "string" then
-		themeInput = THEME_ALIASES[themeInput] or themeInput
+		themeInput = Const.THEME_ALIASES[themeInput] or themeInput
 		local preset = Nucleus.Themes[themeInput]
 		if not preset then
 			log("unknown theme: " .. themeInput)
@@ -5691,7 +5692,7 @@ local function resolveTheme(themeInput)
 		return table.clone(preset), themeInput
 	elseif type(themeInput) == "table" then
 		local baseName = themeInput.Base or "Default"
-		local base = Nucleus.Themes[THEME_ALIASES[baseName] or baseName] or Nucleus.Themes.Default
+		local base = Nucleus.Themes[Const.THEME_ALIASES[baseName] or baseName] or Nucleus.Themes.Default
 		local theme = table.clone(base)
 		for _, key in ipairs(THEME_KEYS) do
 			if typeof(themeInput[key]) == "Color3" then
@@ -5905,7 +5906,7 @@ end
 function Window:_refreshControls()
 	local controls = {}
 	for _, descendant in ipairs(self.Body:GetDescendants()) do
-		if descendant:IsA("GuiButton") or descendant:IsA("TextBox") or descendant:GetAttribute(ATTR_NO_DRAG) then
+		if descendant:IsA("GuiButton") or descendant:IsA("TextBox") or descendant:GetAttribute(Const.ATTR_NO_DRAG) then
 			table.insert(controls, descendant)
 		end
 	end
@@ -5998,7 +5999,7 @@ local function revealElement(guiObject, delay, force)
 	end
 	guiObject.Visible = false
 	task.delay(delay, function()
-		if not guiObject.Parent or guiObject:GetAttribute(ATTR_HIDDEN) then
+		if not guiObject.Parent or guiObject:GetAttribute(Const.ATTR_HIDDEN) then
 			return
 		end
 		local scale = create("UIScale", { Scale = 0.94, Parent = guiObject })
@@ -6065,7 +6066,7 @@ function Window:_playIntro(fromLoader)
 
 	if IS_TOUCH then
 		for _, tab in ipairs(self.Tabs) do
-			tab._button.Visible = tab._button:GetAttribute(ATTR_HIDDEN) ~= true
+			tab._button.Visible = tab._button:GetAttribute(Const.ATTR_HIDDEN) ~= true
 		end
 	else
 		for index, tab in ipairs(self.Tabs) do
@@ -6136,7 +6137,7 @@ function Window:_showLoader(options)
 	createLabel({
 		Position = UDim2.fromOffset(84, 30),
 		Size = UDim2.new(1, -104, 0, 22),
-		Text = options.LoadingTitle or options.Title or LIB_NAME,
+		Text = options.LoadingTitle or options.Title or Const.LIB_NAME,
 		TextSize = 20,
 		Parent = card,
 	})
@@ -6273,7 +6274,7 @@ function Window:_fitToScreen(instant)
 			height = math.floor(base.Y)
 			fit = self._lockedFit or self._fitScale or 1
 		else
-			width = math.floor(large and base.X or math.min(base.X, COMPACT_WIDTH))
+			width = math.floor(large and base.X or math.min(base.X, Const.COMPACT_WIDTH))
 			height = math.floor(large and base.Y or math.min(base.Y, 360))
 			local maxX = screen.X * (portrait and 0.94 or (large and 0.62 or 0.56))
 			local maxY = usableY * (portrait and 0.6 or 0.88)
@@ -6290,8 +6291,8 @@ function Window:_fitToScreen(instant)
 		local availX, availY = screen.X - margin * 2, screen.Y - margin * 2
 		width = math.min(base.X, availX / userScale)
 		height = math.min(base.Y, availY / userScale)
-		width = math.floor(math.max(width, math.min(COMPACT_MIN.X, base.X)))
-		height = math.floor(math.max(height, math.min(COMPACT_MIN.Y, base.Y)))
+		width = math.floor(math.max(width, math.min(Const.COMPACT_MIN.X, base.X)))
+		height = math.floor(math.max(height, math.min(Const.COMPACT_MIN.Y, base.Y)))
 		local fit = math.min(availX / width, availY / height)
 		self._fitScale = math.max(math.min(userScale, fit), 0.5)
 	end
@@ -6300,7 +6301,7 @@ function Window:_fitToScreen(instant)
 	if current.X.Offset ~= width or current.Y.Offset ~= height then
 		self.Root.Size = UDim2.fromOffset(width, height)
 	end
-	self._autoCompact = width < COMPACT_WIDTH
+	self._autoCompact = width < Const.COMPACT_WIDTH
 	self:_setCompact(self._autoCompact or self._sidebarCollapsed == true)
 
 	if self._introDone and self.Open then
@@ -6338,7 +6339,7 @@ function Window:_setCompact(compact, animated)
 	if self._sidebarIcon then
 		setIcon(self._sidebarIcon, compact and "panel-left-open" or "panel-left-close")
 	end
-	local width = compact and COMPACT_SIDEBAR or self._sidebarWidth
+	local width = compact and Const.COMPACT_SIDEBAR or self._sidebarWidth
 	local sidebarSize = UDim2.new(0, width - 8, 1, -16)
 	local contentPosition = UDim2.fromOffset(width + 2, 0)
 	local contentSize = UDim2.new(1, -(width + 2), 1, 0)
@@ -6457,7 +6458,7 @@ function Window:_createOpenButton(buttonOptions)
 		Position = UDim2.fromOffset(30, 0),
 		Size = UDim2.new(0, 0, 1, 0),
 		AutomaticSize = Enum.AutomaticSize.X,
-		Text = buttonOptions.Title or LIB_NAME,
+		Text = buttonOptions.Title or Const.LIB_NAME,
 		TextSize = 13,
 		TextTruncate = Enum.TextTruncate.None,
 		ZIndex = 31,
@@ -6894,7 +6895,7 @@ local function createStatTile(parent, order, icon, title)
 		Parent = parent,
 	})
 	styleCard(tile)
-	tile:SetAttribute(ATTR_NO_DRAG, true)
+	tile:SetAttribute(Const.ATTR_NO_DRAG, true)
 	if icon then
 		createIcon(tile, icon, Theme.Muted, UDim2.new(0, 14, 0, 21))
 	end
@@ -6972,7 +6973,7 @@ local function createChangelogCard(parent, order, entry)
 		LayoutOrder = order,
 		Parent = parent,
 	})
-	card:SetAttribute(ATTR_NO_DRAG, true)
+	card:SetAttribute(Const.ATTR_NO_DRAG, true)
 	styleCard(card)
 	addPadding(card, 14, 14, 12, 14)
 	create("UIListLayout", {
@@ -7040,7 +7041,7 @@ local function createChangelogCard(parent, order, entry)
 	return card
 end
 
-local DEFAULT_STATS = { "FPS", "Ping", "Executor", "Game", "Region", "Time" }
+Const.DEFAULT_STATS = { "FPS", "Ping", "Executor", "Game", "Region", "Time" }
 
 function Window:_buildHome(homeOptions, membership)
 	local homeTab = self:Tab({
@@ -7100,7 +7101,7 @@ function Window:_buildHome(homeOptions, membership)
 			LayoutOrder = 2,
 			Parent = list,
 		})
-		welcomeCard:SetAttribute(ATTR_NO_DRAG, true)
+		welcomeCard:SetAttribute(Const.ATTR_NO_DRAG, true)
 		styleCard(welcomeCard)
 
 		local avatar = create("ImageLabel", {
@@ -7233,7 +7234,7 @@ function Window:_buildHome(homeOptions, membership)
 
 	local enabledStats = {}
 	if shown("Stats") then
-		for _, statName in ipairs(homeOptions.Stats or DEFAULT_STATS) do
+		for _, statName in ipairs(homeOptions.Stats or Const.DEFAULT_STATS) do
 			enabledStats[statName] = true
 		end
 	end
@@ -7335,7 +7336,7 @@ function Window:_buildHome(homeOptions, membership)
 				LayoutOrder = order,
 				Parent = parent,
 			})
-			card:SetAttribute(ATTR_NO_DRAG, true)
+			card:SetAttribute(Const.ATTR_NO_DRAG, true)
 			styleCard(card)
 			addPadding(card, 14, 14, 12, 14)
 			return card
@@ -7382,7 +7383,7 @@ function Window:_buildHome(homeOptions, membership)
 				safeCall(pageDef.Build, pageFrame)
 				for _, child in ipairs(pageFrame:GetChildren()) do
 					if child:IsA("GuiObject") then
-						child:SetAttribute(ATTR_NO_DRAG, true)
+						child:SetAttribute(Const.ATTR_NO_DRAG, true)
 					end
 				end
 			end
@@ -7634,7 +7635,7 @@ function Window:Tab(input, icon)
 	})
 	addPadding(list, 24, 24, 2, 24)
 	if IS_TOUCH then
-		list:SetAttribute(ATTR_NO_DRAG, true)
+		list:SetAttribute(Const.ATTR_NO_DRAG, true)
 	end
 	create("UIListLayout", {
 		SortOrder = Enum.SortOrder.LayoutOrder,
@@ -7679,7 +7680,7 @@ function Window:Tab(input, icon)
 	end
 	if section and not section.Opened and not self._compact then
 		button.Visible = false
-		button:SetAttribute(ATTR_HIDDEN, true)
+		button:SetAttribute(Const.ATTR_HIDDEN, true)
 	end
 	if options.Badge ~= nil then
 		tab:SetBadge(options.Badge)
@@ -7828,8 +7829,8 @@ function Window:_settleTransition()
 	self:_settleIn()
 end
 
-local DIALOG_PADDING = 18
-local DIALOG_WIDTH = 300
+Const.DIALOG_PADDING = 18
+Const.DIALOG_WIDTH = 300
 
 function Window:Dialog(input)
 	local options = normalizeOptions(input, { Text = "Content", Message = "Content" })
@@ -7838,7 +7839,7 @@ function Window:Dialog(input)
 		self._dialog.Close()
 	end
 
-	local pad = DIALOG_PADDING
+	local pad = Const.DIALOG_PADDING
 
 	local backdrop = create("TextButton", {
 		Size = UDim2.fromScale(1, 1),
@@ -7853,7 +7854,7 @@ function Window:Dialog(input)
 	local panel = create("TextButton", {
 		AnchorPoint = Vector2.new(0.5, 0.5),
 		Position = UDim2.new(0.5, 0, 0.5, 10),
-		Size = UDim2.fromOffset(DIALOG_WIDTH, 120),
+		Size = UDim2.fromOffset(Const.DIALOG_WIDTH, 120),
 		BackgroundColor3 = Theme.Background,
 		BackgroundTransparency = 1,
 		BorderSizePixel = 0,
@@ -7909,7 +7910,7 @@ function Window:Dialog(input)
 	local inputOptions = type(options.Input) == "table" and options.Input or (options.Input and {} or nil)
 	local inputHeight = inputOptions and 42 or 0
 	local function layout()
-		panel.Size = UDim2.fromOffset(DIALOG_WIDTH, pad + 24 + contentHeight + inputHeight + 12 + 34 + pad)
+		panel.Size = UDim2.fromOffset(Const.DIALOG_WIDTH, pad + 24 + contentHeight + inputHeight + 12 + 34 + pad)
 		if inputField then
 			inputField.Position = UDim2.fromOffset(pad, pad + 24 + contentHeight + 6)
 		end
@@ -8348,7 +8349,7 @@ function Window:_hideTooltip(owner)
 	end
 end
 
-local MAX_SEARCH_RESULTS = 40
+Const.MAX_SEARCH_RESULTS = 40
 
 function Window:_runSearch(text)
 	local results = self._searchResults
@@ -8382,7 +8383,7 @@ function Window:_runSearch(text)
 		end
 	end
 	for _, entry in ipairs(self._searchIndex) do
-		if #matches >= MAX_SEARCH_RESULTS then
+		if #matches >= Const.MAX_SEARCH_RESULTS then
 			break
 		end
 		local element = entry.Element
@@ -8794,12 +8795,12 @@ local NOTIFY_POSITIONS = {
 	Bottom = { Anchor = Vector2.new(0.5, 1), Position = UDim2.new(0.5, 0, 1, -16), Bottom = true, Side = 0 },
 }
 
-local DEFAULT_NOTIFY_POSITION = IS_TOUCH and "TopRight" or "BottomRight"
-local NOTIFY_WIDTH = 300
+Const.DEFAULT_NOTIFY_POSITION = IS_TOUCH and "TopRight" or "BottomRight"
+Const.NOTIFY_WIDTH = 300
 
 local function applyNotifyPosition(host, positionName)
-	local layout = NOTIFY_POSITIONS[positionName] or NOTIFY_POSITIONS[DEFAULT_NOTIFY_POSITION]
-	host.Position = NOTIFY_POSITIONS[positionName] and positionName or DEFAULT_NOTIFY_POSITION
+	local layout = NOTIFY_POSITIONS[positionName] or NOTIFY_POSITIONS[Const.DEFAULT_NOTIFY_POSITION]
+	host.Position = NOTIFY_POSITIONS[positionName] and positionName or Const.DEFAULT_NOTIFY_POSITION
 	host.Layout = layout
 	host.Holder.AnchorPoint = layout.Anchor
 	host.Holder.Position = layout.Position
@@ -8809,7 +8810,7 @@ end
 createNotifyHost = function(screenGui, connections, maxCount, positionName)
 	local holder = create("Frame", {
 		Name = "Notifications",
-		Size = UDim2.new(0, NOTIFY_WIDTH, 1, -32),
+		Size = UDim2.new(0, Const.NOTIFY_WIDTH, 1, -32),
 		BackgroundTransparency = 1,
 		ZIndex = 80,
 		Parent = screenGui,
@@ -8833,7 +8834,7 @@ createNotifyHost = function(screenGui, connections, maxCount, positionName)
 		local screen = screenGui.AbsoluteSize
 		if screen.X > 0 then
 			local topOffset = (host.Layout and host.Layout.Position.Y.Offset or 16)
-			holder.Size = UDim2.new(0, math.min(NOTIFY_WIDTH, screen.X - 24), 1, -(math.abs(topOffset) + 16))
+			holder.Size = UDim2.new(0, math.min(Const.NOTIFY_WIDTH, screen.X - 24), 1, -(math.abs(topOffset) + 16))
 		end
 	end
 	table.insert(connections, screenGui:GetPropertyChangedSignal("AbsoluteSize"):Connect(fit))
@@ -8864,7 +8865,7 @@ local function showToast(host, input)
 	local toast = { _key = toastKey(options) }
 	host.Order += 1
 	local layout = host.Layout
-	local slideOffset = layout.Side ~= 0 and layout.Side * (NOTIFY_WIDTH + 24) or 0
+	local slideOffset = layout.Side ~= 0 and layout.Side * (Const.NOTIFY_WIDTH + 24) or 0
 	local slideY = layout.Side == 0 and (layout.Bottom and 30 or -30) or 0
 
 	local slot = create("Frame", {
@@ -9069,7 +9070,7 @@ local function showToast(host, input)
 
 	local function paint(data)
 		local kind = data.Type
-		local colorKey = NOTIFY_TYPES[kind] or (kind == "Loading" and "Accent") or "Accent"
+		local colorKey = Const.NOTIFY_TYPES[kind] or (kind == "Loading" and "Accent") or "Accent"
 		local color = Theme[colorKey] or Theme.Accent
 		iconTile.BackgroundColor3 = color
 		iconImage.ImageColor3 = color
@@ -9078,7 +9079,7 @@ local function showToast(host, input)
 
 		local icon = data.Icon
 		if icon == nil then
-			icon = kind == "Loading" and "loader-circle" or NOTIFY_ICONS[kind] or "bell"
+			icon = kind == "Loading" and "loader-circle" or Const.NOTIFY_ICONS[kind] or "bell"
 		end
 		local hasIcon = icon ~= false and setIcon(iconImage, icon)
 		iconTile.Visible = hasIcon
@@ -9167,7 +9168,7 @@ local function showToast(host, input)
 			safeCall(options.OnClose)
 			return
 		end
-		local outX = direction or (layout.Side ~= 0 and layout.Side * (NOTIFY_WIDTH + 24) or 0)
+		local outX = direction or (layout.Side ~= 0 and layout.Side * (Const.NOTIFY_WIDTH + 24) or 0)
 		tween(slider, { Position = UDim2.fromOffset(outX, slideY) }, 0.3, Enum.EasingStyle.Quint)
 		tween(card, { GroupTransparency = 1 }, 0.2)
 		tween(cardStroke, { Transparency = 1 }, 0.15)
@@ -9257,7 +9258,7 @@ local function showToast(host, input)
 		dragging, holding = false, false
 		local dx = getMousePosition().X - dragStart.X
 		if moved and math.abs(dx) > 70 then
-			toast:Dismiss((dx > 0 and 1 or -1) * (NOTIFY_WIDTH + 40))
+			toast:Dismiss((dx > 0 and 1 or -1) * (Const.NOTIFY_WIDTH + 40))
 		elseif moved then
 			tween(slider, { Position = UDim2.fromOffset(0, 0) }, 0.25, Enum.EasingStyle.Quint)
 			tween(card, { GroupTransparency = 0 }, 0.2)
@@ -9344,7 +9345,7 @@ local fallbackHost
 function Nucleus:_notifyFallback(input)
 	if not fallbackHost or not fallbackHost.Holder.Parent then
 		local screenGui = create("ScreenGui", {
-			Name = GUI_NAME .. "Notifications",
+			Name = Const.GUI_NAME .. "Notifications",
 			IgnoreGuiInset = true,
 			ResetOnSpawn = false,
 			DisplayOrder = 1000,
@@ -9429,9 +9430,10 @@ function Window:Destroy()
 		self.Gui:Destroy()
 	end)
 end
+local function installFeatures()
 
-local ATTR_LOC_TEXT = "NucleusLocText"
-local ATTR_LOC_PLACEHOLDER = "NucleusLocPlaceholderText"
+Const.ATTR_LOC_TEXT = "NucleusLocText"
+Const.ATTR_LOC_PLACEHOLDER = "NucleusLocPlaceholderText"
 
 function Nucleus:SetLocalization(settings)
 	settings = type(settings) == "table" and settings or {}
@@ -9458,11 +9460,11 @@ function Nucleus:SetLanguage(language)
 	for _, window in ipairs(Nucleus.Windows) do
 		if window.Gui then
 			for _, descendant in ipairs(window.Gui:GetDescendants()) do
-				local textKey = descendant:GetAttribute(ATTR_LOC_TEXT)
+				local textKey = descendant:GetAttribute(Const.ATTR_LOC_TEXT)
 				if textKey then
 					setTranslated(descendant, "Text", prefix .. textKey)
 				end
-				local placeholderKey = descendant:GetAttribute(ATTR_LOC_PLACEHOLDER)
+				local placeholderKey = descendant:GetAttribute(Const.ATTR_LOC_PLACEHOLDER)
 				if placeholderKey then
 					setTranslated(descendant, "PlaceholderText", prefix .. placeholderKey)
 				end
@@ -9580,7 +9582,7 @@ function Window:SetBackground(image, transparency)
 			ZIndex = 0,
 			Parent = self.Body,
 		})
-		self._background:SetAttribute(ATTR_NO_THEME, true)
+		self._background:SetAttribute(Const.ATTR_NO_THEME, true)
 	end
 	if image == nil or image == false or image == "" then
 		self._background.Image = ""
@@ -9666,7 +9668,7 @@ function Window:TabSection(input)
 		section.Opened = open == true
 		chevron:Set(section.Opened)
 		for _, tab in ipairs(section.Tabs) do
-			tab._button:SetAttribute(ATTR_HIDDEN, not section.Opened)
+			tab._button:SetAttribute(Const.ATTR_HIDDEN, not section.Opened)
 			if self.Window._introDone then
 				tab._button.Visible = section.Opened
 			end
@@ -9699,7 +9701,7 @@ function Window:TabSection(input)
 		header.Visible = not compact
 		if compact then
 			for _, tab in ipairs(section.Tabs) do
-				tab._button:SetAttribute(ATTR_HIDDEN, false)
+				tab._button:SetAttribute(Const.ATTR_HIDDEN, false)
 				if section.Window._introDone then
 					tab._button.Visible = true
 				end
@@ -9878,7 +9880,7 @@ function Window:HeaderButton(input)
 end
 Window.CreateTopbarButton = Window.HeaderButton
 
-local POPUP_VARIANTS = {
+Const.POPUP_VARIANTS = {
 	Primary = true,
 	Secondary = true,
 	Tertiary = true,
@@ -9891,7 +9893,7 @@ function Nucleus:Popup(input)
 	local parentGui = window and window.Gui
 	if not parentGui then
 		ownGui = create("ScreenGui", {
-			Name = GUI_NAME .. "Popup",
+			Name = Const.GUI_NAME .. "Popup",
 			IgnoreGuiInset = true,
 			ResetOnSpawn = false,
 			DisplayOrder = 1000,
@@ -9949,7 +9951,7 @@ function Nucleus:Popup(input)
 	createLabel({
 		Position = UDim2.fromOffset(titleLeft, 0),
 		Size = UDim2.new(1, -titleLeft, 1, 0),
-		Text = tostring(options.Title or LIB_NAME),
+		Text = tostring(options.Title or Const.LIB_NAME),
 		TextSize = 16,
 		FontFace = Fonts.Bold,
 		ZIndex = 202,
@@ -10011,7 +10013,7 @@ function Nucleus:Popup(input)
 		buttons = { { Title = "OK", Variant = "Primary" } }
 	end
 	for order, buttonDef in ipairs(buttons) do
-		local variant = POPUP_VARIANTS[buttonDef.Variant] and buttonDef.Variant or "Secondary"
+		local variant = Const.POPUP_VARIANTS[buttonDef.Variant] and buttonDef.Variant or "Secondary"
 		local primary = variant == "Primary"
 		local tertiary = variant == "Tertiary"
 		local button = create("TextButton", {
@@ -10094,7 +10096,7 @@ for _, word in ipairs({
 	CODE_GLOBALS[word] = true
 end
 
-local MONO_FONT = Font.new("rbxasset://fonts/families/RobotoMono.json", Enum.FontWeight.Regular)
+Const.MONO_FONT = Font.new("rbxasset://fonts/families/RobotoMono.json", Enum.FontWeight.Regular)
 
 local function escapeRich(text)
 	return (text:gsub("&", "&amp;"):gsub("<", "&lt;"):gsub(">", "&gt;"))
@@ -10191,7 +10193,7 @@ function Tab:Code(input)
 		LayoutOrder = self:_nextOrder(),
 		Parent = self.List,
 	})
-	card:SetAttribute(ATTR_NO_DRAG, true)
+	card:SetAttribute(Const.ATTR_NO_DRAG, true)
 	styleCard(card)
 	addPadding(card, 12, 12, 10, 12)
 	create("UIListLayout", {
@@ -10273,7 +10275,7 @@ function Tab:Code(input)
 		AutomaticSize = Enum.AutomaticSize.Y,
 		Text = "",
 		TextSize = 13,
-		FontFace = MONO_FONT,
+		FontFace = Const.MONO_FONT,
 		TextColor3 = Theme.Text,
 		RichText = true,
 		TextWrapped = true,
@@ -10347,7 +10349,7 @@ end
 
 function Tab:Stat(input)
 	local options = normalizeOptions(input, { Title = "Name", Text = "Value" })
-	local height = options.Desc and ROW_HEIGHT_DESC or ROW_HEIGHT
+	local height = options.Desc and Const.ROW_HEIGHT_DESC or Const.ROW_HEIGHT
 	local card, stroke = createCard(self, "Frame", height)
 	bindHoverStroke(card, stroke)
 
@@ -10422,7 +10424,7 @@ function Tab:Image(input)
 		LayoutOrder = self:_nextOrder(),
 		Parent = self.List,
 	})
-	card:SetAttribute(ATTR_NO_DRAG, true)
+	card:SetAttribute(Const.ATTR_NO_DRAG, true)
 	styleCard(card)
 	addPadding(card, 8, 8, 8, 8)
 	create("UIListLayout", {
@@ -10438,7 +10440,7 @@ function Tab:Image(input)
 		LayoutOrder = 1,
 		Parent = card,
 	})
-	image:SetAttribute(ATTR_NO_THEME, true)
+	image:SetAttribute(Const.ATTR_NO_THEME, true)
 	addCorner(image, UDim.new(0, 6))
 	setIcon(image, options.Image or options.Icon)
 
@@ -10893,13 +10895,13 @@ do
 		local options = normalizeOptions(input, { Title = "Text", Name = "Text", Content = "Text" })
 		local window = self.Window
 		local card = create("Frame", {
-			Size = UDim2.new(1, 0, 0, ROW_HEIGHT),
+			Size = UDim2.new(1, 0, 0, Const.ROW_HEIGHT),
 			BackgroundColor3 = Theme.Surface2,
 			BorderSizePixel = 0,
 			LayoutOrder = self:_nextOrder(),
 			Parent = self.List,
 		})
-		card:SetAttribute(ATTR_NO_DRAG, true)
+		card:SetAttribute(Const.ATTR_NO_DRAG, true)
 		addCorner(card)
 		local stroke = addStroke(card, Theme.Accent, 1)
 		stroke.Transparency = 0.6
@@ -10923,7 +10925,7 @@ do
 			AutoButtonColor = false,
 			Parent = card,
 		})
-		button:SetAttribute(ATTR_NO_DRAG, true)
+		button:SetAttribute(Const.ATTR_NO_DRAG, true)
 		addCorner(button, UDim.new(0, 6))
 		addPadding(button, 12, 12)
 		createLabel({
@@ -11037,7 +11039,7 @@ do
 	end
 
 	function Window:Connect(signal, callback)
-		assert(signal and type(callback) == "function", LOG_PREFIX .. "Connect needs a signal and a function")
+		assert(signal and type(callback) == "function", Const.LOG_PREFIX .. "Connect needs a signal and a function")
 		local connection = signal:Connect(function(...)
 			if not self._destroyed then
 				runProtected("a connected event", callback, ...)
@@ -11239,7 +11241,7 @@ function Tab:Clear()
 	return #doomed
 end
 
-local BUTTON_ROW_STYLES = {
+Const.BUTTON_ROW_STYLES = {
 	Primary = "Accent",
 	Danger = "Error",
 }
@@ -11257,12 +11259,12 @@ function Tab:ButtonRow(input)
 	local gap = 8
 
 	local holder = create("Frame", {
-		Size = UDim2.new(1, 0, 0, ROW_HEIGHT),
+		Size = UDim2.new(1, 0, 0, Const.ROW_HEIGHT),
 		BackgroundTransparency = 1,
 		LayoutOrder = self:_nextOrder(),
 		Parent = self.List,
 	})
-	holder:SetAttribute(ATTR_NO_DRAG, true)
+	holder:SetAttribute(Const.ATTR_NO_DRAG, true)
 	create("UIListLayout", {
 		FillDirection = Enum.FillDirection.Horizontal,
 		SortOrder = Enum.SortOrder.LayoutOrder,
@@ -11276,7 +11278,7 @@ function Tab:ButtonRow(input)
 			definition = { Name = definition }
 		end
 		local name = definition.Name or definition.Title or ("Button " .. index)
-		local colorKey = BUTTON_ROW_STYLES[definition.Style]
+		local colorKey = Const.BUTTON_ROW_STYLES[definition.Style]
 		local button = create("TextButton", {
 			Name = "Button" .. index,
 			Size = UDim2.new(1 / count, -gap * (count - 1) / count, 1, 0),
@@ -11289,7 +11291,7 @@ function Tab:ButtonRow(input)
 			LayoutOrder = index,
 			Parent = holder,
 		})
-		button:SetAttribute(ATTR_NO_DRAG, true)
+		button:SetAttribute(Const.ATTR_NO_DRAG, true)
 		addCorner(button)
 		local stroke = addStroke(button, colorKey and Theme[colorKey] or Theme.Stroke, 1)
 		if colorKey then
@@ -11412,7 +11414,7 @@ function Tab:TextArea(input)
 		LayoutOrder = self:_nextOrder(),
 		Parent = self.List,
 	})
-	card:SetAttribute(ATTR_NO_DRAG, true)
+	card:SetAttribute(Const.ATTR_NO_DRAG, true)
 	local stroke = styleCard(card)
 	addPadding(card, 14, 14, 11, 12)
 	create("UIListLayout", {
@@ -11477,7 +11479,7 @@ function Tab:TextArea(input)
 		PlaceholderColor3 = Theme.Muted,
 		TextColor3 = Theme.Text,
 		TextSize = 13,
-		FontFace = options.Monospace and MONO_FONT or Fonts.Regular,
+		FontFace = options.Monospace and Const.MONO_FONT or Fonts.Regular,
 		TextXAlignment = Enum.TextXAlignment.Left,
 		TextYAlignment = Enum.TextYAlignment.Top,
 		TextWrapped = true,
@@ -12153,7 +12155,7 @@ do
 		if options.Unload ~= false then
 			section("Script", "Script")
 			tab:Button({
-				Name = "Unload " .. tostring(window._titleLabel and window._titleLabel.Text or LIB_NAME),
+				Name = "Unload " .. tostring(window._titleLabel and window._titleLabel.Text or Const.LIB_NAME),
 				Style = "Danger",
 				Confirm = "Click again to unload",
 				Callback = function()
@@ -12295,7 +12297,7 @@ do
 			LayoutOrder = order,
 			Parent = parent,
 		})
-		card:SetAttribute(ATTR_NO_DRAG, true)
+		card:SetAttribute(Const.ATTR_NO_DRAG, true)
 		styleCard(card)
 		addPadding(card, 14, 14, 12, 14)
 		create("UIListLayout", {
@@ -12366,7 +12368,7 @@ do
 			LayoutOrder = order,
 			Parent = grid,
 		})
-		button:SetAttribute(ATTR_NO_DRAG, true)
+		button:SetAttribute(Const.ATTR_NO_DRAG, true)
 		addCorner(button, UDim.new(0, 8))
 		local textColor = primary and Theme.AccentDark or Theme.Text
 		local left = 10
@@ -12794,7 +12796,7 @@ do
 	end
 
 	local function createActionRow(tab, options, icon, sideText, onClick)
-		local height = options.Desc and ROW_HEIGHT_DESC or ROW_HEIGHT
+		local height = options.Desc and Const.ROW_HEIGHT_DESC or Const.ROW_HEIGHT
 		local card, stroke = createCard(tab, "TextButton", height)
 		bindHoverStroke(card, stroke)
 		createIcon(card, icon, Theme.Accent, UDim2.new(0, 14, 0.5, 0))
@@ -12939,7 +12941,7 @@ do
 			LayoutOrder = self:_nextOrder(),
 			Parent = self.List,
 		})
-		card:SetAttribute(ATTR_NO_DRAG, true)
+		card:SetAttribute(Const.ATTR_NO_DRAG, true)
 		styleCard(card)
 		local avatar = create("ImageLabel", {
 			Position = UDim2.fromOffset(12, 11),
@@ -13117,7 +13119,7 @@ do
 				class[name] = function(self, ...)
 					if type(self) ~= "table" or getmetatable(self) ~= class then
 						error(("%s%s.%s(...) was called with a dot. Write %s:%s(...) with a colon instead.")
-							:format(LOG_PREFIX, className, name, className, name), 2)
+							:format(Const.LOG_PREFIX, className, name, className, name), 2)
 					end
 					return method(self, ...)
 				end
@@ -13127,5 +13129,7 @@ do
 	guardMethods(Tab, "Tab")
 	guardMethods(Window, "Window")
 end
+end
+installFeatures()
 
 return Nucleus
