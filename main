@@ -9,7 +9,7 @@ local LocalPlayer = Players.LocalPlayer
 
 local Nucleus = {}
 Nucleus.Name = "Nucleus UI"
-Nucleus.Version = "4.2.0"
+Nucleus.Version = "4.4.0"
 Nucleus.Flags = {}
 Nucleus.Windows = {}
 
@@ -28,7 +28,7 @@ end
 
 local KNOWN_OPTIONS = {}
 local KNOWN_OPTIONS_LOWER = {}
-for name in string.gmatch("AU AbsoluteContentSize AbsoluteSize Accent AccentDark Active ActiveOnly AliveCheck Always Anonymous Asc Australia AutoLoad AutoSave BR Background BackgroundColor3 BackgroundTransparency Backspace BasePart Began Body Bold BottomRight Brazil Button ButtonRow Buttons CA CFrame Callback Canada Cancel CancelText CanvasGroup Caption Changed Changes ClearOnFocus Close CloseOnBackdrop Code Collapsed Color Color3 ColorPicker Configs ConfigurationSaving Confirm ConfirmText ConfirmTimeout Content ContentProvider Copied Copy Copyable CoreGui Create CurrentKeybind CurrentOption CurrentValue Custom CustomFont DE Danger Date DateFormat Decal Default DefaultState Delay Delete Depends DependsOn Desc Description Details Discord DiscordButton DiscordLink Divider Dropdown Duration Element EmptyText Enabled Ended Enter Entries Enum EnumItem Error ErrorNotifications Esc Example ExcludeSelf Executor Expired Expiry FPS FR FileName Flag Folder FolderName Format Frame France Free GET Game Germany GetActive GetKey Glow Greeting Group GuiButton GuiName GuiObject GuiService HWID HasKey Header HeaderItems Height Hold Home HttpService Humanoid HumanoidRootPart IN Icon Image ImageButton ImageColor3 ImageLabel ImageRectPosition ImageRectSize ImageTransparency Increment India Info Input Instance JP Japan KeepOnScreen Key KeyInfo KeyPanel Keybind Keybinds LAlt LCtrl LShift Label Language Lifetime Lighting Load Loading LoadingDuration LoadingSteps LoadingSubtitle LoadingText LoadingTitle Localization Lock Locked LockedReason Loop LoopDelay Lowest Main MarketplaceService Max MaxDistance MaxHeight MaxLength MaxNotifications MaxSize Medium Membership Merge Message Method Min MinSize MobileButton MobileIcon Mode Model MinimizeButton Mono Monospace Monthly Multi MultiLine Multiline MultipleOptions Muted NL Name NucleusHidden Nucleus NucleusUIBlur NucleusUIFonts NucleusLoc NucleusLocPlaceholderText NucleusLocText NucleusNoTheme Netherlands NoDrag None Not Notification NotificationPosition Notifications Numeric OK OnCancel OnChanged OnClose OnRelease Open OpenButton Opened Options Page Pages Paragraph Parent Ping Placeholder PlaceholderColor3 PlaceholderText Player PlayerGui Players Popup Position Prefix Premium PremiumBanner PremiumButton Perks Price PopupDelay Cooldown HeaderButton ExpiryButtons OnClick OnShown ShowWithoutKey ButtonText Link PremiumLink PremiumText Primary Profile Progress Qd Qn RAlt RCtrl RShift Radius Range Region RegionCity Regular Reminders Render Reset ResetOnUnload Resizable RunService SG Save Scale ScaleType ScreenGui ScrollBarImageColor3 ScrollingFrame Search SearchAfter SearchPlaceholder SearchResults Secondary Section SectionName Sections SemiBold Session ShowFPS ShowPing ShowPromo ShowTime Sidebar SidebarCollapsed Singapore Size Slider Sound Space Standard Stat Stats Step Stepper Stroke StrokeHover Studio Style Subtitle Success Suffix Surface Surface2 Surface3 Tab TabIcon TabSection Tabs Tag TeamCheck TeleportService Tertiary Text TextArea TextBounds TextBox TextButton TextColor3 TextLabel TextScale TextSize TextTransparency Texture Theme ThemeName Time TimeFormat Title Toggle ToggleUIKeybind Tooltip Top TotalTime TouchOnly TransitionIn TransitionOut Translations Transparency TweenService Type TypeName TypeNames UDim2 UICorner UIGradient UIGridLayout UIListLayout UIPadding UIScale UISizeConstraint UIStroke Unavailable Unknown Update UpdateRate Uptime Usage UseDisplayName User UserInputService UserInputType Value Values Variant Vector2 Vector3 Version VirtualUser Visible Volume Warning Weekly Weights Welcome Window Appearance WindowRadius CardRadius CardBorder SidebarWidth Spacing Shadow TabHighlight Fill Outline Data Labels Texts Protected Badge TimeLeft NoKey NeverExpires Ends Ocean Crimson Amber Violet Slate Obsidian Mint Light Badge Settings SettingsTab AccentPicker Interface Server Unload History FlagPrefix Socials Donations Links Url URL Robux AssetId ShirtId GamePassId PassId Address Goal Target Current Thanks ThanksTitle OnDonate ShowOnHome Tiers", "%S+") do
+for name in string.gmatch("AU AbsoluteContentSize AbsoluteSize Accent AccentDark Active ActiveOnly AliveCheck Always Anonymous Asc Australia AutoLoad AutoSave BR Background BackgroundColor3 BackgroundTransparency Backspace BasePart Began Body Bold BottomRight Brazil Button ButtonRow Buttons CA CFrame Callback Canada Cancel CancelText CanvasGroup Caption Changed Changes ClearOnFocus Close CloseOnBackdrop Code Collapsed Color Color3 ColorPicker Configs ConfigurationSaving Confirm ConfirmText ConfirmTimeout Content ContentProvider Copied Copy Copyable CoreGui Create CurrentKeybind CurrentOption CurrentValue Custom CustomFont DE Danger Date DateFormat Decal Default DefaultState Delay Delete Depends DependsOn Desc Description Details Discord DiscordButton DiscordLink Divider Dropdown Duration Element EmptyText Enabled Ended Enter Entries Enum EnumItem Error ErrorNotifications Esc Example ExcludeSelf Executor Expired Expiry FPS FR FileName Flag Folder FolderName Format Frame France Free GET Game Germany GetActive GetKey Glow Greeting Group GuiButton GuiName GuiObject GuiService HWID HasKey Header HeaderItems Height Hold Home HttpService Humanoid HumanoidRootPart IN Icon Image ImageButton ImageColor3 ImageLabel ImageRectPosition ImageRectSize ImageTransparency Increment India Info Input Instance JP Japan KeepOnScreen Key KeyInfo KeyPanel Keybind Keybinds LAlt LCtrl LShift Label Language Lifetime Lighting Load Loading LoadingDuration LoadingSteps LoadingSubtitle LoadingText LoadingTitle Localization Lock Locked LockedReason Loop LoopDelay Lowest Main MarketplaceService Max MaxDistance MaxHeight MaxLength MaxNotifications MaxSize Medium Membership Merge Message Method Min MinSize MobileButton MobileIcon Mode Model MinimizeButton Mono Monospace Monthly Multi MultiLine Multiline MultipleOptions Muted NL Name NucleusHidden Nucleus NucleusUIBlur NucleusUIFonts NucleusLoc NucleusLocPlaceholderText NucleusLocText NucleusNoTheme Netherlands NoDrag None Not Notification NotificationPosition Notifications Numeric OK OnCancel OnChanged OnClose OnRelease Open OpenButton Opened Options Page Pages Paragraph Parent Ping Placeholder PlaceholderColor3 PlaceholderText Player PlayerGui Players Popup Position Prefix Premium PremiumBanner PremiumButton Perks Price PopupDelay Cooldown HeaderButton ExpiryButtons OnClick OnShown ShowWithoutKey ButtonText Link PremiumLink PremiumText Primary Profile Progress Qd Qn RAlt RCtrl RShift Radius Range Region RegionCity Regular Reminders Render Reset ResetOnUnload Resizable RunService SG Save Scale ScaleType ScreenGui ScrollBarImageColor3 ScrollingFrame Search SearchAfter SearchPlaceholder SearchResults Secondary Section SectionName Sections SemiBold Session ShowFPS ShowPing ShowPromo ShowTime Sidebar SidebarCollapsed Singapore Size Slider Sound Space Standard Stat Stats Step Stepper Stroke StrokeHover Studio Style Subtitle Success Suffix Surface Surface2 Surface3 Tab TabIcon TabSection Tabs Tag TeamCheck TeleportService Tertiary Text TextArea TextBounds TextBox TextButton TextColor3 TextLabel TextScale TextSize TextTransparency Texture Theme ThemeName Time TimeFormat Title Toggle ToggleUIKeybind Tooltip Top TotalTime TouchOnly TransitionIn TransitionOut Translations Transparency TweenService Type TypeName TypeNames UDim2 UICorner UIGradient UIGridLayout UIListLayout UIPadding UIScale UISizeConstraint UIStroke Unavailable Unknown Update UpdateRate Uptime Usage UseDisplayName User UserInputService UserInputType Value Values Variant Vector2 Vector3 Version VirtualUser Visible Volume Warning Weekly Weights Welcome Window Appearance WindowRadius CardRadius CardBorder SidebarWidth Spacing Shadow TabHighlight Fill Outline Data Labels Texts Protected Badge TimeLeft NoKey NeverExpires Ends Ocean Crimson Amber Violet Slate Obsidian Mint Light Badge Settings SettingsTab AccentPicker Interface Server Unload History FlagPrefix Socials Donations Links Url URL Robux AssetId ShirtId GamePassId PassId Address Goal Target Current Thanks ThanksTitle OnDonate ShowOnHome Tiers Amount Currency Network Wallet", "%S+") do
 	KNOWN_OPTIONS[name] = true
 	KNOWN_OPTIONS_LOWER[string.lower(name)] = name
 end
@@ -608,9 +608,25 @@ function Nucleus:PreloadIcons()
 end
 
 local BUILTIN_ICONS = {
-	discord = { "rbxassetid://86699749765447", Vector2.new(256, 0), Vector2.new(128, 128) },
+	["logo-discord"] = { "rbxassetid://86699749765447", Vector2.new(256, 0), Vector2.new(128, 128) },
+	["logo-github"] = { "rbxassetid://86699749765447", Vector2.new(128, 128), Vector2.new(128, 128) },
+	["logo-facebook"] = { "rbxassetid://86699749765447", Vector2.new(512, 0), Vector2.new(128, 128) },
+	["logo-x"] = { "rbxassetid://86699749765447", Vector2.new(512, 512), Vector2.new(128, 128) },
+	["logo-reddit"] = { "rbxassetid://86699749765447", Vector2.new(128, 384), Vector2.new(128, 128) },
+	["logo-whatsapp"] = { "rbxassetid://86699749765447", Vector2.new(640, 640), Vector2.new(128, 128) },
+	["logo-google"] = { "rbxassetid://86699749765447", Vector2.new(384, 128), Vector2.new(128, 128) },
+	["logo-visa"] = { "rbxassetid://86699749765447", Vector2.new(256, 640), Vector2.new(128, 128) },
+	["logo-mastercard"] = { "rbxassetid://86699749765447", Vector2.new(0, 256), Vector2.new(128, 128) },
+	["logo-youtube"] = { "rbxassetid://74032637954135", Vector2.new(480, 864), Vector2.new(96, 96) },
+	["logo-instagram"] = { "rbxassetid://122943914188262", Vector2.new(768, 864), Vector2.new(96, 96) },
+	["logo-twitch"] = { "rbxassetid://74032637954135", Vector2.new(768, 192), Vector2.new(96, 96) },
+	["logo-telegram"] = { "rbxassetid://107947096000444", Vector2.new(96, 672), Vector2.new(96, 96) },
+	["logo-pinterest"] = { "rbxassetid://130202200859762", Vector2.new(288, 0), Vector2.new(96, 96) },
+	["logo-threads"] = { "rbxassetid://107947096000444", Vector2.new(864, 672), Vector2.new(96, 96) },
+	["logo-bitcoin"] = { "rbxassetid://90196769916139", Vector2.new(0, 0), Vector2.new(96, 96) },
 }
-BUILTIN_ICONS["logo-discord"] = BUILTIN_ICONS.discord
+BUILTIN_ICONS.discord = BUILTIN_ICONS["logo-discord"]
+BUILTIN_ICONS["logo-twitter"] = BUILTIN_ICONS["logo-x"]
 
 local function resolveIcon(icon)
 	if type(icon) == "string" and BUILTIN_ICONS[string.lower(icon)] then
@@ -5832,7 +5848,7 @@ function Nucleus:SetValue(flag, value, silent)
 	return false
 end
 
-function Nucleus:Copy(text)
+function Nucleus:Copy(text, silent)
 	text = tostring(text or "")
 	local copyFn = setclipboard
 		or toclipboard
@@ -5843,6 +5859,9 @@ function Nucleus:Copy(text)
 		return false
 	end
 	local ok = pcall(copyFn, text)
+	if silent and ok then
+		return true
+	end
 	local preview = #text > 60 and (text:sub(1, 57) .. "...") or text
 	Nucleus:Notify({
 		Title = ok and "Copied to clipboard" or "Copy failed",
@@ -6944,6 +6963,83 @@ local function slideIn(group, offsetY)
 	tween(group, { GroupTransparency = 0, Position = UDim2.fromOffset(0, offsetY) }, 0.32, Enum.EasingStyle.Quint)
 end
 
+local function createChangelogCard(parent, order, entry)
+	local card = create("Frame", {
+		Size = UDim2.new(1, 0, 0, 0),
+		AutomaticSize = Enum.AutomaticSize.Y,
+		BackgroundColor3 = Theme.Surface2,
+		BorderSizePixel = 0,
+		LayoutOrder = order,
+		Parent = parent,
+	})
+	card:SetAttribute(ATTR_NO_DRAG, true)
+	styleCard(card)
+	addPadding(card, 14, 14, 12, 14)
+	create("UIListLayout", {
+		SortOrder = Enum.SortOrder.LayoutOrder,
+		Padding = UDim.new(0, 4),
+		Parent = card,
+	})
+
+	local titleRow = create("Frame", {
+		Size = UDim2.new(1, 0, 0, 18),
+		BackgroundTransparency = 1,
+		LayoutOrder = 1,
+		Parent = card,
+	})
+	createLabel({
+		Size = UDim2.new(1, -70, 1, 0),
+		Text = entry.Title or entry.Version or "Update",
+		TextSize = 14,
+		Parent = titleRow,
+	})
+
+	if entry.Date or entry.Tag then
+		local tag = create("Frame", {
+			AnchorPoint = Vector2.new(1, 0.5),
+			Position = UDim2.new(1, 0, 0.5, 0),
+			Size = UDim2.fromOffset(0, 20),
+			AutomaticSize = Enum.AutomaticSize.X,
+			BackgroundColor3 = Theme.Surface,
+			BorderSizePixel = 0,
+			Parent = titleRow,
+		})
+		addCorner(tag, UDim.new(0, 5))
+		addStroke(tag)
+		addPadding(tag, 8, 8)
+		createLabel({
+			Size = UDim2.new(0, 0, 1, 0),
+			AutomaticSize = Enum.AutomaticSize.X,
+			Text = tostring(entry.Tag or entry.Date),
+			TextSize = 11,
+			TextColor3 = Theme.Muted,
+			TextTruncate = Enum.TextTruncate.None,
+			Parent = tag,
+		})
+	end
+
+	local bodyText = entry.Content or entry.Body
+	if type(entry.Changes) == "table" then
+		bodyText = "• " .. table.concat(entry.Changes, "\n• ")
+	end
+	if bodyText then
+		createLabel({
+			Size = UDim2.new(1, 0, 0, 0),
+			AutomaticSize = Enum.AutomaticSize.Y,
+			Text = tostring(bodyText),
+			TextSize = 13,
+			FontFace = Fonts.Regular,
+			TextColor3 = Theme.Muted,
+			TextWrapped = true,
+			TextTruncate = Enum.TextTruncate.None,
+			TextYAlignment = Enum.TextYAlignment.Top,
+			LayoutOrder = 2,
+			Parent = card,
+		})
+	end
+	return card
+end
+
 local DEFAULT_STATS = { "FPS", "Ping", "Executor", "Game", "Region", "Time" }
 
 function Window:_buildHome(homeOptions, membership)
@@ -6955,6 +7051,22 @@ function Window:_buildHome(homeOptions, membership)
 	local list = homeTab.List
 	local pageDefs = homeOptions.Pages or homeOptions.Tabs
 	local pages = {}
+
+	local layout = type(homeOptions.Layout) == "table" and homeOptions.Layout or nil
+	local layoutIndex = {}
+	if layout then
+		for index, name in ipairs(layout) do
+			layoutIndex[tostring(name)] = index
+		end
+	end
+	local function shown(name)
+		return layout == nil or layoutIndex[name] ~= nil
+	end
+	local function orderOf(name, default)
+		return layoutIndex[name] and layoutIndex[name] * 10 or default
+	end
+	self._homeShown = shown
+	self._homeOrderOf = orderOf
 
 	local pillRow
 	if type(pageDefs) == "table" and #pageDefs > 0 then
@@ -6980,7 +7092,7 @@ function Window:_buildHome(homeOptions, membership)
 	end
 
 	local welcomeCard
-	if homeOptions.Welcome ~= false then
+	if homeOptions.Welcome ~= false and shown("Welcome") then
 		welcomeCard = create("Frame", {
 			Size = UDim2.new(1, 0, 0, 58),
 			BackgroundColor3 = Theme.Surface2,
@@ -7040,11 +7152,11 @@ function Window:_buildHome(homeOptions, membership)
 		Parent = detailsPage,
 	})
 
-	if homeOptions.Sections ~= false then
+	if homeOptions.Sections ~= false and shown("Stats") then
 		local headerRow = create("Frame", {
 			Size = UDim2.new(1, 0, 0, 24),
 			BackgroundTransparency = 1,
-			LayoutOrder = 1,
+			LayoutOrder = orderOf("Stats", 2) - 1,
 			Parent = detailsPage,
 		})
 		local headerLabel = createLabel({
@@ -7077,8 +7189,12 @@ function Window:_buildHome(homeOptions, membership)
 		keySetting = homeOptions.Key
 	end
 	local keyOptions = type(keySetting) == "table" and keySetting or {}
+	if not shown("Membership") then
+		keySetting = false
+	end
+	local keyOrder = orderOf("Membership", 0)
 	if keySetting ~= false then
-		self.KeyPanel = createKeyPanel(self, detailsPage, 0, keyOptions)
+		self.KeyPanel = createKeyPanel(self, detailsPage, keyOrder, keyOptions)
 	end
 	task.spawn(function()
 		while keySetting ~= false and keyOptions.Protected ~= false and not self._destroyed and detailsPage.Parent do
@@ -7093,7 +7209,7 @@ function Window:_buildHome(homeOptions, membership)
 						frame:Destroy()
 					end)
 				end
-				self.KeyPanel = createKeyPanel(self, detailsPage, 0, keyOptions)
+				self.KeyPanel = createKeyPanel(self, detailsPage, keyOrder, keyOptions)
 			elseif not frame.Visible then
 				frame.Visible = true
 			end
@@ -7104,7 +7220,8 @@ function Window:_buildHome(homeOptions, membership)
 		Size = UDim2.new(1, 0, 0, 0),
 		AutomaticSize = Enum.AutomaticSize.Y,
 		BackgroundTransparency = 1,
-		LayoutOrder = 2,
+		LayoutOrder = orderOf("Stats", 2),
+		Visible = shown("Stats"),
 		Parent = detailsPage,
 	})
 	create("UIGridLayout", {
@@ -7115,8 +7232,10 @@ function Window:_buildHome(homeOptions, membership)
 	})
 
 	local enabledStats = {}
-	for _, statName in ipairs(homeOptions.Stats or DEFAULT_STATS) do
-		enabledStats[statName] = true
+	if shown("Stats") then
+		for _, statName in ipairs(homeOptions.Stats or DEFAULT_STATS) do
+			enabledStats[statName] = true
+		end
 	end
 
 	local tileCount = 0
@@ -7255,69 +7374,7 @@ function Window:_buildHome(homeOptions, membership)
 
 			if type(pageDef.Entries) == "table" then
 				for entryIndex, entry in ipairs(pageDef.Entries) do
-					local card = addTextCard(pageFrame, entryIndex + 1)
-					create("UIListLayout", {
-						SortOrder = Enum.SortOrder.LayoutOrder,
-						Padding = UDim.new(0, 4),
-						Parent = card,
-					})
-
-					local titleRow = create("Frame", {
-						Size = UDim2.new(1, 0, 0, 18),
-						BackgroundTransparency = 1,
-						LayoutOrder = 1,
-						Parent = card,
-					})
-					createLabel({
-						Size = UDim2.new(1, -70, 1, 0),
-						Text = entry.Title or entry.Version or "Update",
-						TextSize = 14,
-						Parent = titleRow,
-					})
-
-					if entry.Date or entry.Tag then
-						local tag = create("Frame", {
-							AnchorPoint = Vector2.new(1, 0.5),
-							Position = UDim2.new(1, 0, 0.5, 0),
-							Size = UDim2.fromOffset(0, 20),
-							AutomaticSize = Enum.AutomaticSize.X,
-							BackgroundColor3 = Theme.Surface,
-							BorderSizePixel = 0,
-							Parent = titleRow,
-						})
-						addCorner(tag, UDim.new(0, 5))
-						addStroke(tag)
-						addPadding(tag, 8, 8)
-						createLabel({
-							Size = UDim2.new(0, 0, 1, 0),
-							AutomaticSize = Enum.AutomaticSize.X,
-							Text = tostring(entry.Tag or entry.Date),
-							TextSize = 11,
-							TextColor3 = Theme.Muted,
-							TextTruncate = Enum.TextTruncate.None,
-							Parent = tag,
-						})
-					end
-
-					local bodyText = entry.Content or entry.Body
-					if type(entry.Changes) == "table" then
-						bodyText = "• " .. table.concat(entry.Changes, "\n• ")
-					end
-					if bodyText then
-						createLabel({
-							Size = UDim2.new(1, 0, 0, 0),
-							AutomaticSize = Enum.AutomaticSize.Y,
-							Text = tostring(bodyText),
-							TextSize = 13,
-							FontFace = Fonts.Regular,
-							TextColor3 = Theme.Muted,
-							TextWrapped = true,
-							TextTruncate = Enum.TextTruncate.None,
-							TextYAlignment = Enum.TextYAlignment.Top,
-							LayoutOrder = 2,
-							Parent = card,
-						})
-					end
+					createChangelogCard(pageFrame, entryIndex + 1, entry)
 				end
 			end
 
@@ -11987,17 +12044,20 @@ do
 		})
 	end
 
-	function Window:SettingsTab(input)
-		local options = normalizeOptions(input, { Title = "Name" })
+	function Tab:Settings(input)
+		local options = normalizeOptions(input, {})
 		local prefix = tostring(options.FlagPrefix or "Nucleus")
-		local tab = self:Tab({
-			Name = options.Name or "Settings",
-			Icon = options.Icon or "settings",
-			Section = options.Section,
-		})
+		local tab = self
+		local window = self.Window
+		local titles = type(options.Titles) == "table" and options.Titles or {}
+		local function section(key, default)
+			if titles[key] ~= false then
+				tab:Section(tostring(titles[key] or default))
+			end
+		end
 
 		if options.Interface ~= false then
-			tab:Section("Interface")
+			section("Interface", "Interface")
 			if options.Theme ~= false then
 				tab:ThemePicker({ Flag = prefix .. "Theme" })
 			end
@@ -12011,22 +12071,22 @@ do
 					Max = 150,
 					Step = 5,
 					Suffix = "%",
-					Default = math.floor(self:GetScale() * 100 + 0.5),
+					Default = math.floor(window:GetScale() * 100 + 0.5),
 					Flag = prefix .. "Scale",
 					OnRelease = true,
 					Callback = function(value)
-						self:SetScale(value / 100)
+						window:SetScale(value / 100)
 					end,
 				})
 			end
 			if options.Keybind ~= false and not IS_TOUCH then
 				tab:Keybind({
 					Name = "Show / hide key",
-					Default = self.Keybind and self.Keybind.Name or "RightControl",
+					Default = window.Keybind and window.Keybind.Name or "RightControl",
 					Flag = prefix .. "ToggleKey",
 					OnChanged = function(keyCode)
 						if keyCode then
-							self:SetKeybind(keyCode)
+							window:SetKeybind(keyCode)
 						end
 					end,
 				})
@@ -12035,11 +12095,11 @@ do
 				tab:Dropdown({
 					Name = "Notification position",
 					Options = NOTIFY_POSITION_NAMES,
-					Default = self._notifyHost and self._notifyHost.Position or NOTIFY_POSITION_NAMES[1],
+					Default = window._notifyHost and window._notifyHost.Position or NOTIFY_POSITION_NAMES[1],
 					Flag = prefix .. "NotifyPosition",
 					Callback = function(position)
 						if type(position) == "string" then
-							self:SetNotificationPosition(position)
+							window:SetNotificationPosition(position)
 						end
 					end,
 				})
@@ -12047,10 +12107,10 @@ do
 			if options.Sidebar ~= false then
 				tab:Toggle({
 					Name = "Compact sidebar",
-					Default = self:IsSidebarCollapsed(),
+					Default = window:IsSidebarCollapsed(),
 					Flag = prefix .. "CompactSidebar",
 					Callback = function(on)
-						self:SetSidebarCollapsed(on)
+						window:SetSidebarCollapsed(on)
 					end,
 				})
 			end
@@ -12060,7 +12120,7 @@ do
 					Default = false,
 					Flag = prefix .. "Anonymous",
 					Callback = function(on)
-						self:SetAnonymous(on)
+						window:SetAnonymous(on)
 					end,
 				})
 			end
@@ -12068,18 +12128,18 @@ do
 				tab:Button({
 					Name = "Recent notifications",
 					Callback = function()
-						self:ShowNotificationHistory()
+						window:ShowNotificationHistory()
 					end,
 				})
 			end
 		end
 
 		if options.Configs ~= false then
-			tab:ConfigManager()
+			tab:ConfigManager({ Name = titles.Configs or "Configs" })
 		end
 
 		if options.Server ~= false then
-			tab:Section("Server")
+			section("Server", "Server")
 			tab:ButtonRow({
 				{ Name = "Rejoin", Icon = "refresh-cw", Callback = function()
 					Nucleus.Utils.Rejoin()
@@ -12091,13 +12151,13 @@ do
 		end
 
 		if options.Unload ~= false then
-			tab:Section("Script")
+			section("Script", "Script")
 			tab:Button({
-				Name = "Unload " .. tostring(self._titleLabel and self._titleLabel.Text or LIB_NAME),
+				Name = "Unload " .. tostring(window._titleLabel and window._titleLabel.Text or LIB_NAME),
 				Style = "Danger",
 				Confirm = "Click again to unload",
 				Callback = function()
-					self:Destroy()
+					window:Destroy()
 				end,
 			})
 		end
@@ -12105,17 +12165,34 @@ do
 		return tab
 	end
 
+	function Window:SettingsTab(input)
+		local options = normalizeOptions(input, { Title = "Name" })
+		local tab = self:Tab({
+			Name = options.Name or "Settings",
+			Icon = options.Icon or "settings",
+			Section = options.Section,
+			Badge = options.Badge,
+		})
+		tab:Settings(options)
+		return tab
+	end
+
 	local SOCIAL_PRESETS = {
-		discord = { "Discord", "discord" },
-		youtube = { "YouTube", "youtube" },
-		instagram = { "Instagram", "instagram" },
+		discord = { "Discord", "logo-discord" },
+		youtube = { "YouTube", "logo-youtube" },
+		instagram = { "Instagram", "logo-instagram" },
 		tiktok = { "TikTok", "music-2" },
-		twitter = { "X", "twitter" },
-		x = { "X", "twitter" },
-		github = { "GitHub", "github" },
-		twitch = { "Twitch", "twitch" },
-		facebook = { "Facebook", "facebook" },
-		telegram = { "Telegram", "send" },
+		twitter = { "X", "logo-x" },
+		x = { "X", "logo-x" },
+		github = { "GitHub", "logo-github" },
+		twitch = { "Twitch", "logo-twitch" },
+		facebook = { "Facebook", "logo-facebook" },
+		telegram = { "Telegram", "logo-telegram" },
+		reddit = { "Reddit", "logo-reddit" },
+		whatsapp = { "WhatsApp", "logo-whatsapp" },
+		pinterest = { "Pinterest", "logo-pinterest" },
+		threads = { "Threads", "logo-threads" },
+		linkedin = { "LinkedIn", "linkedin" },
 		roblox = { "Roblox", "gamepad-2" },
 		kofi = { "Ko-fi", "coffee" },
 		patreon = { "Patreon", "heart-handshake" },
@@ -12124,10 +12201,13 @@ do
 	}
 
 	local SOCIAL_DOMAINS = {
-		{ "discord%.gg", "discord" }, { "discord%.com", "discord" }, { "youtube%.com", "youtube" }, { "youtu%.be", "youtube" },
-		{ "instagram%.com", "instagram" }, { "tiktok%.com", "tiktok" }, { "twitter%.com", "twitter" }, { "x%.com", "x" },
-		{ "github%.com", "github" }, { "twitch%.tv", "twitch" }, { "facebook%.com", "facebook" }, { "t%.me", "telegram" },
-		{ "roblox%.com", "roblox" }, { "ko%-fi%.com", "kofi" }, { "patreon%.com", "patreon" }, { "paypal%.", "paypal" },
+		["discord.gg"] = "discord", ["discord.com"] = "discord", ["youtube.com"] = "youtube", ["youtu.be"] = "youtube",
+		["instagram.com"] = "instagram", ["tiktok.com"] = "tiktok", ["twitter.com"] = "twitter", ["x.com"] = "x",
+		["github.com"] = "github", ["twitch.tv"] = "twitch", ["facebook.com"] = "facebook", ["fb.com"] = "facebook",
+		["t.me"] = "telegram", ["telegram.me"] = "telegram", ["reddit.com"] = "reddit", ["wa.me"] = "whatsapp",
+		["whatsapp.com"] = "whatsapp", ["pinterest.com"] = "pinterest", ["threads.net"] = "threads",
+		["linkedin.com"] = "linkedin", ["roblox.com"] = "roblox", ["ko-fi.com"] = "kofi", ["patreon.com"] = "patreon",
+		["paypal.me"] = "paypal", ["paypal.com"] = "paypal",
 	}
 
 	local function detectSocial(kind, name, link)
@@ -12140,11 +12220,16 @@ do
 			return key
 		end
 		if type(link) == "string" then
-			local lowered = link:lower()
-			for _, rule in ipairs(SOCIAL_DOMAINS) do
-				if lowered:find("^https?://[%w%.]*" .. rule[1]) or lowered:find("^[%w%.]*" .. rule[1]) then
-					return rule[2]
+			local host = link:lower():gsub("^%a+://", ""):match("^[^/%?#:]+") or ""
+			while host ~= "" do
+				if SOCIAL_DOMAINS[host] then
+					return SOCIAL_DOMAINS[host]
 				end
+				local dot = host:find("%.")
+				if not dot then
+					break
+				end
+				host = host:sub(dot + 1)
 			end
 		end
 		return "website"
@@ -12334,15 +12419,84 @@ do
 			log("Socials needs at least one link, like { YouTube = \"https://youtube.com/@you\" }")
 			return nil
 		end
-		local card = createInfoCard(parent, order, tostring(options.Title or "Community"), options.Icon or "users-round", options.Text)
-		local grid = createButtonGrid(card, 3, #links)
-		for index, entry in ipairs(links) do
-			createGridButton(grid, index, entry.Name, entry.Icon, nil, false, function()
-				Nucleus:Copy(entry.Link)
-				safeCall(options.OnClick, entry)
-			end)
+		local card, titleLabel = createInfoCard(parent, order, tostring(options.Title or "Community"), options.Icon or "users-round", options.Text)
+		local controller = { Links = links, Frame = card }
+		local grid
+		local function render()
+			if grid then
+				grid:Destroy()
+			end
+			grid = createButtonGrid(card, 3, #controller.Links)
+			for index, entry in ipairs(controller.Links) do
+				createGridButton(grid, index, entry.Name, entry.Icon, nil, false, function()
+					Nucleus:Copy(entry.Link)
+					safeCall(options.OnClick, entry)
+				end)
+			end
 		end
-		return card, links
+		render()
+		function controller:SetLinks(newLinks)
+			local normalized = normalizeSocials(newLinks)
+			if #normalized == 0 then
+				log("SetLinks needs at least one link")
+				return false
+			end
+			controller.Links = normalized
+			render()
+			return true
+		end
+		function controller:AddLink(link, name)
+			local normalized = normalizeSocials({ type(link) == "table" and link or { Name = name, Link = link } })
+			if #normalized == 0 then
+				return false
+			end
+			table.insert(controller.Links, normalized[1])
+			render()
+			return true
+		end
+		function controller:SetTitle(text)
+			titleLabel.Text = tostring(text)
+		end
+		return card, controller
+	end
+
+	local DONATION_ICONS = {
+		{ "paypal", "wallet" }, { "ko%-?fi", "coffee" }, { "buymeacoffee", "coffee" }, { "coffee", "coffee" },
+		{ "patreon", "heart-handshake" }, { "stripe", "credit-card" }, { "card", "credit-card" },
+		{ "bitcoin", "logo-bitcoin" }, { "btc", "logo-bitcoin" }, { "ethereum", "coins" }, { "eth", "coins" },
+		{ "usdt", "coins" }, { "tether", "coins" }, { "litecoin", "coins" }, { "ltc", "coins" }, { "solana", "coins" },
+		{ "crypto", "coins" },
+	}
+
+	local function donationIcon(item)
+		if item.Icon then
+			return item.Icon
+		end
+		local haystack = (tostring(item.Name or "") .. " " .. tostring(item.Network or "") .. " " .. tostring(item.Link or "")):lower()
+		for _, rule in ipairs(DONATION_ICONS) do
+			if haystack:find(rule[1]) then
+				return rule[2]
+			end
+		end
+		if item.Address then
+			return "wallet"
+		end
+		if item.Link then
+			return "hand-coins"
+		end
+		return "heart"
+	end
+
+	local function amountText(amount, prefix)
+		if amount == nil or amount == "" then
+			return nil
+		end
+		if type(amount) == "number" then
+			local whole = math.floor(amount)
+			local text = whole == amount and tostring(whole) or string.format("%.2f", amount)
+			return tostring(prefix or "$") .. text
+		end
+		return tostring(amount)
 	end
 
 	local function normalizeDonations(input)
@@ -12352,19 +12506,21 @@ do
 			if type(entry) == "table" then
 				local item = {
 					Name = tostring(entry.Name or entry.Title or "Donate"),
-					Robux = tonumber(entry.Robux or entry.Price),
-					AssetId = tonumber(entry.AssetId or entry.ShirtId),
-					GamePassId = tonumber(entry.GamePassId or entry.PassId),
-					Link = entry.Link,
-					Address = entry.Address,
+					Amount = entry.Amount or entry.Price,
+					Link = entry.Link or entry.Url or entry.URL,
+					Address = entry.Address or entry.Wallet,
+					Network = entry.Network,
 					Icon = entry.Icon,
 					Callback = entry.Callback,
 					Primary = entry.Primary == true,
 				}
-				if item.AssetId or item.GamePassId or item.Link or item.Address or type(item.Callback) == "function" then
+				if entry.Robux or entry.AssetId or entry.GamePassId then
+					log(("donation option \"%s\": Robux donations aren't supported. Use Link (PayPal, Ko-fi...) or Address (crypto)."):format(item.Name))
+				end
+				if item.Link or item.Address or type(item.Callback) == "function" then
 					table.insert(list, item)
 				else
-					log(("donation option \"%s\" needs AssetId, GamePassId, Link, Address or Callback"):format(item.Name))
+					log(("donation option \"%s\" needs Link, Address or Callback"):format(item.Name))
 				end
 			end
 		end
@@ -12372,20 +12528,24 @@ do
 	end
 
 	function Window:_donate(item, donationOptions)
-		if item.AssetId or item.GamePassId then
-			local ok, err = pcall(function()
-				local market = game:GetService("MarketplaceService")
-				if item.GamePassId then
-					market:PromptGamePassPurchase(LocalPlayer, item.GamePassId)
+		donationOptions = donationOptions or {}
+		if item.Link or item.Address then
+			local copied = Nucleus:Copy(item.Link or item.Address, true)
+			if copied then
+				local title
+				if item.Address then
+					title = (item.Network and (tostring(item.Network) .. " address") or "Wallet address") .. " copied"
 				else
-					market:PromptPurchase(LocalPlayer, item.AssetId)
+					title = item.Name .. " link copied"
 				end
-			end)
-			if not ok then
-				self:Notify({ Title = "Couldn't open the purchase", Content = tostring(err), Type = "Error", Duration = 5 })
+				self:Notify({
+					Title = title,
+					Content = tostring(donationOptions.Thanks or (item.Address and "Paste it in your wallet app. Thank you for the support!" or "Paste it in your browser to donate. Thank you for the support!")),
+					Type = "Success",
+					Icon = "heart",
+					Duration = 6,
+				})
 			end
-		elseif item.Link or item.Address then
-			Nucleus:Copy(item.Link or item.Address)
 		end
 		if type(item.Callback) == "function" then
 			runProtected(('donation option "%s"'):format(item.Name), item.Callback, item)
@@ -12393,127 +12553,156 @@ do
 		safeCall(donationOptions.OnClick, item)
 	end
 
-	function Window:_watchDonations(donationOptions, items)
-		self._donationItems = self._donationItems or {}
-		for _, item in ipairs(items) do
-			table.insert(self._donationItems, item)
-		end
-		if self._donationWatch then
-			return
-		end
-		self._donationWatch = true
-		local function thank(kind, id)
-			for _, item in ipairs(self._donationItems) do
-				if item[kind] == id then
-					self:Notify({
-						Title = tostring(donationOptions.ThanksTitle or "Thank you!"),
-						Content = tostring(donationOptions.Thanks or "Your support keeps this script going."),
-						Type = "Success",
-						Icon = "heart",
-						Duration = 8,
-					})
-					safeCall(donationOptions.OnDonate, item)
-					return
-				end
-			end
-		end
-		pcall(function()
-			local market = game:GetService("MarketplaceService")
-			self:Connect(market.PromptPurchaseFinished, function(player, assetId, purchased)
-				if player == LocalPlayer and purchased then
-					thank("AssetId", tonumber(assetId))
-				end
-			end)
-			self:Connect(market.PromptGamePassPurchaseFinished, function(player, passId, purchased)
-				if player == LocalPlayer and purchased then
-					thank("GamePassId", tonumber(passId))
-				end
-			end)
-		end)
-	end
-
 	local function buildDonationCard(window, parent, order, input)
 		local options, items = normalizeDonations(input)
 		if #items == 0 then
-			log("Donations needs at least one option, like { Name = \"Small tip\", Robux = 10, AssetId = 123 }")
+			log("Donations needs at least one option, like { Name = \"PayPal\", Link = \"https://paypal.me/you\" }")
 			return nil
 		end
-		local card = createInfoCard(parent, order, tostring(options.Title or "Support the creator"), options.Icon or "heart", options.Text or "Donations are optional and help keep the script updated.")
-		local goal = type(options.Goal) == "table" and options.Goal or nil
-		if goal and tonumber(goal.Target) and tonumber(goal.Target) > 0 then
-			local current = math.max(0, tonumber(goal.Current) or 0)
-			local target = tonumber(goal.Target)
-			local prefix = goal.Prefix or "R$ "
-			local goalRow = create("Frame", {
-				Size = UDim2.new(1, 0, 0, 24),
-				BackgroundTransparency = 1,
-				LayoutOrder = 3,
-				Parent = card,
-			})
-			createLabel({
-				Size = UDim2.new(0.45, -4, 0, 14),
-				Text = tostring(goal.Label or "Goal"),
-				TextSize = 12,
-				TextColor3 = Theme.Text,
-				Parent = goalRow,
-			})
-			createLabel({
-				AnchorPoint = Vector2.new(1, 0),
-				Position = UDim2.fromScale(1, 0),
-				Size = UDim2.new(0.55, 0, 0, 14),
-				Text = prefix .. formatAmount(current) .. " / " .. prefix .. formatAmount(target),
-				TextSize = 12,
-				FontFace = Fonts.Regular,
-				TextColor3 = Theme.Muted,
-				TextXAlignment = Enum.TextXAlignment.Right,
-				Parent = goalRow,
-			})
-			local track = create("Frame", {
-				Position = UDim2.fromOffset(0, 19),
-				Size = UDim2.new(1, 0, 0, 5),
-				BackgroundColor3 = Theme.Surface3,
-				BorderSizePixel = 0,
-				Parent = goalRow,
-			})
-			addCorner(track, UDim.new(1, 0))
-			local fill = create("Frame", {
-				Size = UDim2.fromScale(math.clamp(current / target, 0, 1), 1),
-				BackgroundColor3 = Theme.Accent,
-				BorderSizePixel = 0,
-				Parent = track,
-			})
-			addCorner(fill, UDim.new(1, 0))
-		end
-		local grid = createButtonGrid(card, 4, #items)
-		local anyPrimary = false
-		for _, item in ipairs(items) do
-			anyPrimary = anyPrimary or item.Primary
-		end
-		for index, item in ipairs(items) do
-			local side
-			if item.Robux then
-				side = "R$ " .. formatAmount(item.Robux)
-			elseif item.Address then
-				side = "Copy"
+		local card, titleLabel, textLabel = createInfoCard(parent, order, tostring(options.Title or "Support the creator"), options.Icon or "heart", options.Text or "Donations are optional and help keep the script updated.")
+		local controller = { Options = items, Frame = card }
+		local goalRow, goalAmount, goalFill, goalLabel
+		local goalPrefix = tostring(options.Currency or "$")
+
+		function controller:SetGoal(current, target, label)
+			if type(current) == "table" then
+				current, target, label = current.Current, current.Target, current.Label
 			end
-			local icon = item.Icon or ((item.AssetId or item.GamePassId) and "gift") or (item.Address and "wallet") or (item.Link and "external-link") or "heart"
-			local primary = item.Primary or (not anyPrimary and index == 1)
-			createGridButton(grid, index, item.Name, icon, side, primary, function()
-				window:_donate(item, options)
-			end)
+			if current == nil and target == nil then
+				if goalRow then
+					goalRow.Visible = false
+				end
+				return true
+			end
+			target = tonumber(target) or (controller._target)
+			if not target or target <= 0 then
+				log("SetGoal needs a target above 0")
+				return false
+			end
+			controller._target = target
+			current = math.max(0, tonumber(current) or 0)
+			if not goalRow then
+				goalRow = create("Frame", {
+					Name = "Goal",
+					Size = UDim2.new(1, 0, 0, 24),
+					BackgroundTransparency = 1,
+					LayoutOrder = 3,
+					Parent = card,
+				})
+				goalLabel = createLabel({
+					Size = UDim2.new(0.45, -4, 0, 14),
+					Text = "Goal",
+					TextSize = 12,
+					TextColor3 = Theme.Text,
+					Parent = goalRow,
+				})
+				goalAmount = createLabel({
+					AnchorPoint = Vector2.new(1, 0),
+					Position = UDim2.fromScale(1, 0),
+					Size = UDim2.new(0.55, 0, 0, 14),
+					Text = "",
+					TextSize = 12,
+					FontFace = Fonts.Regular,
+					TextColor3 = Theme.Muted,
+					TextXAlignment = Enum.TextXAlignment.Right,
+					Parent = goalRow,
+				})
+				local track = create("Frame", {
+					Position = UDim2.fromOffset(0, 19),
+					Size = UDim2.new(1, 0, 0, 5),
+					BackgroundColor3 = Theme.Surface3,
+					BorderSizePixel = 0,
+					Parent = goalRow,
+				})
+				addCorner(track, UDim.new(1, 0))
+				goalFill = create("Frame", {
+					Size = UDim2.fromScale(0, 1),
+					BackgroundColor3 = Theme.Accent,
+					BorderSizePixel = 0,
+					Parent = track,
+				})
+				addCorner(goalFill, UDim.new(1, 0))
+			end
+			if label ~= nil then
+				goalLabel.Text = tostring(label)
+			end
+			goalRow.Visible = true
+			goalAmount.Text = goalPrefix .. formatAmount(current) .. " / " .. goalPrefix .. formatAmount(target)
+			goalFill.Size = UDim2.fromScale(math.clamp(current / target, 0, 1), 1)
+			controller.Goal = { Current = current, Target = target, Label = goalLabel.Text }
+			return true
 		end
-		window:_watchDonations(options, items)
-		return card, items
+
+		local goal = type(options.Goal) == "table" and options.Goal or nil
+		if goal then
+			goalPrefix = tostring(goal.Prefix or goalPrefix)
+			controller:SetGoal(goal.Current, goal.Target, goal.Label or "Goal")
+		end
+
+		local grid
+		local function render()
+			if grid then
+				grid:Destroy()
+			end
+			grid = createButtonGrid(card, 4, #controller.Options)
+			local anyPrimary = false
+			for _, item in ipairs(controller.Options) do
+				anyPrimary = anyPrimary or item.Primary
+			end
+			for index, item in ipairs(controller.Options) do
+				local side = amountText(item.Amount, options.Currency) or (item.Address and "Copy" or nil)
+				local primary = item.Primary or (not anyPrimary and index == 1)
+				createGridButton(grid, index, item.Name, donationIcon(item), side, primary, function()
+					window:_donate(item, options)
+				end)
+			end
+		end
+		render()
+
+		function controller:SetOptions(newOptions)
+			local _, normalized = normalizeDonations({ Options = newOptions })
+			if #normalized == 0 then
+				log("SetOptions needs at least one donation option")
+				return false
+			end
+			controller.Options = normalized
+			render()
+			return true
+		end
+		function controller:AddOption(option)
+			local _, normalized = normalizeDonations({ Options = { option } })
+			if #normalized == 0 then
+				return false
+			end
+			table.insert(controller.Options, normalized[1])
+			render()
+			return true
+		end
+		function controller:SetTitle(text)
+			titleLabel.Text = tostring(text)
+		end
+		function controller:SetText(text)
+			if textLabel then
+				textLabel.Text = tostring(text)
+			end
+		end
+		return card, controller
 	end
 
 	function Window:_buildCommunity(parent)
+		local shown = self._homeShown or function()
+			return true
+		end
+		local orderOf = self._homeOrderOf or function(_, default)
+			return default
+		end
 		local socials = self._socialsOptions
-		if socials ~= nil and socials ~= false and not (type(socials) == "table" and socials.ShowOnHome == false) then
-			self._socialsCard = buildSocialsCard(parent, 3, socials)
+		if socials ~= nil and socials ~= false and shown("Socials") and not (type(socials) == "table" and socials.ShowOnHome == false) then
+			self._socialsCard, self.Socials = buildSocialsCard(parent, orderOf("Socials", 3), socials)
 		end
 		local donations = self._donationOptions
-		if donations ~= nil and donations ~= false and not (type(donations) == "table" and donations.ShowOnHome == false) then
-			self._donationCard = buildDonationCard(self, parent, 4, donations)
+		if donations ~= nil and donations ~= false and shown("Donations") and not (type(donations) == "table" and donations.ShowOnHome == false) then
+			self._donationCard, self.Donations = buildDonationCard(self, parent, orderOf("Donations", 4), donations)
 		end
 	end
 
@@ -12564,8 +12753,9 @@ do
 			if index > 3 then
 				break
 			end
+			local amount = amountText(item.Amount, options.Currency)
 			table.insert(buttons, {
-				Title = item.Robux and (item.Name .. "  R$ " .. formatAmount(item.Robux)) or item.Name,
+				Title = amount and (item.Name .. "  " .. amount) or item.Name,
 				Variant = index == 1 and "Primary" or nil,
 				Callback = function()
 					self:_donate(item, options)
@@ -12573,7 +12763,6 @@ do
 			})
 		end
 		table.insert(buttons, { Title = "Later" })
-		self:_watchDonations(options, items)
 		self:Dialog({
 			Title = tostring(options.Title or "Support the creator"),
 			Content = tostring(options.Text or "Donations are optional and help keep the script updated."),
@@ -12584,26 +12773,324 @@ do
 	end
 
 	function Tab:Socials(input)
-		local card, links = buildSocialsCard(self.List, self:_nextOrder(), input)
+		local card, controller = buildSocialsCard(self.List, self:_nextOrder(), input)
 		if not card then
 			return nil
 		end
-		local element = { Links = links }
-		return registerElement(self, { Name = type(input) == "table" and input.Title or "Community" }, element, card, "Socials")
+		return registerElement(self, { Name = type(input) == "table" and input.Title or "Community" }, controller, card, "Socials")
 	end
 
 	function Tab:Donations(input)
-		local card, items = buildDonationCard(self.Window, self.List, self:_nextOrder(), input)
+		local card, controller = buildDonationCard(self.Window, self.List, self:_nextOrder(), input)
 		if not card then
 			return nil
 		end
-		local element = { Options = items }
-		return registerElement(self, { Name = type(input) == "table" and input.Title or "Support the creator" }, element, card, "Donations")
+		return registerElement(self, { Name = type(input) == "table" and input.Title or "Support the creator" }, controller, card, "Donations")
+	end
+
+	local function shortLink(link)
+		local text = tostring(link):gsub("^https?://", ""):gsub("^www%.", ""):gsub("/$", "")
+		return text
+	end
+
+	local function createActionRow(tab, options, icon, sideText, onClick)
+		local height = options.Desc and ROW_HEIGHT_DESC or ROW_HEIGHT
+		local card, stroke = createCard(tab, "TextButton", height)
+		bindHoverStroke(card, stroke)
+		createIcon(card, icon, Theme.Accent, UDim2.new(0, 14, 0.5, 0))
+		local reserve = 30
+		local side
+		if sideText and sideText ~= "" then
+			side = createLabel({
+				AnchorPoint = Vector2.new(1, 0.5),
+				Position = UDim2.new(1, -14, 0.5, 0),
+				Size = UDim2.fromOffset(0, 16),
+				AutomaticSize = Enum.AutomaticSize.X,
+				Text = sideText,
+				TextSize = 12,
+				FontFace = Fonts.Bold,
+				TextColor3 = Theme.Muted,
+				TextTruncate = Enum.TextTruncate.None,
+				Parent = card,
+			})
+			reserve = math.max(30, #sideText * 8 + 20)
+		else
+			createIcon(card, "copy", Theme.Muted, UDim2.new(1, -30, 0.5, 0))
+		end
+		local titleLabel, descLabel = createTitleBlock(card, options.Name, options.Desc, reserve)
+		for _, label in ipairs({ titleLabel, descLabel }) do
+			label.Position += UDim2.fromOffset(26, 0)
+			label.Size -= UDim2.fromOffset(26, 0)
+		end
+		card.MouseButton1Click:Connect(onClick)
+		return card, titleLabel, descLabel, side
+	end
+
+	function Tab:SocialLink(input, maybeLink)
+		if type(input) == "string" and type(maybeLink) == "string" then
+			input = { Name = input, Link = maybeLink }
+		elseif type(input) == "string" then
+			input = { Link = input }
+		end
+		local raw = type(input) == "table" and input or {}
+		local normalized = normalizeSocials({ raw })
+		if #normalized == 0 then
+			log("SocialLink needs a Link, like Tab:SocialLink(\"https://youtube.com/@you\")")
+			return nil
+		end
+		local entry = normalized[1]
+		local options = {
+			Name = entry.Name,
+			Desc = raw.Desc or raw.Description or (raw.ShowLink ~= false and shortLink(entry.Link) or nil),
+		}
+		local element = { Link = entry.Link }
+		local card, titleLabel, descLabel = createActionRow(self, options, entry.Icon, nil, function()
+			Nucleus:Copy(element.Link)
+			safeCall(raw.Callback or raw.OnClick, element.Link)
+		end)
+		function element:SetLink(link)
+			element.Link = tostring(link)
+			if descLabel and raw.Desc == nil and raw.ShowLink ~= false then
+				descLabel.Text = shortLink(element.Link)
+			end
+		end
+		function element:Get()
+			return element.Link
+		end
+		function element:SetTitle(text)
+			titleLabel.Text = tostring(text)
+		end
+		return registerElement(self, { Name = entry.Name, Flag = raw.Flag }, element, card, "SocialLink")
+	end
+
+	function Tab:DonateButton(input)
+		local raw = type(input) == "table" and input or {}
+		local options, items = normalizeDonations({
+			Options = { raw },
+			Thanks = raw.Thanks,
+			OnClick = raw.OnClick,
+			Currency = raw.Currency,
+		})
+		if #items == 0 then
+			return nil
+		end
+		local item = items[1]
+		local side = amountText(item.Amount, options.Currency) or (item.Address and "Copy" or nil)
+		local window = self.Window
+		local card, titleLabel = createActionRow(self, { Name = item.Name, Desc = raw.Desc or raw.Description }, donationIcon(item), side or "", function()
+			window:_donate(item, options)
+		end)
+		local element = { Option = item }
+		function element:SetTitle(text)
+			titleLabel.Text = tostring(text)
+		end
+		return registerElement(self, { Name = item.Name }, element, card, "DonateButton")
+	end
+
+	function Tab:Membership(input)
+		return self:KeyInfo(input)
+	end
+
+	function Tab:Changelog(input)
+		local entries = type(input) == "table" and (input.Entries or input) or {}
+		local element = { Entries = {} }
+		local holder = create("Frame", {
+			Size = UDim2.new(1, 0, 0, 0),
+			AutomaticSize = Enum.AutomaticSize.Y,
+			BackgroundTransparency = 1,
+			LayoutOrder = self:_nextOrder(),
+			Parent = self.List,
+		})
+		create("UIListLayout", {
+			SortOrder = Enum.SortOrder.LayoutOrder,
+			Padding = UDim.new(0, Appearance.Spacing),
+			Parent = holder,
+		})
+		local count = 0
+		function element:Add(entry, atTop)
+			if type(entry) ~= "table" then
+				return false
+			end
+			count += 1
+			createChangelogCard(holder, atTop and -count or count, entry)
+			table.insert(element.Entries, atTop and 1 or #element.Entries + 1, entry)
+			return true
+		end
+		function element:Clear()
+			for _, child in ipairs(holder:GetChildren()) do
+				if child:IsA("GuiObject") then
+					child:Destroy()
+				end
+			end
+			element.Entries = {}
+		end
+		for _, entry in ipairs(entries) do
+			element:Add(entry)
+		end
+		return registerElement(self, { Name = "Changelog" }, element, holder, "Changelog")
+	end
+
+	function Tab:Welcome(input)
+		local options = type(input) == "table" and input or {}
+		local card = create("Frame", {
+			Size = UDim2.new(1, 0, 0, 58),
+			BackgroundColor3 = Theme.Surface2,
+			BorderSizePixel = 0,
+			LayoutOrder = self:_nextOrder(),
+			Parent = self.List,
+		})
+		card:SetAttribute(ATTR_NO_DRAG, true)
+		styleCard(card)
+		local avatar = create("ImageLabel", {
+			Position = UDim2.fromOffset(12, 11),
+			Size = UDim2.fromOffset(36, 36),
+			BackgroundColor3 = Theme.Surface,
+			BorderSizePixel = 0,
+			Parent = card,
+		})
+		addCorner(avatar, UDim.new(0, 8))
+		task.spawn(function()
+			local ok, image = pcall(function()
+				return Players:GetUserThumbnailAsync(LocalPlayer.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size100x100)
+			end)
+			if ok and image and avatar.Parent then
+				avatar.Image = image
+			end
+		end)
+		local greeting = options.Greeting
+		if greeting == nil then
+			local hour = tonumber(os.date("%H")) or 12
+			greeting = "Good " .. (hour < 12 and "morning" or (hour < 18 and "afternoon" or "evening")) .. "."
+		end
+		local titleLabel = createLabel({
+			Position = UDim2.fromOffset(58, 11),
+			Size = UDim2.new(1, -72, 0, 18),
+			Text = tostring(options.Text or options.Welcome or "Hello, ") .. LocalPlayer.DisplayName,
+			TextSize = 15,
+			Parent = card,
+		})
+		local greetingLabel = createLabel({
+			Position = UDim2.fromOffset(58, 30),
+			Size = UDim2.new(1, -72, 0, 16),
+			Text = tostring(greeting),
+			TextSize = 13,
+			FontFace = Fonts.Regular,
+			TextColor3 = Theme.Muted,
+			Parent = card,
+		})
+		local element = {}
+		function element:SetGreeting(text)
+			greetingLabel.Text = tostring(text)
+		end
+		function element:SetTitle(text)
+			titleLabel.Text = tostring(text)
+		end
+		return registerElement(self, { Name = "Welcome" }, element, card, "Welcome")
+	end
+
+	local SYSTEM_STATS = {
+		FPS = { "activity", "FPS" },
+		Ping = { "wifi", "Ping" },
+		Executor = { "terminal", "Executor" },
+		Game = { "gamepad-2", "Game" },
+		Region = { "globe", "Your region" },
+		Time = { "clock", "Time of day" },
+		Players = { "users", "Players" },
+		Uptime = { "timer", "Session" },
+	}
+
+	function Tab:SystemStats(input)
+		local options = type(input) == "table" and input or {}
+		local names = options.Stats or (#options > 0 and options) or { "FPS", "Ping", "Executor", "Game", "Region", "Time" }
+		local window = self.Window
+		local grid = create("Frame", {
+			Size = UDim2.new(1, 0, 0, 0),
+			AutomaticSize = Enum.AutomaticSize.Y,
+			BackgroundTransparency = 1,
+			LayoutOrder = self:_nextOrder(),
+			Parent = self.List,
+		})
+		create("UIGridLayout", {
+			CellSize = UDim2.new(0.5, -4, 0, 62),
+			CellPadding = UDim2.fromOffset(8, 8),
+			SortOrder = Enum.SortOrder.LayoutOrder,
+			Parent = grid,
+		})
+		local values = {}
+		for index, name in ipairs(names) do
+			local preset = SYSTEM_STATS[name]
+			if preset then
+				values[name] = createStatTile(grid, index, preset[1], preset[2])
+			else
+				log(("SystemStats has no stat \"%s\". Use FPS, Ping, Executor, Game, Region, Time, Players or Uptime."):format(tostring(name)))
+			end
+		end
+		if values.Executor then
+			values.Executor.Text = getExecutorName()
+		end
+		if values.Game then
+			values.Game.Text = "Loading"
+			task.spawn(function()
+				local name = getGameName()
+				if values.Game.Parent then
+					values.Game.Text = name
+				end
+			end)
+		end
+		if values.Region then
+			values.Region.Text = "Loading"
+			fetchRegion(function(region)
+				if values.Region.Parent then
+					values.Region.Text = region
+				end
+			end, options.RegionCity == false)
+		end
+		local frames = 0
+		local sessionStart = os.clock()
+		window:_listen("Render", function()
+			frames += 1
+		end)
+		local tab = self._rootTab or self
+		task.spawn(function()
+			while not window._destroyed and grid.Parent do
+				if window.Open and window.CurrentTab == tab and grid.Visible then
+					if values.FPS then
+						values.FPS.Text = tostring(frames)
+					end
+					if values.Ping then
+						local ok, ping = pcall(function()
+							return math.floor(LocalPlayer:GetNetworkPing() * 1000)
+						end)
+						values.Ping.Text = (ok and ping or 0) .. " ms"
+					end
+					if values.Time then
+						values.Time.Text = os.date(options.TimeFormat or "%H:%M")
+					end
+					if values.Players then
+						values.Players.Text = #Players:GetPlayers() .. " / " .. Players.MaxPlayers
+					end
+					if values.Uptime then
+						local seconds = math.floor(os.clock() - sessionStart)
+						values.Uptime.Text = string.format("%d:%02d", math.floor(seconds / 60), seconds % 60)
+					end
+				end
+				frames = 0
+				task.wait(1)
+			end
+		end)
+		return registerElement(self, { Name = "System stats" }, { Values = values }, grid, "SystemStats")
 	end
 
 	Tab.CreateSocials = Tab.Socials
 	Tab.CreateDonations = Tab.Donations
 	Tab.Donate = Tab.Donations
+	Tab.CreateSocialLink = Tab.SocialLink
+	Tab.CreateDonateButton = Tab.DonateButton
+	Tab.CreateMembership = Tab.Membership
+	Tab.CreateChangelog = Tab.Changelog
+	Tab.CreateWelcome = Tab.Welcome
+	Tab.CreateSystemStats = Tab.SystemStats
+	Tab.CreateSettings = Tab.Settings
 
 	local FORGIVING = {
 		"Notify", "Confirm", "Dialog", "Prompt", "Popup", "SetTheme", "AddTheme", "GetValue", "SetValue",
