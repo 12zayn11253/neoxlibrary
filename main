@@ -9,7 +9,7 @@ local LocalPlayer = Players.LocalPlayer
 
 local Nucleus = {}
 Nucleus.Name = "Nucleus UI"
-Nucleus.Version = "3.2.16"
+Nucleus.Version = "4.0.0"
 Nucleus.Flags = {}
 Nucleus.Windows = {}
 
@@ -28,7 +28,7 @@ end
 
 local KNOWN_OPTIONS = {}
 local KNOWN_OPTIONS_LOWER = {}
-for name in string.gmatch("AU AbsoluteContentSize AbsoluteSize Accent AccentDark Active ActiveOnly AliveCheck Always Anonymous Asc Australia AutoLoad AutoSave BR Background BackgroundColor3 BackgroundTransparency Backspace BasePart Began Body Bold BottomRight Brazil Button ButtonRow Buttons CA CFrame Callback Canada Cancel CancelText CanvasGroup Caption Changed Changes ClearOnFocus Close CloseOnBackdrop Code Collapsed Color Color3 ColorPicker Configs ConfigurationSaving Confirm ConfirmText ConfirmTimeout Content ContentProvider Copied Copy Copyable CoreGui Create CurrentKeybind CurrentOption CurrentValue Custom CustomFont DE Danger Date DateFormat Decal Default DefaultState Delay Delete Depends DependsOn Desc Description Details Discord DiscordButton DiscordLink Divider Dropdown Duration Element EmptyText Enabled Ended Enter Entries Enum EnumItem Error ErrorNotifications Esc Example ExcludeSelf Executor Expired Expiry FPS FR FileName Flag Folder FolderName Format Frame France Free GET Game Germany GetActive GetKey Glow Greeting Group GuiButton GuiName GuiObject GuiService HWID HasKey Header HeaderItems Height Hold Home HttpService Humanoid HumanoidRootPart IN Icon Image ImageButton ImageColor3 ImageLabel ImageRectPosition ImageRectSize ImageTransparency Increment India Info Input Instance JP Japan KeepOnScreen Key KeyInfo KeyPanel Keybind Keybinds LAlt LCtrl LShift Label Language Lifetime Lighting Load Loading LoadingDuration LoadingSteps LoadingSubtitle LoadingText LoadingTitle Localization Lock Locked LockedReason Loop LoopDelay Lowest Main MarketplaceService Max MaxDistance MaxHeight MaxLength MaxNotifications MaxSize Medium Membership Merge Message Method Min MinSize MobileButton MobileIcon Mode Model MinimizeButton Mono Monospace Monthly Multi MultiLine Multiline MultipleOptions Muted NL Name NucleusHidden Nucleus NucleusUIBlur NucleusUIFonts NucleusLoc NucleusLocPlaceholderText NucleusLocText NucleusNoTheme Netherlands NoDrag None Not Notification NotificationPosition Notifications Numeric OK OnCancel OnChanged OnClose OnRelease Open OpenButton Opened Options Page Pages Paragraph Parent Ping Placeholder PlaceholderColor3 PlaceholderText Player PlayerGui Players Popup Position Prefix Premium PremiumBanner PremiumButton Perks Price PopupDelay Cooldown HeaderButton ExpiryButtons OnClick OnShown ShowWithoutKey ButtonText Link PremiumLink PremiumText Primary Profile Progress Qd Qn RAlt RCtrl RShift Radius Range Region RegionCity Regular Reminders Render Reset ResetOnUnload Resizable RunService SG Save Scale ScaleType ScreenGui ScrollBarImageColor3 ScrollingFrame Search SearchAfter SearchPlaceholder SearchResults Secondary Section SectionName Sections SemiBold Session ShowFPS ShowPing ShowPromo ShowTime Sidebar SidebarCollapsed Singapore Size Slider Sound Space Standard Stat Stats Step Stepper Stroke StrokeHover Studio Style Subtitle Success Suffix Surface Surface2 Surface3 Tab TabIcon TabSection Tabs Tag TeamCheck TeleportService Tertiary Text TextArea TextBounds TextBox TextButton TextColor3 TextLabel TextScale TextSize TextTransparency Texture Theme ThemeName Time TimeFormat Title Toggle ToggleUIKeybind Tooltip Top TotalTime TouchOnly TransitionIn TransitionOut Translations Transparency TweenService Type TypeName TypeNames UDim2 UICorner UIGradient UIGridLayout UIListLayout UIPadding UIScale UISizeConstraint UIStroke Unavailable Unknown Update UpdateRate Uptime Usage UseDisplayName User UserInputService UserInputType Value Values Variant Vector2 Vector3 Version VirtualUser Visible Volume Warning Weekly Weights Welcome Window", "%S+") do
+for name in string.gmatch("AU AbsoluteContentSize AbsoluteSize Accent AccentDark Active ActiveOnly AliveCheck Always Anonymous Asc Australia AutoLoad AutoSave BR Background BackgroundColor3 BackgroundTransparency Backspace BasePart Began Body Bold BottomRight Brazil Button ButtonRow Buttons CA CFrame Callback Canada Cancel CancelText CanvasGroup Caption Changed Changes ClearOnFocus Close CloseOnBackdrop Code Collapsed Color Color3 ColorPicker Configs ConfigurationSaving Confirm ConfirmText ConfirmTimeout Content ContentProvider Copied Copy Copyable CoreGui Create CurrentKeybind CurrentOption CurrentValue Custom CustomFont DE Danger Date DateFormat Decal Default DefaultState Delay Delete Depends DependsOn Desc Description Details Discord DiscordButton DiscordLink Divider Dropdown Duration Element EmptyText Enabled Ended Enter Entries Enum EnumItem Error ErrorNotifications Esc Example ExcludeSelf Executor Expired Expiry FPS FR FileName Flag Folder FolderName Format Frame France Free GET Game Germany GetActive GetKey Glow Greeting Group GuiButton GuiName GuiObject GuiService HWID HasKey Header HeaderItems Height Hold Home HttpService Humanoid HumanoidRootPart IN Icon Image ImageButton ImageColor3 ImageLabel ImageRectPosition ImageRectSize ImageTransparency Increment India Info Input Instance JP Japan KeepOnScreen Key KeyInfo KeyPanel Keybind Keybinds LAlt LCtrl LShift Label Language Lifetime Lighting Load Loading LoadingDuration LoadingSteps LoadingSubtitle LoadingText LoadingTitle Localization Lock Locked LockedReason Loop LoopDelay Lowest Main MarketplaceService Max MaxDistance MaxHeight MaxLength MaxNotifications MaxSize Medium Membership Merge Message Method Min MinSize MobileButton MobileIcon Mode Model MinimizeButton Mono Monospace Monthly Multi MultiLine Multiline MultipleOptions Muted NL Name NucleusHidden Nucleus NucleusUIBlur NucleusUIFonts NucleusLoc NucleusLocPlaceholderText NucleusLocText NucleusNoTheme Netherlands NoDrag None Not Notification NotificationPosition Notifications Numeric OK OnCancel OnChanged OnClose OnRelease Open OpenButton Opened Options Page Pages Paragraph Parent Ping Placeholder PlaceholderColor3 PlaceholderText Player PlayerGui Players Popup Position Prefix Premium PremiumBanner PremiumButton Perks Price PopupDelay Cooldown HeaderButton ExpiryButtons OnClick OnShown ShowWithoutKey ButtonText Link PremiumLink PremiumText Primary Profile Progress Qd Qn RAlt RCtrl RShift Radius Range Region RegionCity Regular Reminders Render Reset ResetOnUnload Resizable RunService SG Save Scale ScaleType ScreenGui ScrollBarImageColor3 ScrollingFrame Search SearchAfter SearchPlaceholder SearchResults Secondary Section SectionName Sections SemiBold Session ShowFPS ShowPing ShowPromo ShowTime Sidebar SidebarCollapsed Singapore Size Slider Sound Space Standard Stat Stats Step Stepper Stroke StrokeHover Studio Style Subtitle Success Suffix Surface Surface2 Surface3 Tab TabIcon TabSection Tabs Tag TeamCheck TeleportService Tertiary Text TextArea TextBounds TextBox TextButton TextColor3 TextLabel TextScale TextSize TextTransparency Texture Theme ThemeName Time TimeFormat Title Toggle ToggleUIKeybind Tooltip Top TotalTime TouchOnly TransitionIn TransitionOut Translations Transparency TweenService Type TypeName TypeNames UDim2 UICorner UIGradient UIGridLayout UIListLayout UIPadding UIScale UISizeConstraint UIStroke Unavailable Unknown Update UpdateRate Uptime Usage UseDisplayName User UserInputService UserInputType Value Values Variant Vector2 Vector3 Version VirtualUser Visible Volume Warning Weekly Weights Welcome Window Appearance WindowRadius CardRadius CardBorder SidebarWidth Spacing Shadow TabHighlight Fill Outline Data Labels Texts Protected Badge TimeLeft NoKey NeverExpires Ends", "%S+") do
 	KNOWN_OPTIONS[name] = true
 	KNOWN_OPTIONS_LOWER[string.lower(name)] = name
 end
@@ -371,6 +371,29 @@ local FONT_WEIGHTS = {
 	Bold = { 700, Enum.FontWeight.Bold },
 }
 
+function Nucleus:SetFont(family)
+	local resolved
+	if typeof(family) == "EnumItem" then
+		local ok, font = pcall(Font.fromEnum, family)
+		resolved = ok and font and font.Family or nil
+	elseif type(family) == "string" and family ~= "" then
+		if family:find("^rbxasset") then
+			resolved = family
+		else
+			resolved = "rbxasset://fonts/families/" .. family:gsub("%s", "") .. ".json"
+		end
+	end
+	if not resolved then
+		log("SetFont needs a font name like \"Montserrat\" or an Enum.Font")
+		return false
+	end
+	local fonts = Nucleus.Fonts
+	fonts.Regular = Font.new(resolved, Enum.FontWeight.Regular)
+	fonts.Medium = Font.new(resolved, Enum.FontWeight.Medium)
+	fonts.Bold = Font.new(resolved, Enum.FontWeight.Bold)
+	return true
+end
+
 function Nucleus:LoadFont(input)
 	input = normalizeOptions(input, {})
 	if type(writefile) ~= "function" or type(isfile) ~= "function" or type(getcustomasset) ~= "function" then
@@ -655,12 +678,76 @@ local function addStroke(parent, color, transparency, thickness)
 	})
 end
 
-local CARD_RADIUS = UDim.new(0, 10)
+local APPEARANCE_DEFAULTS = {
+	WindowRadius = 12,
+	CardRadius = 10,
+	CardBorder = false,
+	SidebarWidth = 156,
+	Spacing = 6,
+	Shadow = true,
+	TabHighlight = "Fill",
+}
+
+local APPEARANCE_LIMITS = {
+	WindowRadius = { 0, 24 },
+	CardRadius = { 0, 18 },
+	SidebarWidth = { 120, 220 },
+	Spacing = { 2, 16 },
+}
+
+local TAB_HIGHLIGHTS = { Fill = true, Outline = true }
+
+local Appearance = table.clone(APPEARANCE_DEFAULTS)
+Nucleus.Appearance = Appearance
+
+local function applyAppearance(input)
+	for key, value in pairs(APPEARANCE_DEFAULTS) do
+		Appearance[key] = value
+	end
+	if input == nil then
+		return
+	end
+	if type(input) ~= "table" then
+		log("Appearance should be a table, like Appearance = { CardRadius = 8 }")
+		return
+	end
+	for key, value in pairs(input) do
+		local default = APPEARANCE_DEFAULTS[key]
+		if key == "Font" then
+			Nucleus:SetFont(value)
+		elseif default == nil then
+			local known = { "Font" }
+			for name in pairs(APPEARANCE_DEFAULTS) do
+				table.insert(known, name)
+			end
+			table.sort(known)
+			log(("Appearance has no option '%s'. Options: %s"):format(tostring(key), table.concat(known, ", ")))
+		elseif type(default) == "number" then
+			local number = tonumber(value)
+			if number then
+				local limits = APPEARANCE_LIMITS[key]
+				Appearance[key] = math.clamp(math.floor(number + 0.5), limits[1], limits[2])
+			else
+				log(("Appearance.%s should be a number"):format(key))
+			end
+		elseif type(default) == "boolean" then
+			Appearance[key] = value == true
+		elseif key == "TabHighlight" then
+			if TAB_HIGHLIGHTS[value] then
+				Appearance[key] = value
+			else
+				log('Appearance.TabHighlight should be "Fill" or "Outline"')
+			end
+		end
+	end
+end
+Nucleus._applyAppearance = applyAppearance
 
 local function styleCard(card)
-	addCorner(card, CARD_RADIUS)
-	local stroke = addStroke(card, Theme.Surface2)
-	stroke:SetAttribute(ATTR_STROKE_BASE, "Surface2")
+	addCorner(card, UDim.new(0, Appearance.CardRadius))
+	local baseKey = Appearance.CardBorder and "Stroke" or "Surface2"
+	local stroke = addStroke(card, Theme[baseKey])
+	stroke:SetAttribute(ATTR_STROKE_BASE, baseKey)
 	return stroke
 end
 
@@ -4037,19 +4124,83 @@ local function readGlobal(key)
 	return nil
 end
 
-local function getKeyStatus()
-	local rawType = readGlobal("NEOX_KEY_TYPE")
-	local expiry = tonumber(readGlobal("NEOX_KEY_EXPIRY"))
-	local lifetime = readGlobal("NEOX_KEY_IS_LIFETIME") == true or rawType == "lifetime"
-	local hasKey = rawType ~= nil or expiry ~= nil or lifetime
+local function rawKeyData()
+	local source = Nucleus._keySource
+	if type(source) == "function" then
+		local ok, data = pcall(source)
+		if ok and type(data) == "table" then
+			return data
+		end
+		if not Nucleus._keySourceWarned then
+			Nucleus._keySourceWarned = true
+			if ok then
+				log("the Membership Data function should return a table, like { Type = \"lifetime\" }")
+			else
+				log("the Membership Data function failed: " .. tostring(data))
+			end
+		end
+		return {}
+	end
 	return {
+		Type = readGlobal("NEOX_KEY_TYPE"),
+		Expiry = readGlobal("NEOX_KEY_EXPIRY"),
+		Lifetime = readGlobal("NEOX_KEY_IS_LIFETIME"),
+		Usage = readGlobal("NEOX_KEY_USAGE_COUNT"),
+		Discord = readGlobal("NEOX_KEY_DISCORD"),
+		HWID = readGlobal("NEOX_ACTIVE_HWID"),
+	}
+end
+
+local function readKeyData()
+	local data = rawKeyData()
+	local rawType = data.Type
+	if rawType ~= nil then
+		rawType = tostring(rawType)
+	end
+	local expiry = tonumber(data.Expiry)
+	local lifetime = data.Lifetime == true or rawType == "lifetime"
+	local hasKey = rawType ~= nil or expiry ~= nil or lifetime
+	if type(data.HasKey) == "boolean" then
+		hasKey = data.HasKey
+	end
+	local premium = lifetime or rawType == "1month" or rawType == "monthly"
+	if type(data.Premium) == "boolean" then
+		premium = data.Premium
+	end
+	return data, {
 		HasKey = hasKey,
-		Premium = lifetime or rawType == "1month" or rawType == "monthly",
+		Premium = hasKey and premium,
 		Type = rawType,
 		Expiry = expiry,
+		Lifetime = lifetime,
+	}
+end
+
+local function getKeyStatus()
+	local _, status = readKeyData()
+	return {
+		HasKey = status.HasKey,
+		Premium = status.Premium,
+		Type = status.Type,
+		Expiry = status.Expiry,
 	}
 end
 Nucleus._getKeyStatus = getKeyStatus
+
+function Nucleus:SetKeySource(source)
+	if source ~= nil and type(source) ~= "function" then
+		log("SetKeySource needs a function that returns your key data, or nil to use the built-in key system")
+		return false
+	end
+	Nucleus._keySource = source
+	Nucleus._keySourceWarned = false
+	for _, window in ipairs(Nucleus.Windows) do
+		if window.KeyPanel and window.KeyPanel.Refresh then
+			safeCall(window.KeyPanel.Refresh, window.KeyPanel)
+		end
+	end
+	return true
+end
 
 local function formatDuration(seconds)
 	seconds = math.max(0, math.floor(seconds))
@@ -4065,23 +4216,44 @@ end
 
 local function createKeyPanel(window, parent, layoutOrder, input)
 	local options = normalizeOptions(input, { Title = "Name" })
+	if type(options.Data) == "function" then
+		Nucleus._keySource = options.Data
+		Nucleus._keySourceWarned = false
+	elseif options.Data ~= nil then
+		log("Membership Data should be a function that returns your key data")
+	end
+	local texts = type(options.Texts) == "table" and options.Texts or {}
+	local function text(key, default)
+		local value = texts[key]
+		if value == nil then
+			return default
+		end
+		return tostring(value)
+	end
+	local labels = type(options.Labels) == "table" and options.Labels or {}
 
 	local function snapshot()
-		local rawType = readGlobal("NEOX_KEY_TYPE")
-		local expiry = tonumber(readGlobal("NEOX_KEY_EXPIRY"))
-		local lifetime = readGlobal("NEOX_KEY_IS_LIFETIME") == true or rawType == "lifetime"
-		local hasKey = rawType ~= nil or expiry ~= nil or lifetime
+		local data, status = readKeyData()
 		local names = options.TypeNames or KEY_TYPE_NAMES
-		return {
-			HasKey = hasKey,
-			TypeName = hasKey and ((rawType ~= nil and (names[rawType] or tostring(rawType))) or "Active") or "No key",
-			Lifetime = lifetime,
-			Premium = lifetime or rawType == "1month" or rawType == "monthly",
-			Expiry = expiry,
-			Usage = readGlobal("NEOX_KEY_USAGE_COUNT"),
-			Discord = readGlobal("NEOX_KEY_DISCORD"),
-			HWID = readGlobal("NEOX_ACTIVE_HWID"),
+		local typeName
+		if status.HasKey then
+			typeName = status.Type ~= nil and (names[status.Type] or status.Type) or text("Active", "Active")
+		else
+			typeName = text("NoKeyBadge", "No key")
+		end
+		local result = {
+			HasKey = status.HasKey,
+			TypeName = tostring(typeName),
+			Lifetime = status.Lifetime,
+			Premium = status.Premium,
+			Expiry = status.Expiry,
 		}
+		for key, value in pairs(data) do
+			if result[key] == nil then
+				result[key] = value
+			end
+		end
+		return result
 	end
 
 	local card = create("Frame", {
@@ -4094,8 +4266,7 @@ local function createKeyPanel(window, parent, layoutOrder, input)
 		Parent = parent,
 	})
 	card:SetAttribute(ATTR_NO_DRAG, true)
-	addCorner(card)
-	addStroke(card)
+	styleCard(card)
 	addPadding(card, 14, 14, 12, 12)
 	create("UIListLayout", {
 		SortOrder = Enum.SortOrder.LayoutOrder,
@@ -4127,6 +4298,7 @@ local function createKeyPanel(window, parent, layoutOrder, input)
 		BackgroundColor3 = Theme.Accent,
 		BackgroundTransparency = 0.85,
 		BorderSizePixel = 0,
+		Visible = options.Badge ~= false,
 		Parent = headerRow,
 	})
 	addCorner(badge, UDim.new(1, 0))
@@ -4159,7 +4331,7 @@ local function createKeyPanel(window, parent, layoutOrder, input)
 	createLabel({
 		Position = UDim2.fromOffset(0, 24),
 		Size = UDim2.new(0.55, 0, 0, 14),
-		Text = "Time left",
+		Text = text("TimeLeft", "Time left"),
 		TextSize = 12,
 		FontFace = Fonts.Regular,
 		TextColor3 = Theme.Muted,
@@ -4221,11 +4393,10 @@ local function createKeyPanel(window, parent, layoutOrder, input)
 				Parent = grid,
 			})
 			addCorner(cell, UDim.new(0, 6))
-			addStroke(cell)
 			createLabel({
 				Position = UDim2.fromOffset(10, 5),
 				Size = UDim2.new(1, -20, 0, 13),
-				Text = KEY_DETAIL_LABELS[name] or tostring(name),
+				Text = tostring(labels[name] or KEY_DETAIL_LABELS[name] or name),
 				TextSize = 11,
 				FontFace = Fonts.Regular,
 				TextColor3 = Theme.Muted,
@@ -4374,7 +4545,7 @@ local function createKeyPanel(window, parent, layoutOrder, input)
 		local link = options.PremiumLink or (window._premium and window._premium.Link)
 		local buttons
 		if link and not getKeyStatus().Premium then
-			content = content .. " Premium keys never run out."
+			content = content .. text("PremiumHint", " Premium keys never run out.")
 			buttons = {
 				{ Title = "Later" },
 				{ Title = "Get Premium", Primary = true, Callback = function()
@@ -4399,17 +4570,17 @@ local function createKeyPanel(window, parent, layoutOrder, input)
 
 		local left
 		if data.Lifetime then
-			setText(timeValue, "time", "Never expires")
-			setText(expiresLabel, "expires", "Lifetime key")
+			setText(timeValue, "time", text("NeverExpires", "Never expires"))
+			setText(expiresLabel, "expires", text("Lifetime", "Lifetime key"))
 		elseif data.Expiry then
 			left = math.floor(data.Expiry - os.time())
-			setText(timeValue, "time", left > 0 and formatDuration(left) or "Expired")
-			setText(expiresLabel, "expires", "Ends " .. os.date(options.DateFormat or "%b %d, %H:%M", data.Expiry))
+			setText(timeValue, "time", left > 0 and formatDuration(left) or text("Expired", "Expired"))
+			setText(expiresLabel, "expires", text("Ends", "Ends ") .. os.date(options.DateFormat or "%b %d, %H:%M", data.Expiry))
 		elseif data.HasKey then
-			setText(timeValue, "time", "Active")
+			setText(timeValue, "time", text("Active", "Active"))
 			setText(expiresLabel, "expires", "")
 		else
-			setText(timeValue, "time", "No key loaded")
+			setText(timeValue, "time", text("NoKey", "No key loaded"))
 			setText(expiresLabel, "expires", "")
 		end
 		timeValue.TextColor3 = (left and left <= 0) and Theme.Error or ((left and left <= 900) and Theme.Warning or Theme.Text)
@@ -4422,17 +4593,17 @@ local function createKeyPanel(window, parent, layoutOrder, input)
 
 		for name, label in pairs(detailValues) do
 			local value = data[name]
-			local text
+			local detailText
 			if name == "HWID" then
-				text = (type(value) == "string" and #value >= 4) and ("••••" .. string.sub(value, -4)) or "Unknown"
+				detailText = (type(value) == "string" and #value >= 4) and ("••••" .. string.sub(value, -4)) or text("Unknown", "Unknown")
 			elseif name == "Discord" then
-				text = (type(value) == "string" and value ~= "") and value or "Not linked"
+				detailText = (type(value) == "string" and value ~= "") and value or text("NotLinked", "Not linked")
 			elseif value ~= nil and value ~= "" then
-				text = tostring(value)
+				detailText = tostring(value)
 			else
-				text = "-"
+				detailText = "-"
 			end
-			setText(label, "detail" .. name, text)
+			setText(label, "detail" .. name, detailText)
 		end
 
 		promoLabel.Visible = data.HasKey and not data.Premium and options.ShowPromo ~= false
@@ -4443,11 +4614,12 @@ local function createKeyPanel(window, parent, layoutOrder, input)
 
 		if left and not data.Lifetime then
 			if left <= 0 then
-				remind("expired", "Key expired", "Your key has run out. Get a new key to keep using the script.", "Error")
+				remind("expired", text("ExpiredTitle", "Key expired"), text("ExpiredMessage", "Your key has run out. Get a new key to keep using the script."), "Error")
 			elseif left <= 900 then
-				remind("15m", "Key expiring soon", "Your key ends in about " .. math.max(1, math.floor(left / 60)) .. " minutes.", "Warning")
+				local minutes = tostring(math.max(1, math.floor(left / 60)))
+				remind("15m", text("SoonTitle", "Key expiring soon"), (text("SoonMessage", "Your key ends in about {minutes} minutes."):gsub("{minutes}", minutes)), "Warning")
 			elseif left <= 3600 then
-				remind("60m", "Key ends in 1 hour", "Your key has about an hour left.", "Warning")
+				remind("60m", text("HourTitle", "Key ends in 1 hour"), text("HourMessage", "Your key has about an hour left."), "Warning")
 			end
 		end
 	end
@@ -4620,7 +4792,6 @@ local function toVector2(value)
 	return nil
 end
 Nucleus._toVector2 = toVector2
-local SIDEBAR_WIDTH = 156
 
 function Nucleus.Window(selfOrOptions, maybeOptions)
 
@@ -4646,6 +4817,15 @@ function Nucleus.Window(selfOrOptions, maybeOptions)
 	end
 	if tonumber(options.TextScale) then
 		Nucleus.TextScale = math.clamp(tonumber(options.TextScale), 0.7, 1.3)
+	end
+	applyAppearance(options.Appearance)
+	do
+		local home = type(options.Home) == "table" and options.Home or {}
+		local keyOptions = type(options.Membership) == "table" and options.Membership or (type(home.Key) == "table" and home.Key) or {}
+		if type(keyOptions.Data) == "function" then
+			Nucleus._keySource = keyOptions.Data
+			Nucleus._keySourceWarned = false
+		end
 	end
 
 	local toggleKey = toKeyCode(options.Keybind) or Enum.KeyCode.RightControl
@@ -4678,6 +4858,7 @@ function Nucleus.Window(selfOrOptions, maybeOptions)
 		_keybinds = {},
 		_overlays = {},
 		_userScale = math.clamp(tonumber(options.Scale) or 1, 0.5, 1.5),
+		_sidebarWidth = Appearance.SidebarWidth,
 	}, Window)
 
 	local function dispatcher(kind)
@@ -4737,6 +4918,7 @@ function Nucleus.Window(selfOrOptions, maybeOptions)
 		ImageTransparency = 0.6,
 		ScaleType = Enum.ScaleType.Slice,
 		SliceCenter = Rect.new(49, 49, 450, 450),
+		Visible = Appearance.Shadow,
 		Parent = root,
 	})
 
@@ -4749,7 +4931,7 @@ function Nucleus.Window(selfOrOptions, maybeOptions)
 		Parent = root,
 	})
 	window.Body = body
-	addCorner(body, UDim.new(0, 12))
+	addCorner(body, UDim.new(0, Appearance.WindowRadius))
 	window.BodyStroke = addStroke(body, Theme.Stroke)
 	addTopHighlight(body)
 
@@ -4757,7 +4939,7 @@ function Nucleus.Window(selfOrOptions, maybeOptions)
 		Name = "Sidebar",
 		Active = true,
 		Position = UDim2.fromOffset(8, 8),
-		Size = UDim2.new(0, SIDEBAR_WIDTH - 8, 1, -16),
+		Size = UDim2.new(0, window._sidebarWidth - 8, 1, -16),
 		BackgroundColor3 = Theme.Surface,
 		BorderSizePixel = 0,
 		Parent = body,
@@ -4901,6 +5083,10 @@ function Nucleus.Window(selfOrOptions, maybeOptions)
 		ZIndex = 0,
 	})
 	addCorner(indicator, UDim.new(0, 8))
+	if Appearance.TabHighlight == "Outline" then
+		indicator.BackgroundTransparency = 0.86
+		addStroke(indicator, Theme.Accent, 0.7)
+	end
 	window.Indicator = indicator
 
 	local profile = create("Frame", {
@@ -4996,8 +5182,8 @@ function Nucleus.Window(selfOrOptions, maybeOptions)
 	local content = create("Frame", {
 		Name = "Content",
 		Active = true,
-		Position = UDim2.fromOffset(SIDEBAR_WIDTH + 2, 0),
-		Size = UDim2.new(1, -(SIDEBAR_WIDTH + 2), 1, 0),
+		Position = UDim2.fromOffset(window._sidebarWidth + 2, 0),
+		Size = UDim2.new(1, -(window._sidebarWidth + 2), 1, 0),
 		BackgroundTransparency = 1,
 		ClipsDescendants = true,
 		Parent = body,
@@ -5261,7 +5447,9 @@ function Nucleus.Window(selfOrOptions, maybeOptions)
 	table.insert(Nucleus.Windows, window)
 
 	window:_setupPremium(options)
-	window:_buildHome(type(options.Home) == "table" and options.Home or {})
+	if options.Home ~= false then
+		window:_buildHome(type(options.Home) == "table" and options.Home or {}, options.Membership)
+	end
 
 	if type(options.User) == "table" and options.User.Anonymous then
 		window:SetAnonymous(true)
@@ -5990,7 +6178,7 @@ function Window:_setCompact(compact, animated)
 	if self._sidebarIcon then
 		setIcon(self._sidebarIcon, compact and "panel-left-open" or "panel-left-close")
 	end
-	local width = compact and COMPACT_SIDEBAR or SIDEBAR_WIDTH
+	local width = compact and COMPACT_SIDEBAR or self._sidebarWidth
 	local sidebarSize = UDim2.new(0, width - 8, 1, -16)
 	local contentPosition = UDim2.fromOffset(width + 2, 0)
 	local contentSize = UDim2.new(1, -(width + 2), 1, 0)
@@ -6545,8 +6733,7 @@ local function createStatTile(parent, order, icon, title)
 		LayoutOrder = order,
 		Parent = parent,
 	})
-	addCorner(tile)
-	addStroke(tile)
+	styleCard(tile)
 	tile:SetAttribute(ATTR_NO_DRAG, true)
 	if icon then
 		createIcon(tile, icon, Theme.Muted, UDim2.new(0, 14, 0, 21))
@@ -6618,7 +6805,7 @@ end
 
 local DEFAULT_STATS = { "FPS", "Ping", "Executor", "Game", "Region", "Time" }
 
-function Window:_buildHome(homeOptions)
+function Window:_buildHome(homeOptions, membership)
 	local homeTab = self:Tab({
 		Name = homeOptions.Name or "Home",
 		Desc = homeOptions.Desc,
@@ -6651,51 +6838,53 @@ function Window:_buildHome(homeOptions)
 		greeting = "Good " .. partOfDay .. "."
 	end
 
-	local welcomeCard = create("Frame", {
-		Size = UDim2.new(1, 0, 0, 58),
-		BackgroundColor3 = Theme.Surface2,
-		BorderSizePixel = 0,
-		LayoutOrder = 2,
-		Parent = list,
-	})
-	welcomeCard:SetAttribute(ATTR_NO_DRAG, true)
-	addCorner(welcomeCard)
-	addStroke(welcomeCard)
+	local welcomeCard
+	if homeOptions.Welcome ~= false then
+		welcomeCard = create("Frame", {
+			Size = UDim2.new(1, 0, 0, 58),
+			BackgroundColor3 = Theme.Surface2,
+			BorderSizePixel = 0,
+			LayoutOrder = 2,
+			Parent = list,
+		})
+		welcomeCard:SetAttribute(ATTR_NO_DRAG, true)
+		styleCard(welcomeCard)
 
-	local avatar = create("ImageLabel", {
-		Position = UDim2.fromOffset(12, 11),
-		Size = UDim2.fromOffset(36, 36),
-		BackgroundColor3 = Theme.Surface,
-		BorderSizePixel = 0,
-		Parent = welcomeCard,
-	})
-	addCorner(avatar, UDim.new(0, 8))
-	addStroke(avatar)
-	task.spawn(function()
-		local ok, image = pcall(function()
-			return Players:GetUserThumbnailAsync(LocalPlayer.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size100x100)
+		local avatar = create("ImageLabel", {
+			Position = UDim2.fromOffset(12, 11),
+			Size = UDim2.fromOffset(36, 36),
+			BackgroundColor3 = Theme.Surface,
+			BorderSizePixel = 0,
+			Parent = welcomeCard,
+		})
+		addCorner(avatar, UDim.new(0, 8))
+		addStroke(avatar)
+		task.spawn(function()
+			local ok, image = pcall(function()
+				return Players:GetUserThumbnailAsync(LocalPlayer.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size100x100)
+			end)
+			if ok and image and avatar.Parent then
+				avatar.Image = image
+			end
 		end)
-		if ok and image and avatar.Parent then
-			avatar.Image = image
-		end
-	end)
 
-	createLabel({
-		Position = UDim2.fromOffset(58, 11),
-		Size = UDim2.new(1, -72, 0, 18),
-		Text = (homeOptions.Welcome or "Hello, ") .. LocalPlayer.DisplayName,
-		TextSize = 15,
-		Parent = welcomeCard,
-	})
-	createLabel({
-		Position = UDim2.fromOffset(58, 30),
-		Size = UDim2.new(1, -72, 0, 16),
-		Text = greeting,
-		TextSize = 13,
-		FontFace = Fonts.Regular,
-		TextColor3 = Theme.Muted,
-		Parent = welcomeCard,
-	})
+		createLabel({
+			Position = UDim2.fromOffset(58, 11),
+			Size = UDim2.new(1, -72, 0, 18),
+			Text = tostring(homeOptions.Welcome or "Hello, ") .. LocalPlayer.DisplayName,
+			TextSize = 15,
+			Parent = welcomeCard,
+		})
+		createLabel({
+			Position = UDim2.fromOffset(58, 30),
+			Size = UDim2.new(1, -72, 0, 16),
+			Text = greeting,
+			TextSize = 13,
+			FontFace = Fonts.Regular,
+			TextColor3 = Theme.Muted,
+			Parent = welcomeCard,
+		})
+	end
 
 	local detailsPage = create("Frame", {
 		Size = UDim2.new(1, 0, 0, 0),
@@ -6742,10 +6931,16 @@ function Window:_buildHome(homeOptions)
 		task.defer(fitLine)
 	end
 
-	local keyOptions = type(homeOptions.Key) == "table" and homeOptions.Key or {}
-	self.KeyPanel = createKeyPanel(self, detailsPage, 0, keyOptions)
+	local keySetting = membership
+	if keySetting == nil then
+		keySetting = homeOptions.Key
+	end
+	local keyOptions = type(keySetting) == "table" and keySetting or {}
+	if keySetting ~= false then
+		self.KeyPanel = createKeyPanel(self, detailsPage, 0, keyOptions)
+	end
 	task.spawn(function()
-		while not self._destroyed and detailsPage.Parent do
+		while keySetting ~= false and keyOptions.Protected ~= false and not self._destroyed and detailsPage.Parent do
 			task.wait(2)
 			if self._destroyed or not detailsPage.Parent then
 				break
@@ -6877,8 +7072,7 @@ function Window:_buildHome(homeOptions)
 				Parent = parent,
 			})
 			card:SetAttribute(ATTR_NO_DRAG, true)
-			addCorner(card)
-			addStroke(card)
+			styleCard(card)
 			addPadding(card, 14, 14, 12, 14)
 			return card
 		end
@@ -7003,9 +7197,11 @@ function Window:_buildHome(homeOptions)
 		local function showPage(pageIndex, instant)
 			local changed = self._homeIndex ~= pageIndex
 			self._homeIndex = pageIndex
-			welcomeCard.Visible = pageIndex == 1
-			if pageIndex == 1 and changed and not instant then
-				fadeInTree(welcomeCard)
+			if welcomeCard then
+				welcomeCard.Visible = pageIndex == 1
+				if pageIndex == 1 and changed and not instant then
+					fadeInTree(welcomeCard)
+				end
 			end
 
 			for index, page in ipairs(pages) do
@@ -7239,7 +7435,7 @@ function Window:Tab(input, icon)
 	end
 	create("UIListLayout", {
 		SortOrder = Enum.SortOrder.LayoutOrder,
-		Padding = UDim.new(0, 6),
+		Padding = UDim.new(0, Appearance.Spacing),
 		Parent = list,
 	})
 	tab.List = list
@@ -10421,7 +10617,7 @@ do
 		end
 		settings = type(settings) == "table" and settings or {}
 		local home = type(windowOptions.Home) == "table" and windowOptions.Home or {}
-		local homeKey = type(home.Key) == "table" and home.Key or {}
+		local homeKey = (type(windowOptions.Membership) == "table" and windowOptions.Membership) or (type(home.Key) == "table" and home.Key) or {}
 		local link = settings.Link or homeKey.PremiumLink
 		if type(link) ~= "string" or link == "" then
 			return
