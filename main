@@ -9,7 +9,7 @@ local LocalPlayer = Players.LocalPlayer
 
 local NeoxHub = {}
 NeoxHub.Name = "Neox Hub"
-NeoxHub.Version = "3.2.10"
+NeoxHub.Version = "3.2.11"
 NeoxHub.Flags = {}
 NeoxHub.Windows = {}
 
@@ -4584,6 +4584,7 @@ Window.__index = Window
 
 local DEFAULT_WINDOW_SIZE = UDim2.fromOffset(746, 496)
 local COMPACT_WIDTH = 560
+local TAB_INDENT = 14
 local COMPACT_SIDEBAR = 64
 local COMPACT_MIN = Vector2.new(400, 260)
 local DEFAULT_MIN_SIZE = Vector2.new(480, 360)
@@ -4890,6 +4891,7 @@ function NeoxHub.Window(selfOrOptions, maybeOptions)
 	addPadding(tabList, 10, 10, 4, 4)
 	create("UIListLayout", {
 		SortOrder = Enum.SortOrder.LayoutOrder,
+		HorizontalAlignment = Enum.HorizontalAlignment.Right,
 		Padding = UDim.new(0, 4),
 		Parent = tabList,
 	})
@@ -5967,6 +5969,11 @@ end
 
 function Window:_layoutTabButton(tab)
 	local compact = self._compact == true
+	local nested = tab._section ~= nil and not compact
+	tab._button.Size = UDim2.new(1, nested and -TAB_INDENT or 0, 0, 34)
+	if tab._guide then
+		tab._guide.Visible = nested
+	end
 	tab._label.Visible = not compact
 	if tab._icon then
 		tab._icon.AnchorPoint = compact and Vector2.new(0.5, 0.5) or Vector2.new(0, 0.5)
@@ -7145,6 +7152,17 @@ function Window:Tab(input, icon)
 	local buttonStroke = addStroke(button, Theme.Stroke, 1)
 	tab._button = button
 	tab._stroke = buttonStroke
+	if section then
+		tab._guide = create("Frame", {
+			Name = "Guide",
+			Position = UDim2.new(0, -8, 0, -4),
+			Size = UDim2.new(0, 1, 1, 4),
+			BackgroundColor3 = Theme.Stroke,
+			BorderSizePixel = 0,
+			ZIndex = 0,
+			Parent = button,
+		})
+	end
 
 	local hasIcon = options.Icon ~= nil
 	if hasIcon then
@@ -9189,16 +9207,22 @@ function Window:TabSection(input)
 
 	local header = create("TextButton", {
 		Name = "TabSection",
-		Size = UDim2.new(1, 0, 0, 26),
+		Size = UDim2.new(1, 0, 0, 34),
 		BackgroundTransparency = 1,
 		Text = "",
 		AutoButtonColor = false,
 		LayoutOrder = section._base,
 		Parent = self.TabList,
 	})
+	local inner = create("Frame", {
+		Position = UDim2.fromOffset(0, 8),
+		Size = UDim2.new(1, 0, 0, 26),
+		BackgroundTransparency = 1,
+		Parent = header,
+	})
 	local textLeft = 6
 	if options.Icon then
-		createIcon(header, options.Icon, Theme.Muted, UDim2.new(0, 6, 0.5, 0))
+		createIcon(inner, options.Icon, Theme.Muted, UDim2.new(0, 6, 0.5, 0))
 		textLeft = 28
 	end
 	local titleLabel = createLabel({
@@ -9209,9 +9233,9 @@ function Window:TabSection(input)
 		TextSize = 12,
 		FontFace = Fonts.Bold,
 		TextColor3 = Theme.Muted,
-		Parent = header,
+		Parent = inner,
 	})
-	local chevron = createChevron(header, 1, -4)
+	local chevron = createChevron(inner, 1, -4)
 	section._header = header
 
 	local function refreshIndicator()
