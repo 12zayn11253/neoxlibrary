@@ -10,7 +10,7 @@ local LocalPlayer = Players.LocalPlayer
 local Nucleus = {}
 local Const = {}
 Nucleus.Name = "Nucleus UI"
-Nucleus.Version = "4.4.2"
+Nucleus.Version = "4.5.0"
 Nucleus.Flags = {}
 Nucleus.Windows = {}
 
@@ -29,7 +29,7 @@ end
 
 local KNOWN_OPTIONS = {}
 local KNOWN_OPTIONS_LOWER = {}
-for name in string.gmatch("AU AbsoluteContentSize AbsoluteSize Accent AccentDark Active ActiveOnly AliveCheck Always Anonymous Asc Australia AutoLoad AutoSave BR Background BackgroundColor3 BackgroundTransparency Backspace BasePart Began Body Bold BottomRight Brazil Button ButtonRow Buttons CA CFrame Callback Canada Cancel CancelText CanvasGroup Caption Changed Changes ClearOnFocus Close CloseOnBackdrop Code Collapsed Color Color3 ColorPicker Configs ConfigurationSaving Confirm ConfirmText ConfirmTimeout Content ContentProvider Copied Copy Copyable CoreGui Create CurrentKeybind CurrentOption CurrentValue Custom CustomFont DE Danger Date DateFormat Decal Default DefaultState Delay Delete Depends DependsOn Desc Description Details Discord DiscordButton DiscordLink Divider Dropdown Duration Element EmptyText Enabled Ended Enter Entries Enum EnumItem Error ErrorNotifications Esc Example ExcludeSelf Executor Expired Expiry FPS FR FileName Flag Folder FolderName Format Frame France Free GET Game Germany GetActive GetKey Glow Greeting Group GuiButton GuiName GuiObject GuiService HWID HasKey Header HeaderItems Height Hold Home HttpService Humanoid HumanoidRootPart IN Icon Image ImageButton ImageColor3 ImageLabel ImageRectPosition ImageRectSize ImageTransparency Increment India Info Input Instance JP Japan KeepOnScreen Key KeyInfo KeyPanel Keybind Keybinds LAlt LCtrl LShift Label Language Lifetime Lighting Load Loading LoadingDuration LoadingSteps LoadingSubtitle LoadingText LoadingTitle Localization Lock Locked LockedReason Loop LoopDelay Lowest Main MarketplaceService Max MaxDistance MaxHeight MaxLength MaxNotifications MaxSize Medium Membership Merge Message Method Min MinSize MobileButton MobileIcon Mode Model MinimizeButton Mono Monospace Monthly Multi MultiLine Multiline MultipleOptions Muted NL Name NucleusHidden Nucleus NucleusUIBlur NucleusUIFonts NucleusLoc NucleusLocPlaceholderText NucleusLocText NucleusNoTheme Netherlands NoDrag None Not Notification NotificationPosition Notifications Numeric OK OnCancel OnChanged OnClose OnRelease Open OpenButton Opened Options Page Pages Paragraph Parent Ping Placeholder PlaceholderColor3 PlaceholderText Player PlayerGui Players Popup Position Prefix Premium PremiumBanner PremiumButton Perks Price PopupDelay Cooldown HeaderButton ExpiryButtons OnClick OnShown ShowWithoutKey ButtonText Link PremiumLink PremiumText Primary Profile Progress Qd Qn RAlt RCtrl RShift Radius Range Region RegionCity Regular Reminders Render Reset ResetOnUnload Resizable RunService SG Save Scale ScaleType ScreenGui ScrollBarImageColor3 ScrollingFrame Search SearchAfter SearchPlaceholder SearchResults Secondary Section SectionName Sections SemiBold Session ShowFPS ShowPing ShowPromo ShowTime Sidebar SidebarCollapsed Singapore Size Slider Sound Space Standard Stat Stats Step Stepper Stroke StrokeHover Studio Style Subtitle Success Suffix Surface Surface2 Surface3 Tab TabIcon TabSection Tabs Tag TeamCheck TeleportService Tertiary Text TextArea TextBounds TextBox TextButton TextColor3 TextLabel TextScale TextSize TextTransparency Texture Theme ThemeName Time TimeFormat Title Toggle ToggleUIKeybind Tooltip Top TotalTime TouchOnly TransitionIn TransitionOut Translations Transparency TweenService Type TypeName TypeNames UDim2 UICorner UIGradient UIGridLayout UIListLayout UIPadding UIScale UISizeConstraint UIStroke Unavailable Unknown Update UpdateRate Uptime Usage UseDisplayName User UserInputService UserInputType Value Values Variant Vector2 Vector3 Version VirtualUser Visible Volume Warning Weekly Weights Welcome Window Appearance WindowRadius CardRadius CardBorder SidebarWidth Spacing Shadow TabHighlight Fill Outline Data Labels Texts Protected Badge TimeLeft NoKey NeverExpires Ends Ocean Crimson Amber Violet Slate Obsidian Mint Light Badge Settings SettingsTab AccentPicker Interface Server Unload History FlagPrefix Socials Donations Links Url URL Robux AssetId ShirtId GamePassId PassId Address Goal Target Current Thanks ThanksTitle OnDonate ShowOnHome Tiers Amount Currency Network Wallet", "%S+") do
+for name in string.gmatch("AU AbsoluteContentSize AbsoluteSize Accent AccentDark Active ActiveOnly AliveCheck Always Anonymous Asc Australia AutoLoad AutoSave BR Background BackgroundColor3 BackgroundTransparency Backspace BasePart Began Body Bold BottomRight Brazil Button ButtonRow Buttons CA CFrame Callback Canada Cancel CancelText CanvasGroup Caption Changed Changes ClearOnFocus Close CloseOnBackdrop Code Collapsed Color Color3 ColorPicker Configs ConfigurationSaving Confirm ConfirmText ConfirmTimeout Content ContentProvider Copied Copy Copyable CoreGui Create CurrentKeybind CurrentOption CurrentValue Custom CustomFont DE Danger Date DateFormat Decal Default DefaultState Delay Delete Depends DependsOn Desc Description Details Discord DiscordButton DiscordLink Divider Dropdown Duration Element EmptyText Enabled Ended Enter Entries Enum EnumItem Error ErrorNotifications Esc Example ExcludeSelf Executor Expired Expiry FPS FR FileName Flag Folder FolderName Format Frame France Free GET Game Germany GetActive GetKey Glow Greeting Group GuiButton GuiName GuiObject GuiService HWID HasKey Header HeaderItems Height Hold Home HttpService Humanoid HumanoidRootPart IN Icon Image ImageButton ImageColor3 ImageLabel ImageRectPosition ImageRectSize ImageTransparency Increment India Info Input Instance JP Japan KeepOnScreen Key KeyInfo KeyPanel Keybind Keybinds LAlt LCtrl LShift Label Language Lifetime Lighting Load Loading LoadingDuration LoadingSteps LoadingSubtitle LoadingText LoadingTitle Localization Lock Locked LockedReason Loop LoopDelay Lowest Main MarketplaceService Max MaxDistance MaxHeight MaxLength MaxNotifications MaxSize Medium Membership Merge Message Method Min MinSize MobileButton MobileIcon Mode Model MinimizeButton Mono Monospace Monthly Multi MultiLine Multiline MultipleOptions Muted NL Name NucleusHidden Nucleus NucleusUIBlur NucleusUIFonts NucleusLoc NucleusLocPlaceholderText NucleusLocText NucleusNoTheme Netherlands NoDrag None Not Notification NotificationPosition Notifications Numeric OK OnCancel OnChanged OnClose OnRelease Open OpenButton Opened Options Page Pages Paragraph Parent Ping Placeholder PlaceholderColor3 PlaceholderText Player PlayerGui Players Popup Position Prefix Premium PremiumBanner PremiumButton Perks Price PopupDelay Cooldown HeaderButton ExpiryButtons OnClick OnShown ShowWithoutKey ButtonText Link PremiumLink PremiumText Primary Profile Progress Qd Qn RAlt RCtrl RShift Radius Range Region RegionCity Regular Reminders Render Reset ResetOnUnload Resizable RunService SG Save Scale ScaleType ScreenGui ScrollBarImageColor3 ScrollingFrame Search SearchAfter SearchPlaceholder SearchResults Secondary Section SectionName Sections SemiBold Session ShowFPS ShowPing ShowPromo ShowTime Sidebar SidebarCollapsed Singapore Size Slider Sound Space Standard Stat Stats Step Stepper Stroke StrokeHover Studio Style Subtitle Success Suffix Surface Surface2 Surface3 Tab TabIcon TabSection Tabs Tag TeamCheck TeleportService Tertiary Text TextArea TextBounds TextBox TextButton TextColor3 TextLabel TextScale TextSize TextTransparency Texture Theme ThemeName Time TimeFormat Title Toggle ToggleUIKeybind Tooltip Top TotalTime TouchOnly TransitionIn TransitionOut Translations Transparency TweenService Type TypeName TypeNames UDim2 UICorner UIGradient UIGridLayout UIListLayout UIPadding UIScale UISizeConstraint UIStroke Unavailable Unknown Update UpdateRate Uptime Usage UseDisplayName User UserInputService UserInputType Value Values Variant Vector2 Vector3 Version VirtualUser Visible Volume Warning Weekly Weights Welcome Window Appearance WindowRadius CardRadius CardBorder SidebarWidth Spacing Shadow TabHighlight Fill Outline Data Labels Texts Protected Badge TimeLeft NoKey NeverExpires Ends Ocean Crimson Amber Violet Slate Obsidian Mint Light Badge Settings SettingsTab AccentPicker Interface Server Unload History FlagPrefix Socials Donations Links Url URL Robux AssetId ShirtId GamePassId PassId Address Goal Target Current Thanks ThanksTitle OnDonate ShowOnHome Tiers Amount Currency Network Wallet Depth InnerShadow ScrollFades", "%S+") do
 	KNOWN_OPTIONS[name] = true
 	KNOWN_OPTIONS_LOWER[string.lower(name)] = name
 end
@@ -817,6 +817,7 @@ Const.APPEARANCE_DEFAULTS = {
 	Spacing = 6,
 	Shadow = true,
 	TabHighlight = "Fill",
+	Depth = true,
 }
 
 Const.APPEARANCE_LIMITS = {
@@ -879,6 +880,26 @@ local function styleCard(card)
 	local baseKey = Appearance.CardBorder and "Stroke" or "Surface2"
 	local stroke = addStroke(card, Theme[baseKey])
 	stroke:SetAttribute(Const.ATTR_STROKE_BASE, baseKey)
+	if Appearance.Depth then
+		create("UIGradient", {
+			Name = "Depth",
+			Rotation = 90,
+			Color = ColorSequence.new(Color3.new(1, 1, 1), Color3.fromRGB(222, 222, 226)),
+			Parent = card,
+		})
+		local radius = Appearance.CardRadius
+		local shine = create("Frame", {
+			Name = "Shine",
+			Position = UDim2.fromOffset(radius, 0),
+			Size = UDim2.new(1, -radius * 2, 0, 1),
+			BackgroundColor3 = Color3.new(1, 1, 1),
+			BackgroundTransparency = 0.94,
+			BorderSizePixel = 0,
+			ZIndex = 0,
+			Parent = card,
+		})
+		shine:SetAttribute(Const.ATTR_NO_THEME, true)
+	end
 	return stroke
 end
 
@@ -906,6 +927,90 @@ local function createLabel(properties)
 		defaults[property] = value
 	end
 	return create("TextLabel", defaults)
+end
+
+local function addInnerShadow(parent, strength, reach)
+	local shade = create("Frame", {
+		Name = "InnerShadow",
+		Size = UDim2.fromScale(1, 1),
+		BackgroundColor3 = Color3.new(0, 0, 0),
+		BorderSizePixel = 0,
+		ZIndex = 0,
+		Parent = parent,
+	})
+	shade:SetAttribute(Const.ATTR_NO_THEME, true)
+	local corner = parent:FindFirstChildOfClass("UICorner")
+	if corner then
+		addCorner(shade, corner.CornerRadius)
+	end
+	create("UIGradient", {
+		Rotation = 90,
+		Transparency = NumberSequence.new({
+			NumberSequenceKeypoint.new(0, strength or 0.55),
+			NumberSequenceKeypoint.new(reach or 0.5, 1),
+			NumberSequenceKeypoint.new(1, 1),
+		}),
+		Parent = shade,
+	})
+	return shade
+end
+
+local function addScrollFades(scroller, colorKey, size)
+	size = size or 18
+	local holder = create("Frame", {
+		Name = "ScrollFades",
+		Position = scroller.Position,
+		Size = scroller.Size,
+		BackgroundTransparency = 1,
+		ZIndex = (scroller.ZIndex or 1) + 5,
+		Parent = scroller.Parent,
+	})
+	local function makeFade(top)
+		local fade = create("Frame", {
+			AnchorPoint = Vector2.new(0, top and 0 or 1),
+			Position = top and UDim2.new() or UDim2.fromScale(0, 1),
+			Size = UDim2.new(1, 0, 0, size),
+			BackgroundColor3 = Theme[colorKey],
+			BorderSizePixel = 0,
+			Visible = false,
+			ZIndex = holder.ZIndex,
+			Parent = holder,
+		})
+		create("UIGradient", {
+			Rotation = top and 90 or 270,
+			Transparency = NumberSequence.new({
+				NumberSequenceKeypoint.new(0, 0),
+				NumberSequenceKeypoint.new(1, 1),
+			}),
+			Parent = fade,
+		})
+		return fade
+	end
+	local topFade, bottomFade = makeFade(true), makeFade(false)
+	local function update()
+		local canvas, window, position = scroller.AbsoluteCanvasSize, scroller.AbsoluteWindowSize, scroller.CanvasPosition
+		if not (canvas and window and position) then
+			return
+		end
+		local y = position.Y
+		local visible = window.Y
+		local total = canvas.Y
+		topFade.Visible = y > 2
+		bottomFade.Visible = total - visible - y > 2
+	end
+	local function sync()
+		holder.Position = scroller.Position
+		holder.Size = scroller.Size
+		holder.Visible = scroller.Visible
+	end
+	for _, property in ipairs({ "CanvasPosition", "AbsoluteCanvasSize", "AbsoluteWindowSize" }) do
+		scroller:GetPropertyChangedSignal(property):Connect(update)
+	end
+	for _, property in ipairs({ "Position", "Size", "Visible" }) do
+		scroller:GetPropertyChangedSignal(property):Connect(sync)
+	end
+	task.defer(update)
+	return holder
 end
 
 local function addTopHighlight(parent)
@@ -2027,6 +2132,7 @@ function Tab:Toggle(input)
 	})
 	addCorner(track, UDim.new(1, 0))
 	addStroke(track, Theme.Stroke)
+	addInnerShadow(track, 0.62, 0.6)
 
 	local knob = create("Frame", {
 		AnchorPoint = Vector2.new(0, 0.5),
@@ -2311,6 +2417,7 @@ function Tab:Slider(input)
 		Parent = card,
 	})
 	addCorner(track, UDim.new(1, 0))
+	addInnerShadow(track, 0.6, 1)
 
 	local fill = create("Frame", {
 		Size = UDim2.new(0, 0, 1, 0),
@@ -3062,6 +3169,7 @@ function Tab:Input(input)
 	})
 	addCorner(box, UDim.new(0, 6))
 	local boxStroke = addStroke(box)
+	addInnerShadow(box, 0.6, 0.45)
 
 	if hasIcon then
 		createIcon(box, options.Icon, Theme.Muted, UDim2.new(0, 8, 0.5, 0))
@@ -5145,6 +5253,7 @@ function Nucleus.Window(selfOrOptions, maybeOptions)
 		ZIndex = 2,
 		Parent = sidebar,
 	})
+	addScrollFades(tabList, "Surface", 14)
 	window.TabList = tabList
 
 	if searchEnabled then
@@ -7656,6 +7765,7 @@ function Window:Tab(input, icon)
 		CanvasSize = UDim2.new(),
 		Parent = page,
 	})
+	addScrollFades(list, "Background", 16)
 	addPadding(list, 24, 24, 2, 24)
 	if IS_TOUCH then
 		list:SetAttribute(Const.ATTR_NO_DRAG, true)
