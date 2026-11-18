@@ -10,7 +10,7 @@ local LocalPlayer = Players.LocalPlayer
 local Nucleus = {}
 local Const = {}
 Nucleus.Name = "Nucleus UI"
-Nucleus.Version = "4.9.2"
+Nucleus.Version = "4.9.3"
 Nucleus.Flags = {}
 Nucleus.Windows = {}
 
@@ -29,7 +29,7 @@ end
 
 local KNOWN_OPTIONS = {}
 local KNOWN_OPTIONS_LOWER = {}
-for name in string.gmatch("AU AbsoluteContentSize AbsoluteSize Accent AccentDark Active ActiveOnly AliveCheck Always Anonymous Asc Australia AutoLoad AutoSave BR Background BackgroundColor3 BackgroundTransparency Backspace BasePart Began Body Bold BottomRight Brazil Button ButtonRow Buttons CA CFrame Callback Canada Cancel CancelText CanvasGroup Caption Changed Changes ClearOnFocus Close CloseOnBackdrop Code Collapsed Color Color3 ColorPicker Configs ConfigurationSaving Confirm ConfirmText ConfirmTimeout Content ContentProvider Copied Copy Copyable CoreGui Create CurrentKeybind CurrentOption CurrentValue Custom CustomFont DE Danger Date DateFormat Decal Default DefaultState Delay Delete Depends DependsOn Desc Description Details Discord DiscordButton DiscordLink Divider Dropdown Duration Element EmptyText Enabled Ended Enter Entries Enum EnumItem Error ErrorNotifications Esc Example ExcludeSelf Executor Expired Expiry FPS FR FileName Flag Folder FolderName Format Frame France Free GET Game Germany GetActive GetKey Glow Greeting Group GuiButton GuiName GuiObject GuiService HWID HasKey Header HeaderItems Height Hold Home HttpService Humanoid HumanoidRootPart IN Icon Image ImageButton ImageColor3 ImageLabel ImageRectPosition ImageRectSize ImageTransparency Increment India Info Input Instance JP Japan KeepOnScreen Key KeyInfo KeyPanel Keybind Keybinds LAlt LCtrl LShift Label Language Lifetime Lighting Load Loading LoadingDuration LoadingSteps LoadingSubtitle LoadingText LoadingTitle Localization Lock Locked LockedReason Loop LoopDelay Lowest Main MarketplaceService Max MaxDistance MaxHeight MaxLength MaxNotifications MaxSize Medium Membership Merge Message Method Min MinSize MobileButton MobileIcon Mode Model MinimizeButton Mono Monospace Monthly Multi MultiLine Multiline MultipleOptions Muted NL Name NucleusHidden Nucleus NucleusUIBlur NucleusUIFonts NucleusLoc NucleusLocPlaceholderText NucleusLocText NucleusNoTheme Netherlands NoDrag None Not Notification NotificationPosition Notifications Numeric OK OnCancel OnChanged OnClose OnRelease Open OpenButton Opened Options Page Pages Paragraph Parent Ping Placeholder PlaceholderColor3 PlaceholderText Player PlayerGui Players Popup Position Prefix Premium PremiumBanner PremiumButton Perks Price PopupDelay Cooldown HeaderButton ExpiryButtons OnClick OnShown ShowWithoutKey ButtonText Link PremiumLink PremiumText Primary Profile Progress Qd Qn RAlt RCtrl RShift Radius Range Region RegionCity Regular Reminders Render Reset ResetOnUnload Resizable RunService SG Save Scale ScaleType ScreenGui ScrollBarImageColor3 ScrollingFrame Search SearchAfter SearchPlaceholder SearchResults Secondary Section SectionName Sections SemiBold Session ShowFPS ShowPing ShowPromo ShowTime Sidebar SidebarCollapsed Singapore Size Slider Sound Space Standard Stat Stats Step Stepper Stroke StrokeHover Studio Style Subtitle Success Suffix Surface Surface2 Surface3 Tab TabIcon TabSection Tabs Tag TeamCheck TeleportService Tertiary Text TextArea TextBounds TextBox TextButton TextColor3 TextLabel TextScale TextSize TextTransparency Texture Theme ThemeName Time TimeFormat Title Toggle ToggleUIKeybind Tooltip Top TotalTime TouchOnly TransitionIn TransitionOut Translations Transparency TweenService Type TypeName TypeNames UDim2 UICorner UIGradient UIGridLayout UIListLayout UIPadding UIScale UISizeConstraint UIStroke Unavailable Unknown Update UpdateRate Uptime Usage UseDisplayName User UserInputService UserInputType Value Values Variant Vector2 Vector3 Version VirtualUser Visible Volume Warning Weekly Weights Welcome Window Appearance WindowRadius CardRadius CardBorder SidebarWidth Spacing Shadow TabHighlight Fill Outline Data Labels Texts Protected Badge TimeLeft NoKey NeverExpires Ends Ocean Crimson Amber Violet Slate Obsidian Mint Light Badge Settings SettingsTab AccentPicker Interface Server Unload History FlagPrefix Socials Donations Links Url URL Robux AssetId ShirtId GamePassId PassId Address Goal Target Current Thanks ThanksTitle OnDonate ShowOnHome Tiers Amount Currency Network Wallet Depth InnerShadow ScrollFades RememberTab IncludeSelf DisplayNames MaxLines Timestamps AutoScroll EmptyText Status Hidden Build PerGame IgnoreGameProcessed OnResult Elements Element Url Current Notify Author ToggleKey HideSearchBar SideBarWidth Folder Transparent Values AllowNone InputIcon Opened ImageSize Thumbnail ThumbnailSize ScrollBarEnabled Checkbox", "%S+") do
+for name in string.gmatch("AU AbsoluteContentSize AbsoluteSize Accent AccentDark Active ActiveOnly AliveCheck Always Anonymous Asc Australia AutoLoad AutoSave BR Background BackgroundColor3 BackgroundTransparency Backspace BasePart Began Body Bold BottomRight Brazil Button ButtonRow Buttons CA CFrame Callback Canada Cancel CancelText CanvasGroup Caption Changed Changes ClearOnFocus Close CloseOnBackdrop Code Collapsed Color Color3 ColorPicker Configs ConfigurationSaving Confirm ConfirmText ConfirmTimeout Content ContentProvider Copied Copy Copyable CoreGui Create CurrentKeybind CurrentOption CurrentValue Custom CustomFont DE Danger Date DateFormat Decal Default DefaultState Delay Delete Depends DependsOn Desc Description Details Discord DiscordButton DiscordLink Divider Dropdown Duration Element EmptyText Enabled Ended Enter Entries Enum EnumItem Error ErrorNotifications Esc Example ExcludeSelf Executor Expired Expiry FPS FR FileName Flag Folder FolderName Format Frame France Free GET Game Germany GetActive GetKey Glow Greeting Group GuiButton GuiName GuiObject GuiService HWID HasKey Header HeaderItems Height Hold Home HttpService Humanoid HumanoidRootPart IN Icon Image ImageButton ImageColor3 ImageLabel ImageRectPosition ImageRectSize ImageTransparency Increment India Info Input Instance JP Japan KeepOnScreen Key KeyInfo KeyPanel Keybind Keybinds LAlt LCtrl LShift Label Language Lifetime Lighting Load Loading LoadingDuration LoadingSteps LoadingSubtitle LoadingText LoadingTitle Localization Lock Locked LockedReason Loop LoopDelay Lowest Main MarketplaceService Max MaxDistance MaxHeight MaxLength MaxNotifications MaxSize Medium Membership Merge Message Method Min MinSize MobileButton MobileIcon Mode Model MinimizeButton Mono Monospace Monthly Multi MultiLine Multiline MultipleOptions Muted NL Name NucleusHidden Nucleus NucleusUIBlur NucleusUIFonts NucleusLoc NucleusLocPlaceholderText NucleusLocText NucleusNoTheme Netherlands NoDrag None Not Notification NotificationPosition Notifications Numeric OK OnCancel OnChanged OnClose OnRelease Open OpenButton Opened Options Page Pages Paragraph Parent Ping Placeholder PlaceholderColor3 PlaceholderText Player PlayerGui Players Popup Position Prefix Premium PremiumBanner PremiumButton Perks Price PopupDelay Cooldown HeaderButton ExpiryButtons OnClick OnShown ShowWithoutKey ButtonText Link PremiumLink PremiumText Primary Profile Progress Qd Qn RAlt RCtrl RShift Radius Range Region RegionCity Regular Reminders Render Reset ResetOnUnload Resizable RunService SG Save Scale ScaleType ScreenGui ScrollBarImageColor3 ScrollingFrame Search SearchAfter SearchPlaceholder SearchResults Secondary Section SectionName Sections SemiBold Session ShowFPS ShowPing ShowPromo ShowTime Sidebar SidebarCollapsed Singapore Size Slider Sound Space Standard Stat Stats Step Stepper Stroke StrokeHover Studio Style Subtitle Success Suffix Surface Surface2 Surface3 Tab TabIcon TabSection Tabs Tag TeamCheck TeleportService Tertiary Text TextArea TextBounds TextBox TextButton TextColor3 TextLabel TextScale TextSize TextTransparency Texture Theme ThemeName Time TimeFormat Title Toggle ToggleUIKeybind Tooltip Top TotalTime TouchOnly TransitionIn TransitionOut Translations Transparency TweenService Type TypeName TypeNames UDim2 UICorner UIGradient UIGridLayout UIListLayout UIPadding UIScale UISizeConstraint UIStroke Unavailable Unknown Update UpdateRate Uptime Usage UseDisplayName User UserInputService UserInputType Value Values Variant Vector2 Vector3 Version VirtualUser Visible Volume Warning Weekly Weights Welcome Window Appearance WindowRadius CardRadius CardBorder SidebarWidth Spacing Shadow TabHighlight Fill Outline Data Labels Texts Protected Badge TimeLeft NoKey NeverExpires Ends Ocean Crimson Amber Violet Slate Obsidian Mint Light Badge Settings SettingsTab AccentPicker Interface Server Unload History FlagPrefix Socials Donations Links Url URL Robux AssetId ShirtId GamePassId PassId Address Goal Target Current Thanks ThanksTitle OnDonate ShowOnHome Tiers Amount Currency Network Wallet Depth InnerShadow ScrollFades RememberTab IncludeSelf DisplayNames MaxLines Timestamps AutoScroll EmptyText Status Hidden Build PerGame IgnoreGameProcessed OnResult Elements Element Url Current Notify Author ToggleKey HideSearchBar SideBarWidth Folder Transparent Values AllowNone InputIcon Opened ImageSize Thumbnail ThumbnailSize ScrollBarEnabled Checkbox MinimizedBar MiniBar", "%S+") do
 	KNOWN_OPTIONS[name] = true
 	KNOWN_OPTIONS_LOWER[string.lower(name)] = name
 end
@@ -1289,26 +1289,8 @@ local function flashStroke(stroke)
 	end)
 end
 
-Const.PRESS_SCALE = 0.985
 Const.HOVER_LIFT = 0.4
-
-local function bindPress(button)
-	if IS_TOUCH or not button:IsA("GuiButton") then
-		return
-	end
-	local scale
-	local function release()
-		if scale then
-			tween(scale, { Scale = 1 }, 0.25, Enum.EasingStyle.Back)
-		end
-	end
-	button.MouseButton1Down:Connect(function()
-		scale = scale or create("UIScale", { Name = "Press", Parent = button })
-		tween(scale, { Scale = Const.PRESS_SCALE }, 0.08)
-	end)
-	button.MouseButton1Up:Connect(release)
-	button.MouseLeave:Connect(release)
-end
+Const.MINI_TEXT_WIDTH = 170
 
 local function bindHoverStroke(guiObject, stroke)
 	local lifted = false
@@ -1329,7 +1311,6 @@ local function bindHoverStroke(guiObject, stroke)
 			tween(guiObject, { BackgroundColor3 = Theme.Surface2 }, 0.25)
 		end
 	end)
-	bindPress(guiObject)
 end
 
 Const.SHORT_KEY_NAMES = {
@@ -2163,7 +2144,6 @@ function Tab:Button(input)
 			tween(card, { BackgroundTransparency = 0.12 }, 0.25)
 			tween(stroke, { Transparency = 0.4 }, 0.25)
 		end)
-		bindPress(card)
 	else
 		bindHoverStroke(card, stroke)
 	end
@@ -5941,6 +5921,15 @@ function Nucleus.Window(selfOrOptions, maybeOptions)
 	window:_enableDrag()
 	window.MaxSize = toVector2(options.MaxSize)
 	window.KeepOnScreen = options.KeepOnScreen ~= false
+	local miniOptions = options.MinimizedBar
+	if miniOptions == nil then
+		miniOptions = options.MiniBar
+	end
+	if type(miniOptions) == "string" or type(miniOptions) == "function" then
+		miniOptions = { Text = miniOptions }
+	end
+	window._miniOptions = type(miniOptions) == "table" and miniOptions or {}
+	window._miniText = window._miniOptions.Text
 	window:_enableResize(toVector2(options.MinSize) or Const.DEFAULT_MIN_SIZE)
 	if options.Resizable == false then
 		window._grip.Visible = false
@@ -11344,9 +11333,10 @@ function Window:_miniBar()
 	if self._miniBarFrame then
 		return self._miniBarFrame
 	end
+	local miniOptions = self._miniOptions or {}
 	local bar = create("Frame", {
 		Name = "MinimizedBar",
-		Size = UDim2.fromOffset(0, 44),
+		Size = UDim2.fromOffset(0, 50),
 		AutomaticSize = Enum.AutomaticSize.X,
 		BackgroundColor3 = Theme.Background,
 		BorderSizePixel = 0,
@@ -11357,7 +11347,7 @@ function Window:_miniBar()
 	})
 	addCorner(bar, UDim.new(0, 12))
 	addStroke(bar)
-	addPadding(bar, 12, 6)
+	addPadding(bar, 10, 7)
 	create("UIListLayout", {
 		FillDirection = Enum.FillDirection.Horizontal,
 		VerticalAlignment = Enum.VerticalAlignment.Center,
@@ -11366,7 +11356,7 @@ function Window:_miniBar()
 		Parent = bar,
 	})
 	local logo = create("ImageLabel", {
-		Size = UDim2.fromOffset(24, 24),
+		Size = UDim2.fromOffset(28, 28),
 		BackgroundTransparency = 1,
 		ImageColor3 = Color3.new(1, 1, 1),
 		ScaleType = Enum.ScaleType.Fit,
@@ -11378,21 +11368,108 @@ function Window:_miniBar()
 	logo.ImageColor3 = self._logo.ImageColor3
 	logo.ImageRectOffset = self._logo.ImageRectOffset
 	logo.ImageRectSize = self._logo.ImageRectSize
-	local title = createLabel({
+
+	local textColumn = create("Frame", {
+		Name = "Text",
 		Size = UDim2.new(0, 0, 1, 0),
 		AutomaticSize = Enum.AutomaticSize.X,
-		Text = self._titleLabel.Text,
-		TextSize = 14,
-		TextTruncate = Enum.TextTruncate.None,
+		BackgroundTransparency = 1,
 		LayoutOrder = 2,
 		ZIndex = 41,
 		Parent = bar,
 	})
-	create("UISizeConstraint", { MaxSize = Vector2.new(180, 44), Parent = title })
+	create("UIListLayout", {
+		SortOrder = Enum.SortOrder.LayoutOrder,
+		VerticalAlignment = Enum.VerticalAlignment.Center,
+		Padding = UDim.new(0, 1),
+		Parent = textColumn,
+	})
+	local title = createLabel({
+		Name = "Title",
+		Size = UDim2.fromOffset(0, 17),
+		AutomaticSize = Enum.AutomaticSize.X,
+		Text = self._titleLabel.Text,
+		TextSize = 14,
+		TextTruncate = Enum.TextTruncate.None,
+		LayoutOrder = 1,
+		ZIndex = 41,
+		Parent = textColumn,
+	})
+	create("UISizeConstraint", { MaxSize = Vector2.new(Const.MINI_TEXT_WIDTH, 17), Parent = title })
+	local info = createLabel({
+		Name = "Info",
+		Size = UDim2.fromOffset(0, 14),
+		AutomaticSize = Enum.AutomaticSize.X,
+		Text = "",
+		TextSize = 11,
+		FontFace = Fonts.Regular,
+		TextColor3 = Theme.Muted,
+		TextTruncate = Enum.TextTruncate.AtEnd,
+		LayoutOrder = 2,
+		ZIndex = 41,
+		Parent = textColumn,
+	})
+	create("UISizeConstraint", { MaxSize = Vector2.new(Const.MINI_TEXT_WIDTH, 14), Parent = info })
 
-	local function barButton(order, icon, onClick)
+	local activePill = create("Frame", {
+		Name = "Active",
+		Size = UDim2.fromOffset(0, 22),
+		AutomaticSize = Enum.AutomaticSize.X,
+		BackgroundColor3 = Theme.Surface2,
+		BorderSizePixel = 0,
+		LayoutOrder = 3,
+		Visible = false,
+		ZIndex = 41,
+		Parent = bar,
+	})
+	addCorner(activePill, UDim.new(1, 0))
+	addStroke(activePill)
+	addPadding(activePill, 8, 9)
+	create("UIListLayout", {
+		FillDirection = Enum.FillDirection.Horizontal,
+		VerticalAlignment = Enum.VerticalAlignment.Center,
+		SortOrder = Enum.SortOrder.LayoutOrder,
+		Padding = UDim.new(0, 6),
+		Parent = activePill,
+	})
+	local dot = create("Frame", {
+		Size = UDim2.fromOffset(6, 6),
+		BackgroundColor3 = Theme.Success,
+		BorderSizePixel = 0,
+		LayoutOrder = 1,
+		ZIndex = 42,
+		Parent = activePill,
+	})
+	addCorner(dot, UDim.new(1, 0))
+	local activeLabel = createLabel({
+		Size = UDim2.new(0, 0, 1, 0),
+		AutomaticSize = Enum.AutomaticSize.X,
+		Text = "",
+		TextSize = 11,
+		TextTruncate = Enum.TextTruncate.None,
+		LayoutOrder = 2,
+		ZIndex = 42,
+		Parent = activePill,
+	})
+
+	local stats = createLabel({
+		Name = "Stats",
+		Size = UDim2.new(0, 0, 1, 0),
+		AutomaticSize = Enum.AutomaticSize.X,
+		Text = "",
+		TextSize = 11,
+		FontFace = Fonts.Regular,
+		TextColor3 = Theme.Muted,
+		TextTruncate = Enum.TextTruncate.None,
+		LayoutOrder = 4,
+		Visible = miniOptions.Stats ~= false,
+		ZIndex = 41,
+		Parent = bar,
+	})
+
+	local function barButton(order, name, icon, onClick)
 		local button = create("TextButton", {
-			Name = order == 3 and "Restore" or "Close",
+			Name = name,
 			Size = UDim2.fromOffset(32, 32),
 			BackgroundColor3 = Theme.Surface2,
 			BackgroundTransparency = 1,
@@ -11428,20 +11505,68 @@ function Window:_miniBar()
 		button.MouseButton1Click:Connect(onClick)
 		return button
 	end
-	barButton(3, "maximize-2", function()
+	barButton(5, "Restore", "maximize-2", function()
 		self:Minimize(false)
 	end)
-	barButton(4, "x", function()
+	barButton(6, "Close", "x", function()
 		self:Toggle(false)
 	end)
+
+	local frames, lastCount = 0, os.clock()
+	local function refresh()
+		title.Text = self._titleLabel.Text
+		local text = self._miniText
+		if type(text) == "function" then
+			local ok, value = pcall(text)
+			text = ok and value or nil
+		end
+		if text == nil or tostring(text) == "" then
+			text = self._subtitleLabel.Text
+		end
+		info.Text = tostring(text or "")
+		info.Visible = info.Text ~= ""
+
+		local active = 0
+		if miniOptions.Active ~= false then
+			for _, element in ipairs(self._elements) do
+				if element._type == "Toggle" and element.Value == true and not element._destroyed then
+					active += 1
+				end
+			end
+		end
+		activePill.Visible = active > 0
+		activeLabel.Text = active .. " on"
+
+		if stats.Visible then
+			local now = os.clock()
+			local fps = math.floor(frames / math.max(now - lastCount, 0.001) + 0.5)
+			frames, lastCount = 0, now
+			local ok, ping = pcall(function()
+				return math.floor(LocalPlayer:GetNetworkPing() * 1000)
+			end)
+			stats.Text = ("%d fps  ·  %d ms"):format(math.min(fps, 999), ok and ping or 0)
+		end
+	end
 
 	self:_makeDraggable(bar, function()
 		self:Minimize(false)
 	end)
 	self._miniBarFrame = bar
 	self._miniBarTitle = title
+	self._miniBarInfo = info
 	self._miniBarLogo = logo
+	self._miniRefresh = refresh
+	self._miniCount = function()
+		frames += 1
+	end
 	return bar
+end
+
+function Window:SetMinimizedText(text)
+	self._miniText = text
+	if self.Minimized and self._miniRefresh then
+		self._miniRefresh()
+	end
 end
 
 function Window:Minimize(minimized)
@@ -11462,12 +11587,34 @@ function Window:Minimize(minimized)
 		self.Minimized = true
 		self._miniBarTitle.Text = self._titleLabel.Text
 		self._miniBarLogo.Image = self._logo.Image
+		self._miniRefresh()
 		local topLeft = root.AbsolutePosition - self.Gui.AbsolutePosition
 		bar.Position = UDim2.fromOffset(math.max(topLeft.X, 8), math.max(topLeft.Y, 8))
 		root.Visible = false
 		bar.Visible = true
+		if self._miniStop then
+			self._miniStop()
+		end
+		local stopRender = self:_listen("Render", self._miniCount)
+		local running = true
+		self._miniStop = function()
+			running = false
+			stopRender()
+			self._miniStop = nil
+		end
+		task.spawn(function()
+			while running and not self._destroyed do
+				task.wait(1)
+				if running and self.Minimized then
+					self._miniRefresh()
+				end
+			end
+		end)
 	else
 		self.Minimized = false
+		if self._miniStop then
+			self._miniStop()
+		end
 		bar.Visible = false
 		local barTopLeft = bar.AbsolutePosition - self.Gui.AbsolutePosition
 		local size = root.AbsoluteSize
