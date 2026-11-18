@@ -10,7 +10,7 @@ local LocalPlayer = Players.LocalPlayer
 local Nucleus = {}
 local Const = {}
 Nucleus.Name = "Nucleus UI"
-Nucleus.Version = "4.6.0"
+Nucleus.Version = "4.7.0"
 Nucleus.Flags = {}
 Nucleus.Windows = {}
 
@@ -29,7 +29,7 @@ end
 
 local KNOWN_OPTIONS = {}
 local KNOWN_OPTIONS_LOWER = {}
-for name in string.gmatch("AU AbsoluteContentSize AbsoluteSize Accent AccentDark Active ActiveOnly AliveCheck Always Anonymous Asc Australia AutoLoad AutoSave BR Background BackgroundColor3 BackgroundTransparency Backspace BasePart Began Body Bold BottomRight Brazil Button ButtonRow Buttons CA CFrame Callback Canada Cancel CancelText CanvasGroup Caption Changed Changes ClearOnFocus Close CloseOnBackdrop Code Collapsed Color Color3 ColorPicker Configs ConfigurationSaving Confirm ConfirmText ConfirmTimeout Content ContentProvider Copied Copy Copyable CoreGui Create CurrentKeybind CurrentOption CurrentValue Custom CustomFont DE Danger Date DateFormat Decal Default DefaultState Delay Delete Depends DependsOn Desc Description Details Discord DiscordButton DiscordLink Divider Dropdown Duration Element EmptyText Enabled Ended Enter Entries Enum EnumItem Error ErrorNotifications Esc Example ExcludeSelf Executor Expired Expiry FPS FR FileName Flag Folder FolderName Format Frame France Free GET Game Germany GetActive GetKey Glow Greeting Group GuiButton GuiName GuiObject GuiService HWID HasKey Header HeaderItems Height Hold Home HttpService Humanoid HumanoidRootPart IN Icon Image ImageButton ImageColor3 ImageLabel ImageRectPosition ImageRectSize ImageTransparency Increment India Info Input Instance JP Japan KeepOnScreen Key KeyInfo KeyPanel Keybind Keybinds LAlt LCtrl LShift Label Language Lifetime Lighting Load Loading LoadingDuration LoadingSteps LoadingSubtitle LoadingText LoadingTitle Localization Lock Locked LockedReason Loop LoopDelay Lowest Main MarketplaceService Max MaxDistance MaxHeight MaxLength MaxNotifications MaxSize Medium Membership Merge Message Method Min MinSize MobileButton MobileIcon Mode Model MinimizeButton Mono Monospace Monthly Multi MultiLine Multiline MultipleOptions Muted NL Name NucleusHidden Nucleus NucleusUIBlur NucleusUIFonts NucleusLoc NucleusLocPlaceholderText NucleusLocText NucleusNoTheme Netherlands NoDrag None Not Notification NotificationPosition Notifications Numeric OK OnCancel OnChanged OnClose OnRelease Open OpenButton Opened Options Page Pages Paragraph Parent Ping Placeholder PlaceholderColor3 PlaceholderText Player PlayerGui Players Popup Position Prefix Premium PremiumBanner PremiumButton Perks Price PopupDelay Cooldown HeaderButton ExpiryButtons OnClick OnShown ShowWithoutKey ButtonText Link PremiumLink PremiumText Primary Profile Progress Qd Qn RAlt RCtrl RShift Radius Range Region RegionCity Regular Reminders Render Reset ResetOnUnload Resizable RunService SG Save Scale ScaleType ScreenGui ScrollBarImageColor3 ScrollingFrame Search SearchAfter SearchPlaceholder SearchResults Secondary Section SectionName Sections SemiBold Session ShowFPS ShowPing ShowPromo ShowTime Sidebar SidebarCollapsed Singapore Size Slider Sound Space Standard Stat Stats Step Stepper Stroke StrokeHover Studio Style Subtitle Success Suffix Surface Surface2 Surface3 Tab TabIcon TabSection Tabs Tag TeamCheck TeleportService Tertiary Text TextArea TextBounds TextBox TextButton TextColor3 TextLabel TextScale TextSize TextTransparency Texture Theme ThemeName Time TimeFormat Title Toggle ToggleUIKeybind Tooltip Top TotalTime TouchOnly TransitionIn TransitionOut Translations Transparency TweenService Type TypeName TypeNames UDim2 UICorner UIGradient UIGridLayout UIListLayout UIPadding UIScale UISizeConstraint UIStroke Unavailable Unknown Update UpdateRate Uptime Usage UseDisplayName User UserInputService UserInputType Value Values Variant Vector2 Vector3 Version VirtualUser Visible Volume Warning Weekly Weights Welcome Window Appearance WindowRadius CardRadius CardBorder SidebarWidth Spacing Shadow TabHighlight Fill Outline Data Labels Texts Protected Badge TimeLeft NoKey NeverExpires Ends Ocean Crimson Amber Violet Slate Obsidian Mint Light Badge Settings SettingsTab AccentPicker Interface Server Unload History FlagPrefix Socials Donations Links Url URL Robux AssetId ShirtId GamePassId PassId Address Goal Target Current Thanks ThanksTitle OnDonate ShowOnHome Tiers Amount Currency Network Wallet Depth InnerShadow ScrollFades RememberTab IncludeSelf DisplayNames MaxLines Timestamps AutoScroll EmptyText Status Hidden", "%S+") do
+for name in string.gmatch("AU AbsoluteContentSize AbsoluteSize Accent AccentDark Active ActiveOnly AliveCheck Always Anonymous Asc Australia AutoLoad AutoSave BR Background BackgroundColor3 BackgroundTransparency Backspace BasePart Began Body Bold BottomRight Brazil Button ButtonRow Buttons CA CFrame Callback Canada Cancel CancelText CanvasGroup Caption Changed Changes ClearOnFocus Close CloseOnBackdrop Code Collapsed Color Color3 ColorPicker Configs ConfigurationSaving Confirm ConfirmText ConfirmTimeout Content ContentProvider Copied Copy Copyable CoreGui Create CurrentKeybind CurrentOption CurrentValue Custom CustomFont DE Danger Date DateFormat Decal Default DefaultState Delay Delete Depends DependsOn Desc Description Details Discord DiscordButton DiscordLink Divider Dropdown Duration Element EmptyText Enabled Ended Enter Entries Enum EnumItem Error ErrorNotifications Esc Example ExcludeSelf Executor Expired Expiry FPS FR FileName Flag Folder FolderName Format Frame France Free GET Game Germany GetActive GetKey Glow Greeting Group GuiButton GuiName GuiObject GuiService HWID HasKey Header HeaderItems Height Hold Home HttpService Humanoid HumanoidRootPart IN Icon Image ImageButton ImageColor3 ImageLabel ImageRectPosition ImageRectSize ImageTransparency Increment India Info Input Instance JP Japan KeepOnScreen Key KeyInfo KeyPanel Keybind Keybinds LAlt LCtrl LShift Label Language Lifetime Lighting Load Loading LoadingDuration LoadingSteps LoadingSubtitle LoadingText LoadingTitle Localization Lock Locked LockedReason Loop LoopDelay Lowest Main MarketplaceService Max MaxDistance MaxHeight MaxLength MaxNotifications MaxSize Medium Membership Merge Message Method Min MinSize MobileButton MobileIcon Mode Model MinimizeButton Mono Monospace Monthly Multi MultiLine Multiline MultipleOptions Muted NL Name NucleusHidden Nucleus NucleusUIBlur NucleusUIFonts NucleusLoc NucleusLocPlaceholderText NucleusLocText NucleusNoTheme Netherlands NoDrag None Not Notification NotificationPosition Notifications Numeric OK OnCancel OnChanged OnClose OnRelease Open OpenButton Opened Options Page Pages Paragraph Parent Ping Placeholder PlaceholderColor3 PlaceholderText Player PlayerGui Players Popup Position Prefix Premium PremiumBanner PremiumButton Perks Price PopupDelay Cooldown HeaderButton ExpiryButtons OnClick OnShown ShowWithoutKey ButtonText Link PremiumLink PremiumText Primary Profile Progress Qd Qn RAlt RCtrl RShift Radius Range Region RegionCity Regular Reminders Render Reset ResetOnUnload Resizable RunService SG Save Scale ScaleType ScreenGui ScrollBarImageColor3 ScrollingFrame Search SearchAfter SearchPlaceholder SearchResults Secondary Section SectionName Sections SemiBold Session ShowFPS ShowPing ShowPromo ShowTime Sidebar SidebarCollapsed Singapore Size Slider Sound Space Standard Stat Stats Step Stepper Stroke StrokeHover Studio Style Subtitle Success Suffix Surface Surface2 Surface3 Tab TabIcon TabSection Tabs Tag TeamCheck TeleportService Tertiary Text TextArea TextBounds TextBox TextButton TextColor3 TextLabel TextScale TextSize TextTransparency Texture Theme ThemeName Time TimeFormat Title Toggle ToggleUIKeybind Tooltip Top TotalTime TouchOnly TransitionIn TransitionOut Translations Transparency TweenService Type TypeName TypeNames UDim2 UICorner UIGradient UIGridLayout UIListLayout UIPadding UIScale UISizeConstraint UIStroke Unavailable Unknown Update UpdateRate Uptime Usage UseDisplayName User UserInputService UserInputType Value Values Variant Vector2 Vector3 Version VirtualUser Visible Volume Warning Weekly Weights Welcome Window Appearance WindowRadius CardRadius CardBorder SidebarWidth Spacing Shadow TabHighlight Fill Outline Data Labels Texts Protected Badge TimeLeft NoKey NeverExpires Ends Ocean Crimson Amber Violet Slate Obsidian Mint Light Badge Settings SettingsTab AccentPicker Interface Server Unload History FlagPrefix Socials Donations Links Url URL Robux AssetId ShirtId GamePassId PassId Address Goal Target Current Thanks ThanksTitle OnDonate ShowOnHome Tiers Amount Currency Network Wallet Depth InnerShadow ScrollFades RememberTab IncludeSelf DisplayNames MaxLines Timestamps AutoScroll EmptyText Status Hidden Build PerGame IgnoreGameProcessed OnResult Elements Element Url Current Notify", "%S+") do
 	KNOWN_OPTIONS[name] = true
 	KNOWN_OPTIONS_LOWER[string.lower(name)] = name
 end
@@ -269,7 +269,7 @@ Nucleus.Themes = {
 		Accent = rgb(230, 230, 235),
 		AccentDark = rgb(18, 18, 20),
 		Text = rgb(232, 232, 236),
-		Muted = rgb(150, 150, 156),
+		Muted = rgb(160, 160, 166),
 		Glow = rgb(220, 220, 226),
 	}),
 	Midnight = withStatusColors({
@@ -282,7 +282,7 @@ Nucleus.Themes = {
 		Accent = rgb(150, 180, 255),
 		AccentDark = rgb(12, 16, 28),
 		Text = rgb(226, 230, 240),
-		Muted = rgb(142, 151, 173),
+		Muted = rgb(152, 161, 183),
 		Glow = rgb(210, 220, 240),
 	}),
 	Lavender = withStatusColors({
@@ -295,7 +295,7 @@ Nucleus.Themes = {
 		Accent = rgb(235, 199, 246),
 		AccentDark = rgb(22, 16, 26),
 		Text = rgb(236, 236, 241),
-		Muted = rgb(154, 153, 167),
+		Muted = rgb(164, 163, 177),
 		Glow = rgb(220, 214, 230),
 	}),
 	Moss = withStatusColors({
@@ -308,7 +308,7 @@ Nucleus.Themes = {
 		Accent = rgb(176, 222, 170),
 		AccentDark = rgb(14, 22, 14),
 		Text = rgb(228, 234, 227),
-		Muted = rgb(141, 156, 139),
+		Muted = rgb(151, 166, 149),
 		Glow = rgb(214, 230, 212),
 	}),
 	Ember = withStatusColors({
@@ -321,7 +321,7 @@ Nucleus.Themes = {
 		Accent = rgb(255, 190, 140),
 		AccentDark = rgb(28, 18, 10),
 		Text = rgb(240, 232, 226),
-		Muted = rgb(166, 149, 133),
+		Muted = rgb(176, 159, 143),
 		Glow = rgb(240, 222, 208),
 	}),
 	Rose = withStatusColors({
@@ -334,7 +334,7 @@ Nucleus.Themes = {
 		Accent = rgb(255, 170, 195),
 		AccentDark = rgb(30, 12, 18),
 		Text = rgb(240, 228, 232),
-		Muted = rgb(169, 144, 153),
+		Muted = rgb(179, 154, 163),
 		Glow = rgb(240, 214, 222),
 	}),
 	Ocean = withStatusColors({
@@ -347,7 +347,7 @@ Nucleus.Themes = {
 		Accent = rgb(120, 220, 230),
 		AccentDark = rgb(8, 22, 26),
 		Text = rgb(226, 236, 238),
-		Muted = rgb(138, 158, 163),
+		Muted = rgb(148, 168, 173),
 		Glow = rgb(208, 232, 236),
 	}),
 	Crimson = withStatusColors({
@@ -360,7 +360,7 @@ Nucleus.Themes = {
 		Accent = rgb(255, 128, 128),
 		AccentDark = rgb(32, 10, 10),
 		Text = rgb(240, 228, 228),
-		Muted = rgb(168, 142, 142),
+		Muted = rgb(178, 152, 152),
 		Glow = rgb(240, 210, 210),
 	}),
 	Amber = withStatusColors({
@@ -373,7 +373,7 @@ Nucleus.Themes = {
 		Accent = rgb(255, 210, 110),
 		AccentDark = rgb(30, 22, 6),
 		Text = rgb(240, 236, 224),
-		Muted = rgb(166, 157, 134),
+		Muted = rgb(176, 167, 144),
 		Glow = rgb(240, 230, 200),
 	}),
 	Violet = withStatusColors({
@@ -386,7 +386,7 @@ Nucleus.Themes = {
 		Accent = rgb(176, 148, 255),
 		AccentDark = rgb(16, 10, 32),
 		Text = rgb(234, 230, 244),
-		Muted = rgb(152, 146, 172),
+		Muted = rgb(162, 156, 182),
 		Glow = rgb(220, 212, 240),
 	}),
 	Slate = withStatusColors({
@@ -399,7 +399,7 @@ Nucleus.Themes = {
 		Accent = rgb(200, 212, 228),
 		AccentDark = rgb(16, 19, 24),
 		Text = rgb(228, 232, 238),
-		Muted = rgb(146, 154, 166),
+		Muted = rgb(156, 164, 176),
 		Glow = rgb(214, 222, 232),
 	}),
 	Obsidian = withStatusColors({
@@ -412,7 +412,7 @@ Nucleus.Themes = {
 		Accent = rgb(245, 245, 248),
 		AccentDark = rgb(5, 5, 6),
 		Text = rgb(240, 240, 243),
-		Muted = rgb(140, 140, 146),
+		Muted = rgb(150, 150, 156),
 		Glow = rgb(230, 230, 235),
 	}),
 	Mint = withStatusColors({
@@ -425,7 +425,7 @@ Nucleus.Themes = {
 		Accent = rgb(130, 235, 190),
 		AccentDark = rgb(8, 26, 18),
 		Text = rgb(226, 240, 234),
-		Muted = rgb(138, 163, 153),
+		Muted = rgb(148, 173, 163),
 		Glow = rgb(208, 238, 224),
 	}),
 	Light = withStatusColors({
@@ -774,7 +774,7 @@ local function create(className, properties, children)
 		if plainGroup and property == "GroupTransparency" then
 			continue
 		elseif property == "TextSize" then
-			instance.TextSize = math.max(8, math.floor(value * (Nucleus.TextScale or 1) + 0.5))
+			instance.TextSize = math.max(IS_TOUCH and 12 or 11, math.floor(value * (Nucleus.TextScale or 1) + 0.5))
 		elseif Const.TRANSLATED_PROPERTIES[property] and type(value) == "string" then
 			setTranslated(instance, property, value)
 		elseif property ~= "Parent" then
@@ -1419,6 +1419,14 @@ local function registerElement(tab, options, element, frame, typeName, callbackK
 		Nucleus.Flags[options.Flag] = element
 		if window then
 			window.Flags[options.Flag] = element
+		end
+		if window and window._loadedConfig and window._applyLateConfig then
+			local flag = options.Flag
+			task.defer(function()
+				if window.Flags[flag] == element and not element._destroyed then
+					window:_applyLateConfig(element, flag)
+				end
+			end)
 		end
 		local pending = Nucleus._flagListeners and Nucleus._flagListeners[options.Flag]
 		if pending then
@@ -5652,6 +5660,10 @@ function Nucleus.Window(selfOrOptions, maybeOptions)
 				window.ConfigFolder = "NeoxHub"
 			end
 		end
+		if saving.PerGame == true then
+			local gameKey = (game.GameId and game.GameId ~= 0) and game.GameId or game.PlaceId
+			window.ConfigFolder = window.ConfigFolder .. "/" .. tostring(gameKey)
+		end
 		window.ConfigName = saving.FileName or "default"
 		window._autoSaveEnabled = saving.AutoSave == true
 		window._autoLoad = saving.AutoLoad == true
@@ -6803,8 +6815,15 @@ local function hasFileApi()
 end
 
 local function ensureFolder(folder)
-	if type(isfolder) == "function" and type(makefolder) == "function" and not isfolder(folder) then
-		makefolder(folder)
+	if type(isfolder) ~= "function" or type(makefolder) ~= "function" then
+		return
+	end
+	local path = ""
+	for part in string.gmatch(folder, "[^/]+") do
+		path = path == "" and part or (path .. "/" .. part)
+		if not isfolder(path) then
+			makefolder(path)
+		end
 	end
 end
 
@@ -6851,6 +6870,11 @@ function Window:SaveConfig(name)
 			data[flag] = serializeElement(element)
 		end
 	end
+	for flag, saved in pairs(self._loadedConfig or {}) do
+		if data[flag] == nil then
+			data[flag] = saved
+		end
+	end
 
 	local ok, err = pcall(function()
 		ensureFolder(self.ConfigFolder)
@@ -6895,8 +6919,24 @@ function Window:LoadConfig(name, silent)
 	self._autoSaveEnabled = autoSaveWas
 	self._autoSaveReady = true
 	self.ConfigName = cleanName
+	self._loadedConfig = data
 	self:_queueDependencies()
 	return true
+end
+
+function Window:_applyLateConfig(element, flag)
+	local data = self._loadedConfig
+	local saved = data and data[flag]
+	if type(saved) ~= "table" or saved.Type ~= element._type or type(element.Set) ~= "function" then
+		return
+	end
+	local autoSaveWas = self._autoSaveEnabled
+	self._autoSaveEnabled = false
+	local applied, err = pcall(applySavedValue, element, saved, false)
+	self._autoSaveEnabled = autoSaveWas
+	if not applied then
+		log("could not load flag " .. tostring(flag) .. ": " .. tostring(err))
+	end
 end
 
 function Window:DeleteConfig(name)
@@ -6939,6 +6979,11 @@ function Window:ExportConfig()
 			data[flag] = serializeElement(element)
 		end
 	end
+	for flag, saved in pairs(self._loadedConfig or {}) do
+		if data[flag] == nil then
+			data[flag] = saved
+		end
+	end
 	local ok, text = pcall(function()
 		return HttpService:JSONEncode(data)
 	end)
@@ -6961,6 +7006,7 @@ function Window:ImportConfig(text)
 			end
 		end
 	end
+	self._loadedConfig = data
 	if applied == 0 then
 		return false, "nothing in that config matches this script"
 	end
@@ -7834,6 +7880,9 @@ function Window:Tab(input, icon)
 		tab:SetBadge(options.Badge)
 	end
 	self:_layoutTabButton(tab)
+	if type(options.Build) == "function" then
+		tab._lazyBuild = options.Build
+	end
 	if options.Visible == false or options.Hidden == true then
 		task.defer(function()
 			tab:SetVisible(false)
@@ -13428,8 +13477,41 @@ do
 		}
 	end
 
+	function Tab:Build()
+		local builder = self._lazyBuild
+		if builder then
+			self._lazyBuild = nil
+			runProtected(('building tab "%s"'):format(tostring(self.Name)), builder, self)
+		end
+		return self
+	end
+
+	function Tab:IsBuilt()
+		return self._lazyBuild == nil
+	end
+
+	function Window:BuildAllTabs()
+		for _, tab in ipairs(table.clone(self.Tabs)) do
+			tab:Build()
+		end
+	end
+
+	local baseRunSearch = Window._runSearch
+	function Window:_runSearch(text, ...)
+		if type(text) == "string" and text:gsub("%s", "") ~= "" then
+			self:BuildAllTabs()
+		end
+		return baseRunSearch(self, text, ...)
+	end
+
 	local baseSelectTab = Window.SelectTab
 	function Window:SelectTab(tab, ...)
+		if type(tab) == "string" then
+			tab = self:GetTab(tab) or tab
+		end
+		if type(tab) == "table" and tab._lazyBuild then
+			tab:Build()
+		end
 		local previous = self.CurrentTab
 		local result = baseSelectTab(self, tab, ...)
 		local current = self.CurrentTab
@@ -13885,6 +13967,277 @@ do
 		return ok and result or nil
 	end
 
+	local ELEMENT_TYPES = {
+		Toggle = true, Button = true, Slider = true, Dropdown = true, Input = true, Keybind = true,
+		ColorPicker = true, Label = true, Paragraph = true, Section = true, Divider = true, Space = true,
+		Stepper = true, Progress = true, Select = true, TextArea = true, Code = true, Stat = true, Image = true,
+		ButtonRow = true, Status = true, Console = true, PlayerDropdown = true, SocialLink = true,
+		DonateButton = true, Socials = true, Donations = true, Group = true,
+	}
+
+	function Tab:AddElements(list)
+		local created = {}
+		if type(list) ~= "table" then
+			log("AddElements needs a list, like { { Type = \"Toggle\", Name = \"Fly\" } }")
+			return created
+		end
+		for index, entry in ipairs(list) do
+			local kind = type(entry) == "table" and (entry.Type or entry.Element)
+			if not (kind and ELEMENT_TYPES[kind]) then
+				log(("AddElements item %d has no valid Type (got %s)"):format(index, tostring(kind)))
+			else
+				local options = table.clone(entry)
+				options.Type = nil
+				options.Element = nil
+				local children = options.Elements
+				options.Elements = nil
+				local element
+				if kind == "Section" or kind == "Divider" or kind == "Space" then
+					element = self[kind](self, options.Name or options.Title or options.Text or options.Size)
+				else
+					element = self[kind](self, options)
+				end
+				if kind == "Group" and element and type(children) == "table" then
+					element:AddElements(children)
+				end
+				created[index] = element
+				if type(options.Flag) == "string" then
+					created[options.Flag] = element
+				end
+			end
+		end
+		return created
+	end
+
+	function Window:BindKey(key, callback, options)
+		options = type(options) == "table" and options or {}
+		local function resolve(value)
+			if typeof(value) == "EnumItem" then
+				return value
+			end
+			local ok, keyCode = pcall(function()
+				return Enum.KeyCode[tostring(value)]
+			end)
+			return ok and keyCode or nil
+		end
+		local keyCode = resolve(key)
+		if not keyCode or type(callback) ~= "function" then
+			log("BindKey needs a key like \"F\" or Enum.KeyCode.F and a function")
+			return { Disconnect = function() end, SetKey = function() end }
+		end
+		local handle = { Key = keyCode, Enabled = true }
+		local connection = self:Connect(UserInputService.InputBegan, function(inputObject, gameProcessed)
+			if not handle.Enabled or inputObject.KeyCode ~= handle.Key then
+				return
+			end
+			if gameProcessed and not options.IgnoreGameProcessed then
+				return
+			end
+			if UserInputService:GetFocusedTextBox() then
+				return
+			end
+			runProtected(("key %s"):format(handle.Key.Name), callback, handle.Key)
+		end)
+		local releaseConnection
+		if type(options.OnRelease) == "function" then
+			releaseConnection = self:Connect(UserInputService.InputEnded, function(inputObject)
+				if handle.Enabled and inputObject.KeyCode == handle.Key then
+					runProtected(("key %s release"):format(handle.Key.Name), options.OnRelease, handle.Key)
+				end
+			end)
+		end
+		function handle:SetKey(newKey)
+			local resolved = resolve(newKey)
+			if resolved then
+				handle.Key = resolved
+			end
+			return resolved ~= nil
+		end
+		function handle:SetEnabled(enabled)
+			handle.Enabled = enabled ~= false
+		end
+		function handle:Disconnect()
+			handle.Enabled = false
+			if connection and connection.Disconnect then
+				connection:Disconnect()
+			end
+			if releaseConnection and releaseConnection.Disconnect then
+				releaseConnection:Disconnect()
+			end
+		end
+		return handle
+	end
+
+	local function matchesGame(ids)
+		if type(ids) ~= "table" then
+			ids = { ids }
+		end
+		for _, id in ipairs(ids) do
+			local number = tonumber(id)
+			if number and (number == game.PlaceId or number == game.GameId) then
+				return true
+			end
+		end
+		return false
+	end
+
+	function Utils.IsGame(ids)
+		return matchesGame(ids)
+	end
+
+	function Nucleus:ForGame(map, fallback)
+		if type(map) ~= "table" then
+			log("ForGame needs a table like { [PlaceId] = function() end }")
+			return nil
+		end
+		for id, handler in pairs(map) do
+			if matchesGame(id) and type(handler) == "function" then
+				return handler(game.PlaceId)
+			end
+		end
+		if type(fallback) == "function" then
+			return fallback(game.PlaceId)
+		end
+		return nil
+	end
+
+	local function versionParts(text)
+		local parts = {}
+		for number in string.gmatch(tostring(text or ""), "%d+") do
+			table.insert(parts, tonumber(number))
+		end
+		return parts
+	end
+
+	function Utils.CompareVersions(a, b)
+		local left, right = versionParts(a), versionParts(b)
+		for index = 1, math.max(#left, #right) do
+			local x, y = left[index] or 0, right[index] or 0
+			if x ~= y then
+				return x < y and -1 or 1
+			end
+		end
+		return 0
+	end
+
+	function Nucleus:CheckVersion(input)
+		local options = type(input) == "table" and input or {}
+		if type(options.Url) ~= "string" or options.Current == nil then
+			log("CheckVersion needs { Url = \"...\", Current = \"1.0.0\" }")
+			return false
+		end
+		local done = options.OnResult
+		task.spawn(function()
+			local ok, body = Utils.HttpGet(options.Url)
+			if not ok then
+				safeCall(done, false, nil)
+				return
+			end
+			local latest = tostring(body):match("[%d%.]+") or tostring(body)
+			local outdated = Utils.CompareVersions(options.Current, latest) < 0
+			if outdated and options.Notify ~= false then
+				Nucleus:Notify({
+					Title = tostring(options.Title or "Update available"),
+					Content = tostring(options.Message or ("Version " .. latest .. " is out. You have " .. tostring(options.Current) .. ".")),
+					Type = "Info",
+					Duration = 8,
+				})
+			end
+			safeCall(done, outdated, latest)
+		end)
+		return true
+	end
+
+	local function globalFunction(name)
+		local envOk, env = pcall(function()
+			return getgenv()
+		end)
+		local sources = { _G }
+		if envOk and type(env) == "table" then
+			table.insert(sources, 1, env)
+		end
+		for _, source in ipairs(sources) do
+			local current = source
+			for part in tostring(name):gmatch("[^%.]+") do
+				current = type(current) == "table" and current[part] or nil
+			end
+			if type(current) == "function" then
+				return true
+			end
+		end
+		return false
+	end
+
+	function Utils.Supports(...)
+		local missing = {}
+		for _, name in ipairs({ ... }) do
+			if not globalFunction(name) then
+				table.insert(missing, tostring(name))
+			end
+		end
+		return #missing == 0, missing
+	end
+
+	function Nucleus:RequireFunctions(names, message)
+		if type(names) ~= "table" then
+			names = { names }
+		end
+		local ok, missing = Utils.Supports(table.unpack(names))
+		if not ok then
+			Nucleus:Notify({
+				Title = "Executor not supported",
+				Content = tostring(message or ("Missing: " .. table.concat(missing, ", "))),
+				Type = "Warning",
+				Duration = 8,
+			})
+		end
+		return ok, missing
+	end
+
+	function Utils.Throttle(fn, seconds)
+		seconds = tonumber(seconds) or 0.2
+		local last = -math.huge
+		return function(...)
+			local now = os.clock()
+			if now - last >= seconds then
+				last = now
+				return fn(...)
+			end
+			return nil
+		end
+	end
+
+	function Utils.WaitForPath(root, path, timeout)
+		if type(root) == "string" and path == nil then
+			root, path = game, root
+		elseif type(root) == "string" then
+			timeout, path, root = path, root, game
+		end
+		timeout = tonumber(timeout) or 5
+		local current = root
+		local deadline = os.clock() + timeout
+		for part in string.gmatch(tostring(path), "[^%.]+") do
+			if current == game then
+				local ok, service = pcall(game.GetService, game, part)
+				if ok and service then
+					current = service
+					continue
+				end
+			end
+			local child = current:FindFirstChild(part)
+			while not child and os.clock() < deadline do
+				task.wait(0.1)
+				child = current:FindFirstChild(part)
+			end
+			if not child then
+				return nil
+			end
+			current = child
+		end
+		return current
+	end
+
+	Tab.CreateElements = Tab.AddElements
 	Tab.CreatePlayerDropdown = Tab.PlayerDropdown
 	Tab.CreateConsole = Tab.Console
 	Tab.CreateStatus = Tab.Status
@@ -13896,6 +14249,7 @@ do
 		"GetErrors", "ClearErrors", "SetLanguage", "SetLocalization", "Translate", "GetFlag", "GetThemes",
 		"GetLanguage", "SetErrorNotifications", "Try", "ReportError", "PreloadIcons", "LoadFont",
 		"SetAccent", "GetAccent", "SetFont", "SetKeySource", "GetKeyStatus", "IsPremium", "OnFlagChanged",
+		"ForGame", "CheckVersion", "RequireFunctions",
 	}
 	for _, name in ipairs(FORGIVING) do
 		local method = Nucleus[name]
