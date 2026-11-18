@@ -10,7 +10,7 @@ local LocalPlayer = Players.LocalPlayer
 local Nucleus = {}
 local Const = {}
 Nucleus.Name = "Nucleus UI"
-Nucleus.Version = "4.8.1"
+Nucleus.Version = "4.9.0"
 Nucleus.Flags = {}
 Nucleus.Windows = {}
 
@@ -689,6 +689,8 @@ local IS_TOUCH = UserInputService.TouchEnabled and not UserInputService.Keyboard
 Nucleus.Touch = IS_TOUCH
 
 Const.ROW_HEIGHT = 42
+Const.GLYPH_PANE_OPEN = 5
+Const.GLYPH_PANE_CLOSED = 2
 Const.ROW_HEIGHT_DESC = 56
 Const.OPTION_HEIGHT = 30
 Const.CHIP_HEIGHT = 24
@@ -5677,30 +5679,42 @@ function Nucleus.Window(selfOrOptions, maybeOptions)
 	})
 	sidebarButton:SetAttribute(Const.ATTR_NO_DRAG, true)
 	addCorner(sidebarButton, UDim.new(0, 7))
-	local sidebarIcon = create("ImageLabel", {
+	local sidebarGlyph = create("Frame", {
+		Name = "Glyph",
 		AnchorPoint = Vector2.new(0.5, 0.5),
 		Position = UDim2.fromScale(0.5, 0.5),
-		Size = UDim2.fromOffset(18, 18),
+		Size = UDim2.fromOffset(15, 13),
 		BackgroundTransparency = 1,
-		ImageColor3 = Theme.Muted,
-		ScaleType = Enum.ScaleType.Fit,
 		ZIndex = 7,
 		Parent = sidebarButton,
 	})
-	setIcon(sidebarIcon, "panel-left-close")
+	addCorner(sidebarGlyph, UDim.new(0, 4))
+	local glyphStroke = addStroke(sidebarGlyph, Theme.Muted, 0, 1.5)
+	local glyphPane = create("Frame", {
+		Name = "Pane",
+		Position = UDim2.fromOffset(2, 2),
+		Size = UDim2.new(0, Const.GLYPH_PANE_OPEN, 1, -4),
+		BackgroundColor3 = Theme.Muted,
+		BorderSizePixel = 0,
+		ZIndex = 8,
+		Parent = sidebarGlyph,
+	})
+	addCorner(glyphPane, UDim.new(0, 1))
 	window._sidebarButton = sidebarButton
-	window._sidebarIcon = sidebarIcon
+	window._sidebarGlyph = { Stroke = glyphStroke, Pane = glyphPane }
 	sidebarButton.MouseEnter:Connect(function()
 		if IS_TOUCH then
 			return
 		end
 		tween(sidebarButton, { BackgroundTransparency = 0 }, 0.15)
-		tween(sidebarIcon, { ImageColor3 = Theme.Text }, 0.15)
+		tween(glyphStroke, { Color = Theme.Text }, 0.15)
+		tween(glyphPane, { BackgroundColor3 = Theme.Text }, 0.15)
 		window:_showTooltip(window._compact and "Expand sidebar" or "Collapse sidebar", sidebarButton)
 	end)
 	sidebarButton.MouseLeave:Connect(function()
 		tween(sidebarButton, { BackgroundTransparency = 1 }, 0.2)
-		tween(sidebarIcon, { ImageColor3 = Theme.Muted }, 0.2)
+		tween(glyphStroke, { Color = Theme.Muted }, 0.2)
+		tween(glyphPane, { BackgroundColor3 = Theme.Muted }, 0.2)
 		window:_hideTooltip(sidebarButton)
 	end)
 	sidebarButton.MouseButton1Click:Connect(function()
@@ -5708,64 +5722,54 @@ function Nucleus.Window(selfOrOptions, maybeOptions)
 		window:ToggleSidebar()
 	end)
 
-	local closeButton = create("TextButton", {
-		AnchorPoint = Vector2.new(1, 0),
-		Position = UDim2.new(1, -14, 0, 14),
-		Size = UDim2.fromOffset(34, 34),
-		BackgroundColor3 = Theme.Surface2,
-		BackgroundTransparency = 1,
-		Text = "×",
-		TextColor3 = Theme.Muted,
-		TextSize = 28,
-		FontFace = Fonts.Bold,
-		AutoButtonColor = false,
-		ZIndex = 5,
-		Parent = content,
-	})
-	addPadding(closeButton, 0, 0, 1, 0)
-	addCorner(closeButton, UDim.new(0, 8))
-	closeButton.MouseEnter:Connect(function()
-		if IS_TOUCH then
-			return
-		end
-		tween(closeButton, { BackgroundTransparency = 0, TextColor3 = Theme.Text }, 0.15)
-	end)
-	closeButton.MouseLeave:Connect(function()
-		tween(closeButton, { BackgroundTransparency = 1, TextColor3 = Theme.Muted }, 0.2)
-	end)
+	local function headerIconButton(name, icon, offset)
+		local button = create("TextButton", {
+			Name = name,
+			AnchorPoint = Vector2.new(1, 0),
+			Position = UDim2.new(1, offset, 0, 13),
+			Size = UDim2.fromOffset(34, 34),
+			BackgroundColor3 = Theme.Surface2,
+			BackgroundTransparency = 1,
+			Text = "",
+			AutoButtonColor = false,
+			ZIndex = 5,
+			Parent = content,
+		})
+		addCorner(button, UDim.new(0, 8))
+		local image = create("ImageLabel", {
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			Position = UDim2.fromScale(0.5, 0.5),
+			Size = UDim2.fromOffset(17, 17),
+			BackgroundTransparency = 1,
+			ImageColor3 = Theme.Muted,
+			ScaleType = Enum.ScaleType.Fit,
+			ZIndex = 6,
+			Parent = button,
+		})
+		setIcon(image, icon)
+		button.MouseEnter:Connect(function()
+			if IS_TOUCH then
+				return
+			end
+			tween(button, { BackgroundTransparency = 0 }, 0.15)
+			tween(image, { ImageColor3 = Theme.Text }, 0.15)
+		end)
+		button.MouseLeave:Connect(function()
+			tween(button, { BackgroundTransparency = 1 }, 0.2)
+			tween(image, { ImageColor3 = Theme.Muted }, 0.2)
+		end)
+		return button
+	end
+
+	local closeButton = headerIconButton("Close", "x", -14)
 	closeButton.MouseButton1Click:Connect(function()
 		window:Toggle(false)
 	end)
 	window._closeButton = closeButton
 
 	if options.MinimizeButton ~= false then
-		local minimizeButton = create("TextButton", {
-			Name = "Minimize",
-			AnchorPoint = Vector2.new(1, 0),
-			Position = UDim2.new(1, -52, 0, 14),
-			Size = UDim2.fromOffset(34, 34),
-			BackgroundColor3 = Theme.Surface2,
-			BackgroundTransparency = 1,
-			Text = "−",
-			TextColor3 = Theme.Muted,
-			TextSize = 26,
-			FontFace = Fonts.Bold,
-			AutoButtonColor = false,
-			ZIndex = 5,
-			Parent = content,
-		})
+		local minimizeButton = headerIconButton("Minimize", "minus", -52)
 		minimizeButton:SetAttribute(Const.ATTR_NO_DRAG, true)
-		addPadding(minimizeButton, 0, 0, 1, 0)
-		addCorner(minimizeButton, UDim.new(0, 8))
-		minimizeButton.MouseEnter:Connect(function()
-			if IS_TOUCH then
-				return
-			end
-			tween(minimizeButton, { BackgroundTransparency = 0, TextColor3 = Theme.Text }, 0.15)
-		end)
-		minimizeButton.MouseLeave:Connect(function()
-			tween(minimizeButton, { BackgroundTransparency = 1, TextColor3 = Theme.Muted }, 0.2)
-		end)
 		minimizeButton.MouseButton1Click:Connect(function()
 			window:Minimize(true)
 		end)
@@ -6686,8 +6690,13 @@ function Window:_setCompact(compact, animated)
 		return
 	end
 	self._compact = compact
-	if self._sidebarIcon then
-		setIcon(self._sidebarIcon, compact and "panel-left-open" or "panel-left-close")
+	if self._sidebarGlyph then
+		local paneSize = UDim2.new(0, compact and Const.GLYPH_PANE_CLOSED or Const.GLYPH_PANE_OPEN, 1, -4)
+		if animated then
+			tween(self._sidebarGlyph.Pane, { Size = paneSize }, 0.28, Enum.EasingStyle.Quint)
+		else
+			self._sidebarGlyph.Pane.Size = paneSize
+		end
 	end
 	local width = compact and Const.COMPACT_SIDEBAR or self._sidebarWidth
 	local sidebarSize = UDim2.new(0, width - 8, 1, -16)
@@ -9445,13 +9454,19 @@ local function showToast(host, input)
 		Position = UDim2.new(1, 4, 0, -4),
 		Size = UDim2.fromOffset(IS_TOUCH and 30 or 22, IS_TOUCH and 30 or 22),
 		BackgroundTransparency = 1,
-		Text = "×",
-		TextColor3 = Theme.Muted,
-		TextSize = 20,
-		FontFace = Fonts.Bold,
+		Text = "",
 		AutoButtonColor = false,
 		Parent = topRow,
 	})
+	setIcon(create("ImageLabel", {
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		Position = UDim2.fromScale(0.5, 0.5),
+		Size = UDim2.fromOffset(13, 13),
+		BackgroundTransparency = 1,
+		ImageColor3 = Theme.Muted,
+		ScaleType = Enum.ScaleType.Fit,
+		Parent = dismissButton,
+	}), "x")
 
 	local buttonRow
 	if type(options.Buttons) == "table" and #options.Buttons > 0 then
@@ -10171,7 +10186,7 @@ function Window:_headerRow()
 	local row = create("Frame", {
 		Name = "HeaderItems",
 		AnchorPoint = Vector2.new(1, 0),
-		Position = UDim2.new(1, self._minimizeButton and -94 or -56, 0, 19),
+		Position = UDim2.new(1, self._minimizeButton and -94 or -56, 0, 18),
 		Size = UDim2.fromOffset(0, 24),
 		AutomaticSize = Enum.AutomaticSize.X,
 		BackgroundTransparency = 1,
@@ -11106,37 +11121,48 @@ function Window:_miniBar()
 	})
 	create("UISizeConstraint", { MaxSize = Vector2.new(180, 44), Parent = title })
 
-	local function barButton(order, text, size, onClick)
+	local function barButton(order, icon, onClick)
 		local button = create("TextButton", {
+			Name = order == 3 and "Restore" or "Close",
 			Size = UDim2.fromOffset(32, 32),
 			BackgroundColor3 = Theme.Surface2,
 			BackgroundTransparency = 1,
-			Text = text,
-			TextColor3 = Theme.Muted,
-			TextSize = size,
-			FontFace = Fonts.Bold,
+			Text = "",
 			AutoButtonColor = false,
 			LayoutOrder = order,
 			ZIndex = 41,
 			Parent = bar,
 		})
 		addCorner(button, UDim.new(0, 8))
+		local image = create("ImageLabel", {
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			Position = UDim2.fromScale(0.5, 0.5),
+			Size = UDim2.fromOffset(16, 16),
+			BackgroundTransparency = 1,
+			ImageColor3 = Theme.Muted,
+			ScaleType = Enum.ScaleType.Fit,
+			ZIndex = 42,
+			Parent = button,
+		})
+		setIcon(image, icon)
 		button.MouseEnter:Connect(function()
 			if IS_TOUCH then
 				return
 			end
-			tween(button, { BackgroundTransparency = 0, TextColor3 = Theme.Text }, 0.15)
+			tween(button, { BackgroundTransparency = 0 }, 0.15)
+			tween(image, { ImageColor3 = Theme.Text }, 0.15)
 		end)
 		button.MouseLeave:Connect(function()
-			tween(button, { BackgroundTransparency = 1, TextColor3 = Theme.Muted }, 0.2)
+			tween(button, { BackgroundTransparency = 1 }, 0.2)
+			tween(image, { ImageColor3 = Theme.Muted }, 0.2)
 		end)
 		button.MouseButton1Click:Connect(onClick)
 		return button
 	end
-	barButton(3, "+", 24, function()
+	barButton(3, "maximize-2", function()
 		self:Minimize(false)
 	end)
-	barButton(4, "×", 26, function()
+	barButton(4, "x", function()
 		self:Toggle(false)
 	end)
 
@@ -14494,6 +14520,175 @@ do
 	Tab.CreateConsole = Tab.Console
 	Tab.CreateStatus = Tab.Status
 	Tab.Log = Tab.Console
+
+	do
+		local function fits(kind, value)
+			local valueType = typeof(value)
+			for part in string.gmatch(kind, "[^|]+") do
+				if part == "list" then
+					if valueType == "table" and (value[1] ~= nil or next(value) == nil) then
+						return true
+					end
+				elseif part == valueType then
+					return true
+				end
+			end
+			return false
+		end
+
+		local function fromShorthand(schema, ...)
+			local count = select("#", ...)
+			local first = ...
+			if count == 0 or (count == 1 and type(first) ~= "function") then
+				return nil
+			end
+			local options, extra = {}, nil
+			local slot = 1
+			for index = 1, count do
+				local value = select(index, ...)
+				local valueType = typeof(value)
+				if valueType == "function" then
+					if options.Callback == nil then
+						options.Callback = value
+					end
+				elseif valueType == "table" and not fits("list", value) then
+					extra = extra or {}
+					for key, item in pairs(value) do
+						if extra[key] == nil then
+							extra[key] = item
+						end
+					end
+				elseif value == nil then
+					slot += 1
+				else
+					while schema[slot] and not fits(schema[slot][2], value) do
+						slot += 1
+					end
+					local entry = schema[slot]
+					if entry then
+						options[entry[1]] = value
+						slot += 1
+					end
+				end
+			end
+			if extra then
+				for key, item in pairs(extra) do
+					if options[key] == nil then
+						options[key] = item
+					end
+				end
+			end
+			return options
+		end
+
+		local readingValue = false
+		local liveValue = {
+			__index = function(element, key)
+				if key == "Value" and not readingValue and type(rawget(element, "Get")) == "function" then
+					readingValue = true
+					local ok, value = pcall(rawget(element, "Get"), element)
+					readingValue = false
+					if ok then
+						return value
+					end
+				end
+				return nil
+			end,
+		}
+
+		local title, desc = { "Title", "string" }, { "Desc", "string" }
+		local range = { title, { "Min", "number" }, { "Max", "number" }, { "Value", "number" } }
+		local typing = { title, { "Placeholder", "string" } }
+		Const.SHORTHAND = {
+			Button = { title, desc },
+			Toggle = { title, { "Value", "boolean" } },
+			Slider = range,
+			Stepper = range,
+			Dropdown = { title, { "Values", "list" }, { "Value", "string|number|list" } },
+			Input = typing,
+			TextArea = typing,
+			Keybind = { title, { "Value", "string|EnumItem" } },
+			ColorPicker = { title, { "Value", "Color3" } },
+			Paragraph = { title, desc },
+			Progress = { title, { "Value", "number" } },
+			Code = { title, { "Code", "string" } },
+			Group = { title, desc },
+		}
+
+		for name, schema in pairs(Const.SHORTHAND) do
+			local method = Tab[name]
+			if type(method) == "function" then
+				local function shorthand(self, ...)
+					local options = fromShorthand(schema, ...)
+					local element
+					if options then
+						if name == "Dropdown" and type(options.Value) == "table" and options.Multi == nil then
+							options.Multi = true
+						end
+						element = method(self, options)
+					else
+						element = method(self, ...)
+					end
+					if type(element) == "table" and getmetatable(element) == nil and rawget(element, "Value") == nil
+						and type(rawget(element, "Get")) == "function" then
+						setmetatable(element, liveValue)
+					end
+					return element
+				end
+				for key, value in pairs(table.clone(Tab)) do
+					if value == method then
+						Tab[key] = shorthand
+					end
+				end
+			end
+		end
+
+		local function notifyShorthand(first, second, third, fourth)
+			if type(first) ~= "string" or (second == nil and third == nil and fourth == nil) then
+				return first
+			end
+			local options = { Title = first }
+			local values = { second, third, fourth }
+			for index = 1, 3 do
+				local value = values[index]
+				if type(value) == "number" then
+					options.Duration = value
+				elseif type(value) == "string" and options.Content == nil then
+					options.Content = value
+				elseif type(value) == "string" then
+					options.Type = value
+				end
+			end
+			return options
+		end
+		local windowNotify = Window.Notify
+		Window.Notify = function(self, first, second, third, fourth)
+			return windowNotify(self, notifyShorthand(first, second, third, fourth))
+		end
+		local nucleusNotify = Nucleus.Notify
+		Nucleus.Notify = function(self, first, second, third, fourth)
+			return nucleusNotify(self, notifyShorthand(first, second, third, fourth))
+		end
+
+		local createWindow = Nucleus.Window
+		local function windowShorthand(first, second, third)
+			if first == Nucleus then
+				if type(second) == "string" then
+					second = { Title = second, Author = type(third) == "string" and third or nil }
+				end
+				return createWindow(first, second)
+			end
+			if type(first) == "string" then
+				return createWindow({ Title = first, Author = type(second) == "string" and second or nil })
+			end
+			return createWindow(first, second)
+		end
+		for key, value in pairs(table.clone(Nucleus)) do
+			if value == createWindow then
+				Nucleus[key] = windowShorthand
+			end
+		end
+	end
 
 	local FORGIVING = {
 		"Notify", "Confirm", "Dialog", "Prompt", "Popup", "SetTheme", "AddTheme", "GetValue", "SetValue",
