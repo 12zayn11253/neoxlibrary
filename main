@@ -10,7 +10,7 @@ local LocalPlayer = Players.LocalPlayer
 local Nucleus = {}
 local Const = {}
 Nucleus.Name = "Nucleus UI"
-Nucleus.Version = "4.7.0"
+Nucleus.Version = "4.8.1"
 Nucleus.Flags = {}
 Nucleus.Windows = {}
 
@@ -29,7 +29,7 @@ end
 
 local KNOWN_OPTIONS = {}
 local KNOWN_OPTIONS_LOWER = {}
-for name in string.gmatch("AU AbsoluteContentSize AbsoluteSize Accent AccentDark Active ActiveOnly AliveCheck Always Anonymous Asc Australia AutoLoad AutoSave BR Background BackgroundColor3 BackgroundTransparency Backspace BasePart Began Body Bold BottomRight Brazil Button ButtonRow Buttons CA CFrame Callback Canada Cancel CancelText CanvasGroup Caption Changed Changes ClearOnFocus Close CloseOnBackdrop Code Collapsed Color Color3 ColorPicker Configs ConfigurationSaving Confirm ConfirmText ConfirmTimeout Content ContentProvider Copied Copy Copyable CoreGui Create CurrentKeybind CurrentOption CurrentValue Custom CustomFont DE Danger Date DateFormat Decal Default DefaultState Delay Delete Depends DependsOn Desc Description Details Discord DiscordButton DiscordLink Divider Dropdown Duration Element EmptyText Enabled Ended Enter Entries Enum EnumItem Error ErrorNotifications Esc Example ExcludeSelf Executor Expired Expiry FPS FR FileName Flag Folder FolderName Format Frame France Free GET Game Germany GetActive GetKey Glow Greeting Group GuiButton GuiName GuiObject GuiService HWID HasKey Header HeaderItems Height Hold Home HttpService Humanoid HumanoidRootPart IN Icon Image ImageButton ImageColor3 ImageLabel ImageRectPosition ImageRectSize ImageTransparency Increment India Info Input Instance JP Japan KeepOnScreen Key KeyInfo KeyPanel Keybind Keybinds LAlt LCtrl LShift Label Language Lifetime Lighting Load Loading LoadingDuration LoadingSteps LoadingSubtitle LoadingText LoadingTitle Localization Lock Locked LockedReason Loop LoopDelay Lowest Main MarketplaceService Max MaxDistance MaxHeight MaxLength MaxNotifications MaxSize Medium Membership Merge Message Method Min MinSize MobileButton MobileIcon Mode Model MinimizeButton Mono Monospace Monthly Multi MultiLine Multiline MultipleOptions Muted NL Name NucleusHidden Nucleus NucleusUIBlur NucleusUIFonts NucleusLoc NucleusLocPlaceholderText NucleusLocText NucleusNoTheme Netherlands NoDrag None Not Notification NotificationPosition Notifications Numeric OK OnCancel OnChanged OnClose OnRelease Open OpenButton Opened Options Page Pages Paragraph Parent Ping Placeholder PlaceholderColor3 PlaceholderText Player PlayerGui Players Popup Position Prefix Premium PremiumBanner PremiumButton Perks Price PopupDelay Cooldown HeaderButton ExpiryButtons OnClick OnShown ShowWithoutKey ButtonText Link PremiumLink PremiumText Primary Profile Progress Qd Qn RAlt RCtrl RShift Radius Range Region RegionCity Regular Reminders Render Reset ResetOnUnload Resizable RunService SG Save Scale ScaleType ScreenGui ScrollBarImageColor3 ScrollingFrame Search SearchAfter SearchPlaceholder SearchResults Secondary Section SectionName Sections SemiBold Session ShowFPS ShowPing ShowPromo ShowTime Sidebar SidebarCollapsed Singapore Size Slider Sound Space Standard Stat Stats Step Stepper Stroke StrokeHover Studio Style Subtitle Success Suffix Surface Surface2 Surface3 Tab TabIcon TabSection Tabs Tag TeamCheck TeleportService Tertiary Text TextArea TextBounds TextBox TextButton TextColor3 TextLabel TextScale TextSize TextTransparency Texture Theme ThemeName Time TimeFormat Title Toggle ToggleUIKeybind Tooltip Top TotalTime TouchOnly TransitionIn TransitionOut Translations Transparency TweenService Type TypeName TypeNames UDim2 UICorner UIGradient UIGridLayout UIListLayout UIPadding UIScale UISizeConstraint UIStroke Unavailable Unknown Update UpdateRate Uptime Usage UseDisplayName User UserInputService UserInputType Value Values Variant Vector2 Vector3 Version VirtualUser Visible Volume Warning Weekly Weights Welcome Window Appearance WindowRadius CardRadius CardBorder SidebarWidth Spacing Shadow TabHighlight Fill Outline Data Labels Texts Protected Badge TimeLeft NoKey NeverExpires Ends Ocean Crimson Amber Violet Slate Obsidian Mint Light Badge Settings SettingsTab AccentPicker Interface Server Unload History FlagPrefix Socials Donations Links Url URL Robux AssetId ShirtId GamePassId PassId Address Goal Target Current Thanks ThanksTitle OnDonate ShowOnHome Tiers Amount Currency Network Wallet Depth InnerShadow ScrollFades RememberTab IncludeSelf DisplayNames MaxLines Timestamps AutoScroll EmptyText Status Hidden Build PerGame IgnoreGameProcessed OnResult Elements Element Url Current Notify", "%S+") do
+for name in string.gmatch("AU AbsoluteContentSize AbsoluteSize Accent AccentDark Active ActiveOnly AliveCheck Always Anonymous Asc Australia AutoLoad AutoSave BR Background BackgroundColor3 BackgroundTransparency Backspace BasePart Began Body Bold BottomRight Brazil Button ButtonRow Buttons CA CFrame Callback Canada Cancel CancelText CanvasGroup Caption Changed Changes ClearOnFocus Close CloseOnBackdrop Code Collapsed Color Color3 ColorPicker Configs ConfigurationSaving Confirm ConfirmText ConfirmTimeout Content ContentProvider Copied Copy Copyable CoreGui Create CurrentKeybind CurrentOption CurrentValue Custom CustomFont DE Danger Date DateFormat Decal Default DefaultState Delay Delete Depends DependsOn Desc Description Details Discord DiscordButton DiscordLink Divider Dropdown Duration Element EmptyText Enabled Ended Enter Entries Enum EnumItem Error ErrorNotifications Esc Example ExcludeSelf Executor Expired Expiry FPS FR FileName Flag Folder FolderName Format Frame France Free GET Game Germany GetActive GetKey Glow Greeting Group GuiButton GuiName GuiObject GuiService HWID HasKey Header HeaderItems Height Hold Home HttpService Humanoid HumanoidRootPart IN Icon Image ImageButton ImageColor3 ImageLabel ImageRectPosition ImageRectSize ImageTransparency Increment India Info Input Instance JP Japan KeepOnScreen Key KeyInfo KeyPanel Keybind Keybinds LAlt LCtrl LShift Label Language Lifetime Lighting Load Loading LoadingDuration LoadingSteps LoadingSubtitle LoadingText LoadingTitle Localization Lock Locked LockedReason Loop LoopDelay Lowest Main MarketplaceService Max MaxDistance MaxHeight MaxLength MaxNotifications MaxSize Medium Membership Merge Message Method Min MinSize MobileButton MobileIcon Mode Model MinimizeButton Mono Monospace Monthly Multi MultiLine Multiline MultipleOptions Muted NL Name NucleusHidden Nucleus NucleusUIBlur NucleusUIFonts NucleusLoc NucleusLocPlaceholderText NucleusLocText NucleusNoTheme Netherlands NoDrag None Not Notification NotificationPosition Notifications Numeric OK OnCancel OnChanged OnClose OnRelease Open OpenButton Opened Options Page Pages Paragraph Parent Ping Placeholder PlaceholderColor3 PlaceholderText Player PlayerGui Players Popup Position Prefix Premium PremiumBanner PremiumButton Perks Price PopupDelay Cooldown HeaderButton ExpiryButtons OnClick OnShown ShowWithoutKey ButtonText Link PremiumLink PremiumText Primary Profile Progress Qd Qn RAlt RCtrl RShift Radius Range Region RegionCity Regular Reminders Render Reset ResetOnUnload Resizable RunService SG Save Scale ScaleType ScreenGui ScrollBarImageColor3 ScrollingFrame Search SearchAfter SearchPlaceholder SearchResults Secondary Section SectionName Sections SemiBold Session ShowFPS ShowPing ShowPromo ShowTime Sidebar SidebarCollapsed Singapore Size Slider Sound Space Standard Stat Stats Step Stepper Stroke StrokeHover Studio Style Subtitle Success Suffix Surface Surface2 Surface3 Tab TabIcon TabSection Tabs Tag TeamCheck TeleportService Tertiary Text TextArea TextBounds TextBox TextButton TextColor3 TextLabel TextScale TextSize TextTransparency Texture Theme ThemeName Time TimeFormat Title Toggle ToggleUIKeybind Tooltip Top TotalTime TouchOnly TransitionIn TransitionOut Translations Transparency TweenService Type TypeName TypeNames UDim2 UICorner UIGradient UIGridLayout UIListLayout UIPadding UIScale UISizeConstraint UIStroke Unavailable Unknown Update UpdateRate Uptime Usage UseDisplayName User UserInputService UserInputType Value Values Variant Vector2 Vector3 Version VirtualUser Visible Volume Warning Weekly Weights Welcome Window Appearance WindowRadius CardRadius CardBorder SidebarWidth Spacing Shadow TabHighlight Fill Outline Data Labels Texts Protected Badge TimeLeft NoKey NeverExpires Ends Ocean Crimson Amber Violet Slate Obsidian Mint Light Badge Settings SettingsTab AccentPicker Interface Server Unload History FlagPrefix Socials Donations Links Url URL Robux AssetId ShirtId GamePassId PassId Address Goal Target Current Thanks ThanksTitle OnDonate ShowOnHome Tiers Amount Currency Network Wallet Depth InnerShadow ScrollFades RememberTab IncludeSelf DisplayNames MaxLines Timestamps AutoScroll EmptyText Status Hidden Build PerGame IgnoreGameProcessed OnResult Elements Element Url Current Notify Author ToggleKey HideSearchBar SideBarWidth Folder Transparent Values AllowNone InputIcon Opened ImageSize Thumbnail ThumbnailSize ScrollBarEnabled Checkbox", "%S+") do
 	KNOWN_OPTIONS[name] = true
 	KNOWN_OPTIONS_LOWER[string.lower(name)] = name
 end
@@ -107,6 +107,18 @@ local function normalizeOptions(input, aliases)
 			options[key] = value
 		end
 		checkOptionKeys(options)
+	end
+	local value = options.Value
+	if type(value) == "table" and (value.Min ~= nil or value.Max ~= nil or value.Default ~= nil) and value[1] == nil then
+		options.Min = options.Min or value.Min
+		options.Max = options.Max or value.Max
+		if options.Default == nil then
+			options.Default = value.Default
+		end
+		options.Value = value.Default
+	end
+	if options.Options == nil and type(options.Values) == "table" then
+		options.Options = options.Values
 	end
 	for alias, canonical in pairs(aliases or {}) do
 		if options[canonical] == nil and options[alias] ~= nil then
@@ -1681,6 +1693,14 @@ decorateElement = function(element, frame, options, window)
 
 	element.Locked = false
 	local lockOverlay, lockReasonLabel
+	function element:Lock(reason)
+		return element:SetLocked(true, reason)
+	end
+
+	function element:Unlock()
+		return element:SetLocked(false)
+	end
+
 	function element:SetLocked(locked, reason)
 		element.Locked = locked == true
 		if element.Locked and type(element.SetOpen) == "function" then
@@ -1877,8 +1897,21 @@ function Tab:Label(input)
 	return registerElement(self, options, element, label, "Label")
 end
 
+Const.PARAGRAPH_COLORS = {
+	Red = Color3.fromRGB(240, 110, 110),
+	Orange = Color3.fromRGB(245, 160, 90),
+	Yellow = Color3.fromRGB(240, 205, 100),
+	Green = Color3.fromRGB(120, 210, 150),
+	Blue = Color3.fromRGB(110, 170, 250),
+	Purple = Color3.fromRGB(175, 140, 250),
+	Pink = Color3.fromRGB(240, 140, 190),
+	Grey = Color3.fromRGB(150, 150, 156),
+	Gray = Color3.fromRGB(150, 150, 156),
+	White = Color3.fromRGB(235, 235, 240),
+}
+
 function Tab:Paragraph(input)
-	local options = normalizeOptions(input, { Title = "Name" })
+	local options = normalizeOptions(input, { Title = "Name", Desc = "Content", Description = "Content", Text = "Content" })
 
 	local card = createCard(self, "Frame", 0)
 	card.AutomaticSize = Enum.AutomaticSize.Y
@@ -1941,13 +1974,54 @@ function Tab:Paragraph(input)
 		Parent = card,
 	})
 
+	local accent = options.Color
+	if type(accent) == "string" then
+		accent = Const.PARAGRAPH_COLORS[accent] or Theme[accent]
+	end
+	local titleLabel = titleParent:FindFirstChild("Title")
+	if typeof(accent) == "Color3" then
+		card.BackgroundColor3 = Theme.Surface2:Lerp(accent, 0.12)
+		card:SetAttribute(Const.ATTR_NO_THEME, true)
+		if titleLabel then
+			titleLabel.TextColor3 = accent
+			titleLabel:SetAttribute(Const.ATTR_NO_THEME, true)
+		end
+	end
+
+	local image = options.Image or options.Icon
+	if image ~= nil and image ~= "" and titleLabel then
+		local size = math.clamp(tonumber(options.ImageSize) or 16, 12, 40)
+		local row = create("Frame", {
+			Name = "TitleRow",
+			Size = UDim2.new(1, 0, 0, math.max(size, 14)),
+			BackgroundTransparency = 1,
+			LayoutOrder = 1,
+			Parent = titleParent == card and card or titleParent,
+		})
+		local icon = create("ImageLabel", {
+			Name = "ParagraphImage",
+			AnchorPoint = Vector2.new(0, 0.5),
+			Position = UDim2.fromScale(0, 0.5),
+			Size = UDim2.fromOffset(size, size),
+			BackgroundTransparency = 1,
+			ImageColor3 = typeof(accent) == "Color3" and accent or Theme.Accent,
+			ScaleType = Enum.ScaleType.Fit,
+			Parent = row,
+		})
+		setIcon(icon, image)
+		titleLabel.Parent = row
+		titleLabel.AnchorPoint = Vector2.new(0, 0.5)
+		titleLabel.Position = UDim2.new(0, size + 8, 0.5, 0)
+		titleLabel.Size = UDim2.new(1, -(size + 8) - (options.Copyable and 24 or 0), 0, 14)
+	end
+
 	local element = {}
 	function element:Set(text)
 		if type(text) == "table" then
 			if text.Title ~= nil then
 				element:SetTitle(text.Title)
 			end
-			text = text.Content
+			text = text.Content or text.Desc
 			if text == nil then
 				return
 			end
@@ -1955,8 +2029,66 @@ function Tab:Paragraph(input)
 		content.Text = text == nil and "" or tostring(text)
 	end
 	element.SetContent = element.Set
+	element.SetDesc = element.Set
 	function element:Get()
 		return content.Text
+	end
+
+	if type(options.Buttons) == "table" and #options.Buttons > 0 then
+		local row = create("Frame", {
+			Name = "Buttons",
+			Size = UDim2.new(1, 0, 0, 30),
+			BackgroundTransparency = 1,
+			LayoutOrder = 3,
+			Parent = card,
+		})
+		create("UIListLayout", {
+			FillDirection = Enum.FillDirection.Horizontal,
+			Padding = UDim.new(0, 6),
+			SortOrder = Enum.SortOrder.LayoutOrder,
+			Parent = row,
+		})
+		create("UIPadding", { PaddingTop = UDim.new(0, 4), Parent = row })
+		for index, definition in ipairs(options.Buttons) do
+			if type(definition) == "table" then
+				local primary = definition.Primary == true or definition.Variant == "Primary"
+				local button = create("TextButton", {
+					Size = UDim2.fromOffset(0, 26),
+					AutomaticSize = Enum.AutomaticSize.X,
+					BackgroundColor3 = primary and Theme.Accent or Theme.Surface,
+					BorderSizePixel = 0,
+					Text = "",
+					AutoButtonColor = false,
+					LayoutOrder = index,
+					Parent = row,
+				})
+				button:SetAttribute(Const.ATTR_NO_DRAG, true)
+				addCorner(button, UDim.new(0, 7))
+				if not primary then
+					addStroke(button)
+				end
+				local left = 10
+				if definition.Icon then
+					createIcon(button, definition.Icon, primary and Theme.AccentDark or Theme.Muted, UDim2.new(0, 9, 0.5, 0))
+					left = 29
+				end
+				addPadding(button, left, 10)
+				createLabel({
+					Size = UDim2.fromOffset(0, 26),
+					AutomaticSize = Enum.AutomaticSize.X,
+					Text = tostring(definition.Title or definition.Name or "Button"),
+					TextSize = 12,
+					TextColor3 = primary and Theme.AccentDark or Theme.Text,
+					TextTruncate = Enum.TextTruncate.None,
+					Parent = button,
+				})
+				button.MouseButton1Click:Connect(function()
+					if type(definition.Callback) == "function" then
+						runProtected(("paragraph button \"%s\""):format(tostring(definition.Title or definition.Name)), definition.Callback)
+					end
+				end)
+			end
+		end
 	end
 
 	if copyButton then
@@ -2136,17 +2268,34 @@ function Tab:Toggle(input)
 	local trackWidth = IS_TOUCH and 36 or 32
 	local knobSize = IS_TOUCH and 14 or 12
 
+	local isCheckbox = options.Type == "Checkbox" or options.Style == "Checkbox"
+	local boxSize = IS_TOUCH and 20 or 18
 	local track = create("Frame", {
 		AnchorPoint = Vector2.new(1, 0.5),
 		Position = UDim2.new(1, -14, 0.5, 0),
-		Size = IS_TOUCH and UDim2.fromOffset(36, 20) or UDim2.fromOffset(32, 18),
+		Size = isCheckbox and UDim2.fromOffset(boxSize, boxSize) or (IS_TOUCH and UDim2.fromOffset(36, 20) or UDim2.fromOffset(32, 18)),
 		BackgroundColor3 = Theme.Surface3,
 		BorderSizePixel = 0,
 		Parent = card,
 	})
-	addCorner(track, UDim.new(1, 0))
+	addCorner(track, isCheckbox and UDim.new(0, 5) or UDim.new(1, 0))
 	addStroke(track, Theme.Stroke)
 	addInnerShadow(track, 0.62, 0.6)
+	local checkIcon
+	if isCheckbox then
+		trackWidth = boxSize
+		checkIcon = create("ImageLabel", {
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			Position = UDim2.fromScale(0.5, 0.5),
+			Size = UDim2.fromOffset(boxSize - 6, boxSize - 6),
+			BackgroundTransparency = 1,
+			ImageColor3 = Theme.AccentDark,
+			ImageTransparency = 1,
+			ZIndex = 2,
+			Parent = track,
+		})
+		setIcon(checkIcon, "check")
+	end
 
 	local knob = create("Frame", {
 		AnchorPoint = Vector2.new(0, 0.5),
@@ -2163,6 +2312,12 @@ function Tab:Toggle(input)
 	local function render(animated)
 		local on = element.Value
 		local duration = animated and 0.25 or 0
+		if isCheckbox then
+			knob.Visible = false
+			tween(track, { BackgroundColor3 = on and Theme.Accent or Theme.Surface3 }, duration * 0.6)
+			tween(checkIcon, { ImageTransparency = on and 0 or 1 }, duration * 0.6)
+			return
+		end
 		tween(track, { BackgroundColor3 = on and Theme.Accent or Theme.Surface3 }, duration)
 		tween(knob, {
 			Position = on and UDim2.new(0, trackWidth - 3 - knobSize, 0.5, 0) or UDim2.new(0, 3, 0.5, 0),
@@ -2580,6 +2735,14 @@ function Tab:Slider(input)
 
 	function element:Get()
 		return element.Value
+	end
+
+	function element:SetMin(newMin)
+		return element:SetRange(newMin, maximum)
+	end
+
+	function element:SetMax(newMax)
+		return element:SetRange(minimum, newMax)
 	end
 
 	function element:SetRange(newMin, newMax, newStep)
@@ -3057,6 +3220,10 @@ function Tab:Dropdown(input)
 
 	function element:Get()
 		return getSelection()
+	end
+
+	function element:Select(value)
+		return element:Set(value)
 	end
 
 	function element:Refresh(newOptions, keepSelection)
@@ -5056,8 +5223,23 @@ function Nucleus.Window(selfOrOptions, maybeOptions)
 	local options = normalizeOptions(input, {
 		Name = "Title",
 		LoadingSubtitle = "Subtitle",
+		Author = "Subtitle",
 		ToggleUIKeybind = "Keybind",
+		ToggleKey = "Keybind",
 	})
+	if options.HideSearchBar == true and options.Search == nil then
+		options.Search = false
+	end
+	local sidebarWidth = options.SidebarWidth or options.SideBarWidth
+	if sidebarWidth ~= nil then
+		options.Appearance = type(options.Appearance) == "table" and table.clone(options.Appearance) or {}
+		if options.Appearance.SidebarWidth == nil then
+			options.Appearance.SidebarWidth = sidebarWidth
+		end
+	end
+	if type(options.Folder) == "string" and options.ConfigurationSaving == nil then
+		options.ConfigurationSaving = { Enabled = true, FolderName = options.Folder }
+	end
 
 	if options.Theme ~= nil then
 		Nucleus:SetTheme(options.Theme)
@@ -5214,6 +5396,10 @@ function Nucleus.Window(selfOrOptions, maybeOptions)
 	})
 	addCorner(sidebar, UDim.new(0, 10))
 	window._sidebar = sidebar
+	if options.Transparent == true then
+		body.BackgroundTransparency = 0.12
+		sidebar.BackgroundTransparency = 0.35
+	end
 
 	local brand = create("Frame", {
 		Name = "Header",
@@ -5837,6 +6023,9 @@ end
 
 Const.THEME_ALIASES = {
 	Mono = "Default",
+	Dark = "Default",
+	White = "Light",
+	Black = "Obsidian",
 }
 
 local function resolveTheme(themeInput)
@@ -6485,6 +6674,9 @@ function Window:_layoutTabButton(tab)
 	if tab._badge then
 		tab._badge.Visible = not compact and tab._badgeText ~= nil
 		tab:_fitBadge()
+	end
+	if tab._lockIcon then
+		tab._lockIcon.Visible = tab._locked == true and not compact
 	end
 end
 
@@ -7237,7 +7429,7 @@ Const.DEFAULT_STATS = { "FPS", "Ping", "Executor", "Game", "Region", "Time" }
 
 function Window:_buildHome(homeOptions, membership)
 	local homeTab = self:Tab({
-		Name = homeOptions.Name or "Home",
+		Name = homeOptions.Name or homeOptions.Title or "Home",
 		Desc = homeOptions.Desc,
 		Icon = homeOptions.Icon or "house",
 	})
@@ -7882,6 +8074,9 @@ function Window:Tab(input, icon)
 	self:_layoutTabButton(tab)
 	if type(options.Build) == "function" then
 		tab._lazyBuild = options.Build
+	end
+	if options.Locked == true then
+		tab:SetLocked(true, options.LockedReason)
 	end
 	if options.Visible == false or options.Hidden == true then
 		task.defer(function()
@@ -13504,10 +13699,63 @@ do
 		return baseRunSearch(self, text, ...)
 	end
 
+	function Tab:SetLocked(locked, reason)
+		self._locked = locked == true
+		self._lockedReason = reason
+		local faded = self._locked and 0.55 or 0
+		if self._label then
+			self._label.TextTransparency = faded
+		end
+		if self._icon then
+			self._icon.ImageTransparency = faded
+		end
+		if not self._lockIcon and self._locked and self._button then
+			self._lockIcon = create("ImageLabel", {
+				Name = "LockIcon",
+				AnchorPoint = Vector2.new(1, 0.5),
+				Position = UDim2.new(1, -10, 0.5, 0),
+				Size = UDim2.fromOffset(12, 12),
+				BackgroundTransparency = 1,
+				ImageColor3 = Theme.Muted,
+				ZIndex = 2,
+				Parent = self._button,
+			})
+			setIcon(self._lockIcon, "lock")
+		end
+		if self._lockIcon then
+			self._lockIcon.Visible = self._locked and not self.Window._compact
+		end
+		return self
+	end
+
+	function Tab:Lock(reason)
+		return self:SetLocked(true, reason)
+	end
+
+	function Tab:Unlock()
+		return self:SetLocked(false)
+	end
+
+	function Tab:IsLocked()
+		return self._locked == true
+	end
+
 	local baseSelectTab = Window.SelectTab
 	function Window:SelectTab(tab, ...)
 		if type(tab) == "string" then
 			tab = self:GetTab(tab) or tab
+		end
+		if type(tab) == "table" and tab._locked then
+			if self._introDone then
+				self:Notify({
+					Title = tostring(tab.Name or "Tab") .. " is locked",
+					Content = tostring(tab._lockedReason or "This tab isn't available right now."),
+					Type = "Warning",
+					Icon = "lock",
+					Duration = 4,
+				})
+			end
+			return nil
 		end
 		if type(tab) == "table" and tab._lazyBuild then
 			tab:Build()
@@ -14238,6 +14486,10 @@ do
 	end
 
 	Tab.CreateElements = Tab.AddElements
+	Window.Section = Window.TabSection
+	Window.CreateSection = Window.TabSection
+	Tab.Colorpicker = Tab.ColorPicker
+	Tab.CreateColorpicker = Tab.ColorPicker
 	Tab.CreatePlayerDropdown = Tab.PlayerDropdown
 	Tab.CreateConsole = Tab.Console
 	Tab.CreateStatus = Tab.Status
