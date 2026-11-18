@@ -10,7 +10,7 @@ local LocalPlayer = Players.LocalPlayer
 local Nucleus = {}
 local Const = {}
 Nucleus.Name = "Nucleus UI"
-Nucleus.Version = "4.5.0"
+Nucleus.Version = "4.6.0"
 Nucleus.Flags = {}
 Nucleus.Windows = {}
 
@@ -29,7 +29,7 @@ end
 
 local KNOWN_OPTIONS = {}
 local KNOWN_OPTIONS_LOWER = {}
-for name in string.gmatch("AU AbsoluteContentSize AbsoluteSize Accent AccentDark Active ActiveOnly AliveCheck Always Anonymous Asc Australia AutoLoad AutoSave BR Background BackgroundColor3 BackgroundTransparency Backspace BasePart Began Body Bold BottomRight Brazil Button ButtonRow Buttons CA CFrame Callback Canada Cancel CancelText CanvasGroup Caption Changed Changes ClearOnFocus Close CloseOnBackdrop Code Collapsed Color Color3 ColorPicker Configs ConfigurationSaving Confirm ConfirmText ConfirmTimeout Content ContentProvider Copied Copy Copyable CoreGui Create CurrentKeybind CurrentOption CurrentValue Custom CustomFont DE Danger Date DateFormat Decal Default DefaultState Delay Delete Depends DependsOn Desc Description Details Discord DiscordButton DiscordLink Divider Dropdown Duration Element EmptyText Enabled Ended Enter Entries Enum EnumItem Error ErrorNotifications Esc Example ExcludeSelf Executor Expired Expiry FPS FR FileName Flag Folder FolderName Format Frame France Free GET Game Germany GetActive GetKey Glow Greeting Group GuiButton GuiName GuiObject GuiService HWID HasKey Header HeaderItems Height Hold Home HttpService Humanoid HumanoidRootPart IN Icon Image ImageButton ImageColor3 ImageLabel ImageRectPosition ImageRectSize ImageTransparency Increment India Info Input Instance JP Japan KeepOnScreen Key KeyInfo KeyPanel Keybind Keybinds LAlt LCtrl LShift Label Language Lifetime Lighting Load Loading LoadingDuration LoadingSteps LoadingSubtitle LoadingText LoadingTitle Localization Lock Locked LockedReason Loop LoopDelay Lowest Main MarketplaceService Max MaxDistance MaxHeight MaxLength MaxNotifications MaxSize Medium Membership Merge Message Method Min MinSize MobileButton MobileIcon Mode Model MinimizeButton Mono Monospace Monthly Multi MultiLine Multiline MultipleOptions Muted NL Name NucleusHidden Nucleus NucleusUIBlur NucleusUIFonts NucleusLoc NucleusLocPlaceholderText NucleusLocText NucleusNoTheme Netherlands NoDrag None Not Notification NotificationPosition Notifications Numeric OK OnCancel OnChanged OnClose OnRelease Open OpenButton Opened Options Page Pages Paragraph Parent Ping Placeholder PlaceholderColor3 PlaceholderText Player PlayerGui Players Popup Position Prefix Premium PremiumBanner PremiumButton Perks Price PopupDelay Cooldown HeaderButton ExpiryButtons OnClick OnShown ShowWithoutKey ButtonText Link PremiumLink PremiumText Primary Profile Progress Qd Qn RAlt RCtrl RShift Radius Range Region RegionCity Regular Reminders Render Reset ResetOnUnload Resizable RunService SG Save Scale ScaleType ScreenGui ScrollBarImageColor3 ScrollingFrame Search SearchAfter SearchPlaceholder SearchResults Secondary Section SectionName Sections SemiBold Session ShowFPS ShowPing ShowPromo ShowTime Sidebar SidebarCollapsed Singapore Size Slider Sound Space Standard Stat Stats Step Stepper Stroke StrokeHover Studio Style Subtitle Success Suffix Surface Surface2 Surface3 Tab TabIcon TabSection Tabs Tag TeamCheck TeleportService Tertiary Text TextArea TextBounds TextBox TextButton TextColor3 TextLabel TextScale TextSize TextTransparency Texture Theme ThemeName Time TimeFormat Title Toggle ToggleUIKeybind Tooltip Top TotalTime TouchOnly TransitionIn TransitionOut Translations Transparency TweenService Type TypeName TypeNames UDim2 UICorner UIGradient UIGridLayout UIListLayout UIPadding UIScale UISizeConstraint UIStroke Unavailable Unknown Update UpdateRate Uptime Usage UseDisplayName User UserInputService UserInputType Value Values Variant Vector2 Vector3 Version VirtualUser Visible Volume Warning Weekly Weights Welcome Window Appearance WindowRadius CardRadius CardBorder SidebarWidth Spacing Shadow TabHighlight Fill Outline Data Labels Texts Protected Badge TimeLeft NoKey NeverExpires Ends Ocean Crimson Amber Violet Slate Obsidian Mint Light Badge Settings SettingsTab AccentPicker Interface Server Unload History FlagPrefix Socials Donations Links Url URL Robux AssetId ShirtId GamePassId PassId Address Goal Target Current Thanks ThanksTitle OnDonate ShowOnHome Tiers Amount Currency Network Wallet Depth InnerShadow ScrollFades", "%S+") do
+for name in string.gmatch("AU AbsoluteContentSize AbsoluteSize Accent AccentDark Active ActiveOnly AliveCheck Always Anonymous Asc Australia AutoLoad AutoSave BR Background BackgroundColor3 BackgroundTransparency Backspace BasePart Began Body Bold BottomRight Brazil Button ButtonRow Buttons CA CFrame Callback Canada Cancel CancelText CanvasGroup Caption Changed Changes ClearOnFocus Close CloseOnBackdrop Code Collapsed Color Color3 ColorPicker Configs ConfigurationSaving Confirm ConfirmText ConfirmTimeout Content ContentProvider Copied Copy Copyable CoreGui Create CurrentKeybind CurrentOption CurrentValue Custom CustomFont DE Danger Date DateFormat Decal Default DefaultState Delay Delete Depends DependsOn Desc Description Details Discord DiscordButton DiscordLink Divider Dropdown Duration Element EmptyText Enabled Ended Enter Entries Enum EnumItem Error ErrorNotifications Esc Example ExcludeSelf Executor Expired Expiry FPS FR FileName Flag Folder FolderName Format Frame France Free GET Game Germany GetActive GetKey Glow Greeting Group GuiButton GuiName GuiObject GuiService HWID HasKey Header HeaderItems Height Hold Home HttpService Humanoid HumanoidRootPart IN Icon Image ImageButton ImageColor3 ImageLabel ImageRectPosition ImageRectSize ImageTransparency Increment India Info Input Instance JP Japan KeepOnScreen Key KeyInfo KeyPanel Keybind Keybinds LAlt LCtrl LShift Label Language Lifetime Lighting Load Loading LoadingDuration LoadingSteps LoadingSubtitle LoadingText LoadingTitle Localization Lock Locked LockedReason Loop LoopDelay Lowest Main MarketplaceService Max MaxDistance MaxHeight MaxLength MaxNotifications MaxSize Medium Membership Merge Message Method Min MinSize MobileButton MobileIcon Mode Model MinimizeButton Mono Monospace Monthly Multi MultiLine Multiline MultipleOptions Muted NL Name NucleusHidden Nucleus NucleusUIBlur NucleusUIFonts NucleusLoc NucleusLocPlaceholderText NucleusLocText NucleusNoTheme Netherlands NoDrag None Not Notification NotificationPosition Notifications Numeric OK OnCancel OnChanged OnClose OnRelease Open OpenButton Opened Options Page Pages Paragraph Parent Ping Placeholder PlaceholderColor3 PlaceholderText Player PlayerGui Players Popup Position Prefix Premium PremiumBanner PremiumButton Perks Price PopupDelay Cooldown HeaderButton ExpiryButtons OnClick OnShown ShowWithoutKey ButtonText Link PremiumLink PremiumText Primary Profile Progress Qd Qn RAlt RCtrl RShift Radius Range Region RegionCity Regular Reminders Render Reset ResetOnUnload Resizable RunService SG Save Scale ScaleType ScreenGui ScrollBarImageColor3 ScrollingFrame Search SearchAfter SearchPlaceholder SearchResults Secondary Section SectionName Sections SemiBold Session ShowFPS ShowPing ShowPromo ShowTime Sidebar SidebarCollapsed Singapore Size Slider Sound Space Standard Stat Stats Step Stepper Stroke StrokeHover Studio Style Subtitle Success Suffix Surface Surface2 Surface3 Tab TabIcon TabSection Tabs Tag TeamCheck TeleportService Tertiary Text TextArea TextBounds TextBox TextButton TextColor3 TextLabel TextScale TextSize TextTransparency Texture Theme ThemeName Time TimeFormat Title Toggle ToggleUIKeybind Tooltip Top TotalTime TouchOnly TransitionIn TransitionOut Translations Transparency TweenService Type TypeName TypeNames UDim2 UICorner UIGradient UIGridLayout UIListLayout UIPadding UIScale UISizeConstraint UIStroke Unavailable Unknown Update UpdateRate Uptime Usage UseDisplayName User UserInputService UserInputType Value Values Variant Vector2 Vector3 Version VirtualUser Visible Volume Warning Weekly Weights Welcome Window Appearance WindowRadius CardRadius CardBorder SidebarWidth Spacing Shadow TabHighlight Fill Outline Data Labels Texts Protected Badge TimeLeft NoKey NeverExpires Ends Ocean Crimson Amber Violet Slate Obsidian Mint Light Badge Settings SettingsTab AccentPicker Interface Server Unload History FlagPrefix Socials Donations Links Url URL Robux AssetId ShirtId GamePassId PassId Address Goal Target Current Thanks ThanksTitle OnDonate ShowOnHome Tiers Amount Currency Network Wallet Depth InnerShadow ScrollFades RememberTab IncludeSelf DisplayNames MaxLines Timestamps AutoScroll EmptyText Status Hidden", "%S+") do
 	KNOWN_OPTIONS[name] = true
 	KNOWN_OPTIONS_LOWER[string.lower(name)] = name
 end
@@ -1419,6 +1419,12 @@ local function registerElement(tab, options, element, frame, typeName, callbackK
 		Nucleus.Flags[options.Flag] = element
 		if window then
 			window.Flags[options.Flag] = element
+		end
+		local pending = Nucleus._flagListeners and Nucleus._flagListeners[options.Flag]
+		if pending then
+			for _, entry in ipairs(pending) do
+				entry.Connections[element] = element:OnChanged(entry.Listener)
+			end
 		end
 	end
 
@@ -5705,6 +5711,15 @@ function Nucleus.Window(selfOrOptions, maybeOptions)
 
 	window:_setupPremium(options)
 	window:_setupDonations()
+	if options.RememberTab == true then
+		local key = tostring(options.Title or "window"):gsub("[^%w]", "")
+		window._rememberKey = "tab_" .. (key ~= "" and key or "window")
+		task.delay(0.6, function()
+			if not window._destroyed then
+				window:_restoreTab()
+			end
+		end)
+	end
 	if options.Home ~= false then
 		window:_buildHome(type(options.Home) == "table" and options.Home or {}, options.Membership)
 	end
@@ -7819,6 +7834,11 @@ function Window:Tab(input, icon)
 		tab:SetBadge(options.Badge)
 	end
 	self:_layoutTabButton(tab)
+	if options.Visible == false or options.Hidden == true then
+		task.defer(function()
+			tab:SetVisible(false)
+		end)
+	end
 
 	table.insert(self.Tabs, tab)
 	if #self.Tabs == 1 then
@@ -8551,7 +8571,7 @@ function Window:_runSearch(text)
 
 	local matches = {}
 	for _, tab in ipairs(self.Tabs) do
-		if string.find(string.lower(tab.Name), query, 1, true) then
+		if not tab._userHidden and string.find(string.lower(tab.Name), query, 1, true) then
 			table.insert(matches, { Title = tab.Name, Subtitle = "Tab", Tab = tab })
 		end
 	end
@@ -8561,6 +8581,7 @@ function Window:_runSearch(text)
 		end
 		local element = entry.Element
 		if not element._destroyed and entry.Frame.Parent and element.Visible ~= false
+			and not (entry.Tab and entry.Tab._userHidden)
 			and string.find(string.lower(entry.Name), query, 1, true)
 		then
 			table.insert(matches, {
@@ -9844,9 +9865,10 @@ function Window:TabSection(input)
 		section.Opened = open == true
 		chevron:Set(section.Opened)
 		for _, tab in ipairs(section.Tabs) do
-			tab._button:SetAttribute(Const.ATTR_HIDDEN, not section.Opened)
+			local show = section.Opened and not tab._userHidden
+			tab._button:SetAttribute(Const.ATTR_HIDDEN, not show)
 			if self.Window._introDone then
-				tab._button.Visible = section.Opened
+				tab._button.Visible = show
 			end
 		end
 		section:_refreshCount()
@@ -9877,9 +9899,9 @@ function Window:TabSection(input)
 		header.Visible = not compact
 		if compact then
 			for _, tab in ipairs(section.Tabs) do
-				tab._button:SetAttribute(Const.ATTR_HIDDEN, false)
+				tab._button:SetAttribute(Const.ATTR_HIDDEN, tab._userHidden == true)
 				if section.Window._introDone then
-					tab._button.Visible = true
+					tab._button.Visible = not tab._userHidden
 				end
 			end
 		else
@@ -12823,14 +12845,9 @@ do
 				grid:Destroy()
 			end
 			grid = createButtonGrid(card, 4, #controller.Options)
-			local anyPrimary = false
-			for _, item in ipairs(controller.Options) do
-				anyPrimary = anyPrimary or item.Primary
-			end
 			for index, item in ipairs(controller.Options) do
 				local side = amountText(item.Amount, options.Currency) or (item.Address and "Copy" or nil)
-				local primary = item.Primary or (not anyPrimary and index == 1)
-				createGridButton(grid, index, item.Name, donationIcon(item), side, primary, function()
+				createGridButton(grid, index, item.Name, donationIcon(item), side, item.Primary, function()
 					window:_donate(item, options)
 				end)
 			end
@@ -12934,7 +12951,7 @@ do
 			local amount = amountText(item.Amount, options.Currency)
 			table.insert(buttons, {
 				Title = amount and (item.Name .. "  " .. amount) or item.Name,
-				Variant = index == 1 and "Primary" or nil,
+				Variant = item.Primary and "Primary" or nil,
 				Callback = function()
 					self:_donate(item, options)
 				end,
@@ -13270,12 +13287,615 @@ do
 	Tab.CreateSystemStats = Tab.SystemStats
 	Tab.CreateSettings = Tab.Settings
 
+	function Tab:SetVisible(visible)
+		visible = visible ~= false
+		self._userHidden = not visible
+		local window = self.Window
+		local section = self._section
+		local show = visible and (section == nil or section.Opened or window._compact)
+		self._button:SetAttribute(Const.ATTR_HIDDEN, not show)
+		if window._introDone then
+			self._button.Visible = show
+		end
+		if section and section._refreshCount then
+			section:_refreshCount()
+		end
+		if not visible and window.CurrentTab == self then
+			for _, other in ipairs(window.Tabs) do
+				if other ~= self and not other._userHidden then
+					window:SelectTab(other)
+					break
+				end
+			end
+		elseif window.CurrentTab then
+			window:_placeIndicator(window.CurrentTab)
+		end
+		return self
+	end
+
+	function Tab:Hide()
+		return self:SetVisible(false)
+	end
+
+	function Tab:Show()
+		return self:SetVisible(true)
+	end
+
+	function Tab:IsVisible()
+		return not self._userHidden
+	end
+
+	function Tab:IsSelected()
+		return self.Window.CurrentTab == self
+	end
+
+	function Tab:SetIcon(icon)
+		if self._icon then
+			if icon == nil or icon == false then
+				self._icon.Visible = false
+			else
+				setIcon(self._icon, icon)
+				self._icon.Visible = true
+			end
+		end
+		return self
+	end
+
+	function Tab:Destroy()
+		local window = self.Window
+		if self._destroyed then
+			return
+		end
+		self._destroyed = true
+		if window._outLayer then
+			window:_settleTransition()
+		end
+		local index = table.find(window.Tabs, self)
+		if index then
+			table.remove(window.Tabs, index)
+		end
+		if self._section then
+			local sectionIndex = table.find(self._section.Tabs, self)
+			if sectionIndex then
+				table.remove(self._section.Tabs, sectionIndex)
+			end
+			if self._section._refreshCount then
+				self._section:_refreshCount()
+			end
+		end
+		for flag, element in pairs(window.Flags) do
+			local owner = element._tab
+			if owner == self or (owner and owner._rootTab == self) then
+				window.Flags[flag] = nil
+				if Nucleus.Flags[flag] == element then
+					Nucleus.Flags[flag] = nil
+				end
+			end
+		end
+		if window.CurrentTab == self then
+			window.CurrentTab = nil
+			if window.Indicator then
+				window.Indicator.Parent = window.TabList
+				window.Indicator.Visible = false
+			end
+			for _, other in ipairs(window.Tabs) do
+				if not other._userHidden then
+					window:SelectTab(other)
+					break
+				end
+			end
+		end
+		if self._button then
+			self._button:Destroy()
+		end
+		if self._page then
+			self._page:Destroy()
+		end
+	end
+
+	function Window:GetTab(name)
+		for _, tab in ipairs(self.Tabs) do
+			if tab.Name == name then
+				return tab
+			end
+		end
+		local lowered = string.lower(tostring(name or ""))
+		for _, tab in ipairs(self.Tabs) do
+			if string.lower(tab.Name) == lowered then
+				return tab
+			end
+		end
+		return nil
+	end
+
+	function Window:GetCurrentTab()
+		return self.CurrentTab
+	end
+
+	function Window:OnTabChanged(listener)
+		if type(listener) ~= "function" then
+			return { Disconnect = function() end }
+		end
+		self._tabListeners = self._tabListeners or {}
+		table.insert(self._tabListeners, listener)
+		return {
+			Disconnect = function()
+				local index = table.find(self._tabListeners, listener)
+				if index then
+					table.remove(self._tabListeners, index)
+				end
+			end,
+		}
+	end
+
+	local baseSelectTab = Window.SelectTab
+	function Window:SelectTab(tab, ...)
+		local previous = self.CurrentTab
+		local result = baseSelectTab(self, tab, ...)
+		local current = self.CurrentTab
+		if current ~= previous and current then
+			for _, listener in ipairs(table.clone(self._tabListeners or {})) do
+				runProtected("OnTabChanged", listener, current, previous)
+			end
+			if self._rememberKey and self._rememberReady and current.Name then
+				Nucleus.Utils.SaveData(self._rememberKey, { Tab = current.Name })
+			end
+		end
+		return result
+	end
+
+	function Window:_restoreTab()
+		if not self._rememberKey then
+			return
+		end
+		local saved = Nucleus.Utils.LoadData(self._rememberKey, nil)
+		local tab = type(saved) == "table" and saved.Tab and self:GetTab(saved.Tab)
+		if tab and not tab._userHidden and self.CurrentTab ~= tab then
+			self:SelectTab(tab)
+		end
+		self._rememberReady = true
+	end
+
+	function Nucleus:OnFlagChanged(flag, listener)
+		if type(flag) ~= "string" or type(listener) ~= "function" then
+			log("OnFlagChanged needs a flag name and a function")
+			return { Disconnect = function() end }
+		end
+		Nucleus._flagListeners = Nucleus._flagListeners or {}
+		local list = Nucleus._flagListeners[flag] or {}
+		Nucleus._flagListeners[flag] = list
+		local entry = { Listener = listener, Connections = {} }
+		table.insert(list, entry)
+		local existing = Nucleus.Flags[flag]
+		if existing and existing.OnChanged then
+			entry.Connections[existing] = existing:OnChanged(listener)
+		end
+		return {
+			Disconnect = function()
+				local index = table.find(list, entry)
+				if index then
+					table.remove(list, index)
+				end
+				for _, connection in pairs(entry.Connections) do
+					if connection and connection.Disconnect then
+						connection.Disconnect()
+					end
+				end
+				entry.Connections = {}
+			end,
+		}
+	end
+
+	function Window:OnFlagChanged(flag, listener)
+		return Nucleus:OnFlagChanged(flag, listener)
+	end
+
+	local function playerLabel(player, useDisplay)
+		if useDisplay and player.DisplayName and player.DisplayName ~= player.Name then
+			return player.DisplayName .. " (@" .. player.Name .. ")"
+		end
+		return player.Name
+	end
+
+	function Tab:PlayerDropdown(input)
+		local options = normalizeOptions(input, { Title = "Name", Description = "Desc" })
+		local includeSelf = options.IncludeSelf == true
+		local useDisplay = options.DisplayNames ~= false
+		local labelToName = {}
+		local function buildList()
+			local labels = {}
+			labelToName = {}
+			local players = Players:GetPlayers()
+			table.sort(players, function(a, b)
+				return string.lower(a.Name) < string.lower(b.Name)
+			end)
+			for _, player in ipairs(players) do
+				if includeSelf or player ~= LocalPlayer then
+					local label = playerLabel(player, useDisplay)
+					labelToName[label] = player.Name
+					table.insert(labels, label)
+				end
+			end
+			return labels
+		end
+		local userCallback = options.Callback
+		local dropdown
+		local function findByName(name)
+			for _, player in ipairs(Players:GetPlayers()) do
+				if player.Name == name then
+					return player
+				end
+			end
+			return nil
+		end
+		local function toPlayers(value)
+			if type(value) == "table" then
+				local list = {}
+				for _, label in ipairs(value) do
+					local player = findByName(labelToName[label] or label)
+					if player then
+						table.insert(list, player)
+					end
+				end
+				return list
+			end
+			if value == nil then
+				return nil
+			end
+			return findByName(labelToName[value] or value)
+		end
+		local dropdownOptions = table.clone(options)
+		dropdownOptions.Options = buildList()
+		dropdownOptions.Name = options.Name or (options.Multi and "Players" or "Player")
+		dropdownOptions.Search = options.Search ~= false
+		dropdownOptions.Callback = function(value)
+			if userCallback then
+				userCallback(toPlayers(value), value)
+			end
+		end
+		dropdown = self:Dropdown(dropdownOptions)
+		if not dropdown then
+			return nil
+		end
+		local function refresh()
+			if dropdown._destroyed then
+				return
+			end
+			dropdown:Refresh(buildList(), true)
+		end
+		local window = self.Window
+		window:Connect(Players.PlayerAdded, function()
+			task.defer(refresh)
+		end)
+		window:Connect(Players.PlayerRemoving, function()
+			task.defer(refresh)
+		end)
+		function dropdown:GetPlayer()
+			return toPlayers(dropdown:Get())
+		end
+		dropdown.GetPlayers = dropdown.GetPlayer
+		function dropdown:RefreshPlayers()
+			refresh()
+		end
+		return dropdown
+	end
+
+	local CONSOLE_COLORS = { Info = "Text", Success = "Success", Warning = "Warning", Error = "Error", Muted = "Muted" }
+
+	function Tab:Console(input)
+		local options = normalizeOptions(input, { Title = "Name" })
+		local maxLines = math.clamp(tonumber(options.MaxLines) or 100, 5, 500)
+		local height = math.clamp(tonumber(options.Height) or 160, 80, 600)
+		local showTime = options.Timestamps ~= false
+		local card = create("Frame", {
+			Size = UDim2.new(1, 0, 0, 0),
+			AutomaticSize = Enum.AutomaticSize.Y,
+			BackgroundColor3 = Theme.Surface2,
+			BorderSizePixel = 0,
+			LayoutOrder = self:_nextOrder(),
+			Parent = self.List,
+		})
+		card:SetAttribute(Const.ATTR_NO_DRAG, true)
+		styleCard(card)
+		addPadding(card, 12, 12, 10, 12)
+		create("UIListLayout", { SortOrder = Enum.SortOrder.LayoutOrder, Padding = UDim.new(0, 8), Parent = card })
+		local header = create("Frame", { Size = UDim2.new(1, 0, 0, 20), BackgroundTransparency = 1, LayoutOrder = 1, Parent = card })
+		createIcon(header, options.Icon or "terminal", Theme.Muted, UDim2.new(0, 0, 0.5, 0))
+		local titleLabel = createLabel({
+			Position = UDim2.fromOffset(24, 0),
+			Size = UDim2.new(1, -120, 1, 0),
+			Text = tostring(options.Name or "Console"),
+			TextSize = 13,
+			Parent = header,
+		})
+		local function headerButton(text, offset, onClick)
+			local button = create("TextButton", {
+				AnchorPoint = Vector2.new(1, 0.5),
+				Position = UDim2.new(1, offset, 0.5, 0),
+				Size = UDim2.fromOffset(46, 20),
+				BackgroundColor3 = Theme.Surface,
+				BorderSizePixel = 0,
+				Text = "",
+				AutoButtonColor = false,
+				Parent = header,
+			})
+			button:SetAttribute(Const.ATTR_NO_DRAG, true)
+			addCorner(button, UDim.new(0, 6))
+			createLabel({
+				Size = UDim2.fromScale(1, 1),
+				Text = text,
+				TextSize = 11,
+				TextColor3 = Theme.Muted,
+				TextXAlignment = Enum.TextXAlignment.Center,
+				Parent = button,
+			})
+			button.MouseButton1Click:Connect(onClick)
+			return button
+		end
+		local box = create("ScrollingFrame", {
+			Size = UDim2.new(1, 0, 0, height),
+			BackgroundColor3 = Theme.Surface,
+			BorderSizePixel = 0,
+			CanvasSize = UDim2.new(),
+			AutomaticCanvasSize = Enum.AutomaticSize.Y,
+			ScrollBarThickness = 3,
+			ScrollBarImageColor3 = Theme.Muted,
+			ScrollBarImageTransparency = 0.55,
+			ScrollingDirection = Enum.ScrollingDirection.Y,
+			LayoutOrder = 2,
+			Parent = card,
+		})
+		box:SetAttribute(Const.ATTR_NO_DRAG, true)
+		addCorner(box, UDim.new(0, 6))
+		addStroke(box)
+		addPadding(box, 8, 8, 6, 6)
+		create("UIListLayout", { SortOrder = Enum.SortOrder.LayoutOrder, Padding = UDim.new(0, 2), Parent = box })
+		local emptyLabel = createLabel({
+			Size = UDim2.new(1, 0, 0, 16),
+			Text = tostring(options.EmptyText or "Nothing logged yet."),
+			TextSize = 12,
+			FontFace = Fonts.Regular,
+			TextColor3 = Theme.Muted,
+			LayoutOrder = 0,
+			Parent = box,
+		})
+		local element = { Lines = {} }
+		local rows = {}
+		local counter = 0
+		local function scrollToEnd()
+			task.defer(function()
+				if box.Parent then
+					box.CanvasPosition = Vector2.new(0, math.max(0, box.AbsoluteCanvasSize.Y))
+				end
+			end)
+		end
+		function element:Log(text, kind)
+			kind = CONSOLE_COLORS[kind] and kind or "Info"
+			text = tostring(text)
+			counter += 1
+			local stamp = showTime and os.date("%H:%M:%S") or nil
+			table.insert(element.Lines, { Text = text, Type = kind, Time = stamp })
+			emptyLabel.Visible = false
+			local row = createLabel({
+				Size = UDim2.new(1, 0, 0, 0),
+				AutomaticSize = Enum.AutomaticSize.Y,
+				Text = (stamp and (stamp .. "  ") or "") .. text,
+				TextSize = 12,
+				FontFace = Const.MONO_FONT or Fonts.Regular,
+				TextColor3 = Theme[CONSOLE_COLORS[kind]],
+				TextWrapped = true,
+				TextTruncate = Enum.TextTruncate.None,
+				LayoutOrder = counter,
+				Parent = box,
+			})
+			table.insert(rows, row)
+			while #rows > maxLines do
+				table.remove(rows, 1):Destroy()
+				table.remove(element.Lines, 1)
+			end
+			if options.AutoScroll ~= false then
+				scrollToEnd()
+			end
+			return element
+		end
+		element.Add = element.Log
+		element.Print = element.Log
+		function element:Info(text) return element:Log(text, "Info") end
+		function element:Success(text) return element:Log(text, "Success") end
+		function element:Warn(text) return element:Log(text, "Warning") end
+		function element:Error(text) return element:Log(text, "Error") end
+		function element:Clear()
+			for _, row in ipairs(rows) do
+				row:Destroy()
+			end
+			rows = {}
+			element.Lines = {}
+			emptyLabel.Visible = true
+			return element
+		end
+		function element:GetText()
+			local out = {}
+			for _, line in ipairs(element.Lines) do
+				table.insert(out, (line.Time and (line.Time .. "  ") or "") .. line.Text)
+			end
+			return table.concat(out, "\n")
+		end
+		function element:SetTitle(text)
+			titleLabel.Text = tostring(text)
+		end
+		headerButton("Clear", 0, function()
+			element:Clear()
+		end)
+		headerButton("Copy", -52, function()
+			Nucleus:Copy(element:GetText())
+		end)
+		return registerElement(self, { Name = options.Name or "Console" }, element, card, "Console")
+	end
+
+	local STATUS_KEYS = { Success = "Success", Warning = "Warning", Error = "Error", Info = "Accent", Idle = "Muted" }
+
+	function Tab:Status(input)
+		local options = normalizeOptions(input, { Title = "Name", Description = "Desc" })
+		local height = options.Desc and Const.ROW_HEIGHT_DESC or Const.ROW_HEIGHT
+		local card = createCard(self, "Frame", height)
+		local titleLabel = createTitleBlock(card, options.Name or "Status", options.Desc, 150)
+		local pill = create("Frame", {
+			AnchorPoint = Vector2.new(1, 0.5),
+			Position = UDim2.new(1, -14, 0.5, 0),
+			Size = UDim2.fromOffset(0, 22),
+			AutomaticSize = Enum.AutomaticSize.X,
+			BackgroundColor3 = Theme.Surface,
+			BorderSizePixel = 0,
+			Parent = card,
+		})
+		addCorner(pill, UDim.new(1, 0))
+		addPadding(pill, 9, 10)
+		create("UIListLayout", {
+			FillDirection = Enum.FillDirection.Horizontal,
+			VerticalAlignment = Enum.VerticalAlignment.Center,
+			Padding = UDim.new(0, 6),
+			Parent = pill,
+		})
+		local dot = create("Frame", { Size = UDim2.fromOffset(7, 7), BorderSizePixel = 0, LayoutOrder = 1, Parent = pill })
+		addCorner(dot, UDim.new(1, 0))
+		local statusLabel = createLabel({
+			Size = UDim2.fromOffset(0, 22),
+			AutomaticSize = Enum.AutomaticSize.X,
+			Text = "",
+			TextSize = 12,
+			TextTruncate = Enum.TextTruncate.None,
+			LayoutOrder = 2,
+			Parent = pill,
+		})
+		local element = {}
+		function element:SetStatus(text, kind)
+			kind = STATUS_KEYS[kind] and kind or (element.Type or "Idle")
+			element.Status = tostring(text)
+			element.Type = kind
+			statusLabel.Text = element.Status
+			dot.BackgroundColor3 = Theme[STATUS_KEYS[kind]]
+			statusLabel.TextColor3 = kind == "Idle" and Theme.Muted or Theme.Text
+			return element
+		end
+		function element:Get()
+			return element.Status, element.Type
+		end
+		function element:SetTitle(text)
+			titleLabel.Text = tostring(text)
+		end
+		element:SetStatus(options.Status or options.Text or "Idle", options.Type or "Idle")
+		return registerElement(self, options, element, card, "Status")
+	end
+
+	function Utils.FindPlayer(query)
+		return Utils.GetPlayer(query)
+	end
+
+	function Utils.GetPlayerNames(includeSelf)
+		local names = {}
+		for _, player in ipairs(Players:GetPlayers()) do
+			if includeSelf or player ~= LocalPlayer then
+				table.insert(names, player.Name)
+			end
+		end
+		table.sort(names, function(a, b)
+			return string.lower(a) < string.lower(b)
+		end)
+		return names
+	end
+
+	function Utils.Distance(a, b)
+		local function position(value)
+			if typeof(value) == "Vector3" then
+				return value
+			elseif typeof(value) == "CFrame" then
+				return value.Position
+			elseif typeof(value) == "Instance" then
+				if value:IsA("Player") then
+					local root = Utils.GetRoot(value)
+					return root and root.Position
+				elseif value:IsA("Model") then
+					local primary = value.PrimaryPart or value:FindFirstChild("HumanoidRootPart")
+					return primary and primary.Position
+				elseif value:IsA("BasePart") then
+					return value.Position
+				end
+			end
+			return nil
+		end
+		local first, second = position(a), position(b or LocalPlayer)
+		if not first or not second then
+			return math.huge
+		end
+		return (first - second).Magnitude
+	end
+
+	function Utils.ServerInfo()
+		local ok, ping = pcall(function()
+			return math.floor(LocalPlayer:GetNetworkPing() * 1000)
+		end)
+		local uptimeOk, uptime = pcall(function()
+			return math.floor(workspace.DistributedGameTime)
+		end)
+		return {
+			PlaceId = game.PlaceId,
+			JobId = game.JobId,
+			Players = #Players:GetPlayers(),
+			MaxPlayers = Players.MaxPlayers,
+			Ping = ok and ping or 0,
+			Uptime = uptimeOk and uptime or 0,
+		}
+	end
+
+	function Utils.CopyJobId()
+		return Nucleus:Copy(game.JobId)
+	end
+
+	function Utils.JoinServer(jobId, placeId)
+		if type(jobId) ~= "string" or jobId == "" then
+			log("JoinServer needs a JobId")
+			return false
+		end
+		local ok, err = pcall(function()
+			game:GetService("TeleportService"):TeleportToPlaceInstance(tonumber(placeId) or game.PlaceId, jobId, LocalPlayer)
+		end)
+		if not ok then
+			log("JoinServer failed: " .. tostring(err))
+		end
+		return ok
+	end
+
+	function Utils.HttpGet(url)
+		local ok, result = pcall(function()
+			return game:HttpGet(url)
+		end)
+		if ok then
+			return true, result
+		end
+		return false, tostring(result)
+	end
+
+	function Utils.JSONEncode(value)
+		local ok, result = pcall(HttpService.JSONEncode, HttpService, value)
+		return ok and result or nil
+	end
+
+	function Utils.JSONDecode(text)
+		local ok, result = pcall(HttpService.JSONDecode, HttpService, text)
+		return ok and result or nil
+	end
+
+	Tab.CreatePlayerDropdown = Tab.PlayerDropdown
+	Tab.CreateConsole = Tab.Console
+	Tab.CreateStatus = Tab.Status
+	Tab.Log = Tab.Console
+
 	local FORGIVING = {
 		"Notify", "Confirm", "Dialog", "Prompt", "Popup", "SetTheme", "AddTheme", "GetValue", "SetValue",
 		"GetValues", "SetValues", "Copy", "Destroy", "Unload", "Loop", "Connect", "OnUnload", "OnError",
 		"GetErrors", "ClearErrors", "SetLanguage", "SetLocalization", "Translate", "GetFlag", "GetThemes",
 		"GetLanguage", "SetErrorNotifications", "Try", "ReportError", "PreloadIcons", "LoadFont",
-		"SetAccent", "GetAccent", "SetFont", "SetKeySource", "GetKeyStatus", "IsPremium",
+		"SetAccent", "GetAccent", "SetFont", "SetKeySource", "GetKeyStatus", "IsPremium", "OnFlagChanged",
 	}
 	for _, name in ipairs(FORGIVING) do
 		local method = Nucleus[name]
