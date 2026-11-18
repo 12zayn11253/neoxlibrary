@@ -10,7 +10,7 @@ local LocalPlayer = Players.LocalPlayer
 local Nucleus = {}
 local Const = {}
 Nucleus.Name = "Nucleus UI"
-Nucleus.Version = "4.9.1"
+Nucleus.Version = "4.9.2"
 Nucleus.Flags = {}
 Nucleus.Windows = {}
 
@@ -1289,16 +1289,47 @@ local function flashStroke(stroke)
 	end)
 end
 
+Const.PRESS_SCALE = 0.985
+Const.HOVER_LIFT = 0.4
+
+local function bindPress(button)
+	if IS_TOUCH or not button:IsA("GuiButton") then
+		return
+	end
+	local scale
+	local function release()
+		if scale then
+			tween(scale, { Scale = 1 }, 0.25, Enum.EasingStyle.Back)
+		end
+	end
+	button.MouseButton1Down:Connect(function()
+		scale = scale or create("UIScale", { Name = "Press", Parent = button })
+		tween(scale, { Scale = Const.PRESS_SCALE }, 0.08)
+	end)
+	button.MouseButton1Up:Connect(release)
+	button.MouseLeave:Connect(release)
+end
+
 local function bindHoverStroke(guiObject, stroke)
+	local lifted = false
 	guiObject.MouseEnter:Connect(function()
 		if IS_TOUCH then
 			return
 		end
 		tween(stroke, { Color = Theme.StrokeHover }, 0.12)
+		if guiObject.BackgroundColor3 == Theme.Surface2 and (guiObject.BackgroundTransparency or 0) < 1 then
+			lifted = true
+			tween(guiObject, { BackgroundColor3 = Theme.Surface2:Lerp(Theme.Surface3, Const.HOVER_LIFT) }, 0.12)
+		end
 	end)
 	guiObject.MouseLeave:Connect(function()
 		tween(stroke, { Color = strokeBase(stroke) }, 0.25)
+		if lifted then
+			lifted = false
+			tween(guiObject, { BackgroundColor3 = Theme.Surface2 }, 0.25)
+		end
 	end)
+	bindPress(guiObject)
 end
 
 Const.SHORT_KEY_NAMES = {
@@ -2132,6 +2163,7 @@ function Tab:Button(input)
 			tween(card, { BackgroundTransparency = 0.12 }, 0.25)
 			tween(stroke, { Transparency = 0.4 }, 0.25)
 		end)
+		bindPress(card)
 	else
 		bindHoverStroke(card, stroke)
 	end
@@ -2931,9 +2963,12 @@ function Tab:Dropdown(input)
 	})
 	addCorner(searchFrame, UDim.new(0, 6))
 	local searchStroke = addStroke(searchFrame, Theme.Stroke, 1)
+	local _, searchIcon = createIcon(searchFrame, "search", Theme.Muted, UDim2.new(0, 10, 0.5, 0))
+	searchIcon.Parent.Size = UDim2.fromOffset(14, 14)
+	searchIcon.ImageTransparency = 1
 	local searchBox = create("TextBox", {
-		Position = UDim2.fromOffset(12, 0),
-		Size = UDim2.new(1, -20, 1, 0),
+		Position = UDim2.fromOffset(32, 0),
+		Size = UDim2.new(1, -40, 1, 0),
 		BackgroundTransparency = 1,
 		Text = "",
 		PlaceholderText = "Search",
@@ -3051,6 +3086,7 @@ function Tab:Dropdown(input)
 		tween(searchFrame, { BackgroundTransparency = open and 0 or 1 }, 0.2)
 		tween(searchStroke, { Transparency = open and 0 or 1 }, 0.2)
 		tween(searchBox, { TextTransparency = open and 0 or 1 }, 0.2)
+		tween(searchIcon, { ImageTransparency = open and 0 or 1 }, 0.2)
 		chevron:Set(open)
 		tween(chipStroke, { Color = open and Theme.StrokeHover or Theme.Stroke }, 0.2)
 
@@ -3310,6 +3346,14 @@ function Tab:Dropdown(input)
 		end)
 	end
 
+	searchBox.Focused:Connect(function()
+		tween(searchIcon, { ImageColor3 = Theme.Text }, 0.15)
+		tween(searchStroke, { Color = Theme.StrokeHover }, 0.15)
+	end)
+	searchBox.FocusLost:Connect(function()
+		tween(searchIcon, { ImageColor3 = Theme.Muted }, 0.2)
+		tween(searchStroke, { Color = Theme.Stroke }, 0.2)
+	end)
 	searchBox:GetPropertyChangedSignal("Text"):Connect(function()
 		searchQuery = string.lower(searchBox.Text)
 		applySearch()
@@ -5506,7 +5550,8 @@ function Nucleus.Window(selfOrOptions, maybeOptions)
 		})
 		addCorner(searchFrame, UDim.new(0, 7))
 		local searchStroke = addStroke(searchFrame)
-		createIcon(searchFrame, "search", Theme.Muted, UDim2.new(0, 9, 0.5, 0))
+		local _, searchIcon = createIcon(searchFrame, "search", Theme.Muted, UDim2.new(0, 10, 0.5, 0))
+		searchIcon.Parent.Size = UDim2.fromOffset(15, 15)
 
 		local searchBox = create("TextBox", {
 			Position = UDim2.fromOffset(31, 0),
@@ -5523,11 +5568,32 @@ function Nucleus.Window(selfOrOptions, maybeOptions)
 			ClearTextOnFocus = false,
 			Parent = searchFrame,
 		})
+		local clearButton = create("ImageButton", {
+			Name = "Clear",
+			AnchorPoint = Vector2.new(1, 0.5),
+			Position = UDim2.new(1, -7, 0.5, 0),
+			Size = UDim2.fromOffset(16, 16),
+			BackgroundTransparency = 1,
+			ImageColor3 = Theme.Muted,
+			ScaleType = Enum.ScaleType.Fit,
+			Visible = false,
+			Parent = searchFrame,
+		})
+		setIcon(clearButton, "x")
+		clearButton.MouseButton1Click:Connect(function()
+			searchBox.Text = ""
+		end)
 		searchBox.Focused:Connect(function()
 			tween(searchStroke, { Color = Theme.StrokeHover }, 0.15)
+			tween(searchIcon, { ImageColor3 = Theme.Text }, 0.15)
 		end)
 		searchBox.FocusLost:Connect(function()
 			tween(searchStroke, { Color = Theme.Stroke }, 0.15)
+			tween(searchIcon, { ImageColor3 = Theme.Muted }, 0.2)
+		end)
+		searchBox:GetPropertyChangedSignal("Text"):Connect(function()
+			clearButton.Visible = searchBox.Text ~= ""
+			searchBox.Size = UDim2.new(1, searchBox.Text ~= "" and -60 or -38, 1, 0)
 		end)
 
 		local results = create("ScrollingFrame", {
