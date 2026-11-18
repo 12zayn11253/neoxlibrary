@@ -10,7 +10,7 @@ local LocalPlayer = Players.LocalPlayer
 local Nucleus = {}
 local Const = {}
 Nucleus.Name = "Nucleus UI"
-Nucleus.Version = "4.9.3"
+Nucleus.Version = "4.10.0"
 Nucleus.Flags = {}
 Nucleus.Windows = {}
 
@@ -29,7 +29,7 @@ end
 
 local KNOWN_OPTIONS = {}
 local KNOWN_OPTIONS_LOWER = {}
-for name in string.gmatch("AU AbsoluteContentSize AbsoluteSize Accent AccentDark Active ActiveOnly AliveCheck Always Anonymous Asc Australia AutoLoad AutoSave BR Background BackgroundColor3 BackgroundTransparency Backspace BasePart Began Body Bold BottomRight Brazil Button ButtonRow Buttons CA CFrame Callback Canada Cancel CancelText CanvasGroup Caption Changed Changes ClearOnFocus Close CloseOnBackdrop Code Collapsed Color Color3 ColorPicker Configs ConfigurationSaving Confirm ConfirmText ConfirmTimeout Content ContentProvider Copied Copy Copyable CoreGui Create CurrentKeybind CurrentOption CurrentValue Custom CustomFont DE Danger Date DateFormat Decal Default DefaultState Delay Delete Depends DependsOn Desc Description Details Discord DiscordButton DiscordLink Divider Dropdown Duration Element EmptyText Enabled Ended Enter Entries Enum EnumItem Error ErrorNotifications Esc Example ExcludeSelf Executor Expired Expiry FPS FR FileName Flag Folder FolderName Format Frame France Free GET Game Germany GetActive GetKey Glow Greeting Group GuiButton GuiName GuiObject GuiService HWID HasKey Header HeaderItems Height Hold Home HttpService Humanoid HumanoidRootPart IN Icon Image ImageButton ImageColor3 ImageLabel ImageRectPosition ImageRectSize ImageTransparency Increment India Info Input Instance JP Japan KeepOnScreen Key KeyInfo KeyPanel Keybind Keybinds LAlt LCtrl LShift Label Language Lifetime Lighting Load Loading LoadingDuration LoadingSteps LoadingSubtitle LoadingText LoadingTitle Localization Lock Locked LockedReason Loop LoopDelay Lowest Main MarketplaceService Max MaxDistance MaxHeight MaxLength MaxNotifications MaxSize Medium Membership Merge Message Method Min MinSize MobileButton MobileIcon Mode Model MinimizeButton Mono Monospace Monthly Multi MultiLine Multiline MultipleOptions Muted NL Name NucleusHidden Nucleus NucleusUIBlur NucleusUIFonts NucleusLoc NucleusLocPlaceholderText NucleusLocText NucleusNoTheme Netherlands NoDrag None Not Notification NotificationPosition Notifications Numeric OK OnCancel OnChanged OnClose OnRelease Open OpenButton Opened Options Page Pages Paragraph Parent Ping Placeholder PlaceholderColor3 PlaceholderText Player PlayerGui Players Popup Position Prefix Premium PremiumBanner PremiumButton Perks Price PopupDelay Cooldown HeaderButton ExpiryButtons OnClick OnShown ShowWithoutKey ButtonText Link PremiumLink PremiumText Primary Profile Progress Qd Qn RAlt RCtrl RShift Radius Range Region RegionCity Regular Reminders Render Reset ResetOnUnload Resizable RunService SG Save Scale ScaleType ScreenGui ScrollBarImageColor3 ScrollingFrame Search SearchAfter SearchPlaceholder SearchResults Secondary Section SectionName Sections SemiBold Session ShowFPS ShowPing ShowPromo ShowTime Sidebar SidebarCollapsed Singapore Size Slider Sound Space Standard Stat Stats Step Stepper Stroke StrokeHover Studio Style Subtitle Success Suffix Surface Surface2 Surface3 Tab TabIcon TabSection Tabs Tag TeamCheck TeleportService Tertiary Text TextArea TextBounds TextBox TextButton TextColor3 TextLabel TextScale TextSize TextTransparency Texture Theme ThemeName Time TimeFormat Title Toggle ToggleUIKeybind Tooltip Top TotalTime TouchOnly TransitionIn TransitionOut Translations Transparency TweenService Type TypeName TypeNames UDim2 UICorner UIGradient UIGridLayout UIListLayout UIPadding UIScale UISizeConstraint UIStroke Unavailable Unknown Update UpdateRate Uptime Usage UseDisplayName User UserInputService UserInputType Value Values Variant Vector2 Vector3 Version VirtualUser Visible Volume Warning Weekly Weights Welcome Window Appearance WindowRadius CardRadius CardBorder SidebarWidth Spacing Shadow TabHighlight Fill Outline Data Labels Texts Protected Badge TimeLeft NoKey NeverExpires Ends Ocean Crimson Amber Violet Slate Obsidian Mint Light Badge Settings SettingsTab AccentPicker Interface Server Unload History FlagPrefix Socials Donations Links Url URL Robux AssetId ShirtId GamePassId PassId Address Goal Target Current Thanks ThanksTitle OnDonate ShowOnHome Tiers Amount Currency Network Wallet Depth InnerShadow ScrollFades RememberTab IncludeSelf DisplayNames MaxLines Timestamps AutoScroll EmptyText Status Hidden Build PerGame IgnoreGameProcessed OnResult Elements Element Url Current Notify Author ToggleKey HideSearchBar SideBarWidth Folder Transparent Values AllowNone InputIcon Opened ImageSize Thumbnail ThumbnailSize ScrollBarEnabled Checkbox MinimizedBar MiniBar", "%S+") do
+for name in string.gmatch("AU AbsoluteContentSize AbsoluteSize Accent AccentDark Active ActiveOnly AliveCheck Always Anonymous Asc Australia AutoLoad AutoSave BR Background BackgroundColor3 BackgroundTransparency Backspace BasePart Began Body Bold BottomRight Brazil Button ButtonRow Buttons CA CFrame Callback Canada Cancel CancelText CanvasGroup Caption Changed Changes ClearOnFocus Close CloseOnBackdrop Code Collapsed Color Color3 ColorPicker Configs ConfigurationSaving Confirm ConfirmText ConfirmTimeout Content ContentProvider Copied Copy Copyable CoreGui Create CurrentKeybind CurrentOption CurrentValue Custom CustomFont DE Danger Date DateFormat Decal Default DefaultState Delay Delete Depends DependsOn Desc Description Details Discord DiscordButton DiscordLink Divider Dropdown Duration Element EmptyText Enabled Ended Enter Entries Enum EnumItem Error ErrorNotifications Esc Example ExcludeSelf Executor Expired Expiry FPS FR FileName Flag Folder FolderName Format Frame France Free GET Game Germany GetActive GetKey Glow Greeting Group GuiButton GuiName GuiObject GuiService HWID HasKey Header HeaderItems Height Hold Home HttpService Humanoid HumanoidRootPart IN Icon Image ImageButton ImageColor3 ImageLabel ImageRectPosition ImageRectSize ImageTransparency Increment India Info Input Instance JP Japan KeepOnScreen Key KeyInfo KeyPanel Keybind Keybinds LAlt LCtrl LShift Label Language Lifetime Lighting Load Loading LoadingDuration LoadingSteps LoadingSubtitle LoadingText LoadingTitle Localization Lock Locked LockedReason Loop LoopDelay Lowest Main MarketplaceService Max MaxDistance MaxHeight MaxLength MaxNotifications MaxSize Medium Membership Merge Message Method Min MinSize MobileButton MobileIcon Mode Model MinimizeButton Mono Monospace Monthly Multi MultiLine Multiline MultipleOptions Muted NL Name NucleusHidden Nucleus NucleusUIBlur NucleusUIFonts NucleusLoc NucleusLocPlaceholderText NucleusLocText NucleusNoTheme Netherlands NoDrag None Not Notification NotificationPosition Notifications Numeric OK OnCancel OnChanged OnClose OnRelease Open OpenButton Opened Options Page Pages Paragraph Parent Ping Placeholder PlaceholderColor3 PlaceholderText Player PlayerGui Players Popup Position Prefix Premium PremiumBanner PremiumButton Perks Price PopupDelay Cooldown HeaderButton ExpiryButtons OnClick OnShown ShowWithoutKey ButtonText Link PremiumLink PremiumText Primary Profile Progress Qd Qn RAlt RCtrl RShift Radius Range Region RegionCity Regular Reminders Render Reset ResetOnUnload Resizable RunService SG Save Scale ScaleType ScreenGui ScrollBarImageColor3 ScrollingFrame Search SearchAfter SearchPlaceholder SearchResults Secondary Section SectionName Sections SemiBold Session ShowFPS ShowPing ShowPromo ShowTime Sidebar SidebarCollapsed Singapore Size Slider Sound Space Standard Stat Stats Step Stepper Stroke StrokeHover Studio Style Subtitle Success Suffix Surface Surface2 Surface3 Tab TabIcon TabSection Tabs Tag TeamCheck TeleportService Tertiary Text TextArea TextBounds TextBox TextButton TextColor3 TextLabel TextScale TextSize TextTransparency Texture Theme ThemeName Time TimeFormat Title Toggle ToggleUIKeybind Tooltip Top TotalTime TouchOnly TransitionIn TransitionOut Translations Transparency TweenService Type TypeName TypeNames UDim2 UICorner UIGradient UIGridLayout UIListLayout UIPadding UIScale UISizeConstraint UIStroke Unavailable Unknown Update UpdateRate Uptime Usage UseDisplayName User UserInputService UserInputType Value Values Variant Vector2 Vector3 Version VirtualUser Visible Volume Warning Weekly Weights Welcome Window Appearance WindowRadius CardRadius CardBorder SidebarWidth Spacing Shadow TabHighlight Fill Outline Data Labels Texts Protected Badge TimeLeft NoKey NeverExpires Ends Ocean Crimson Amber Violet Slate Obsidian Mint Light Badge Settings SettingsTab AccentPicker Interface Server Unload History FlagPrefix Socials Donations Links Url URL Robux AssetId ShirtId GamePassId PassId Address Goal Target Current Thanks ThanksTitle OnDonate ShowOnHome Tiers Amount Currency Network Wallet Depth InnerShadow ScrollFades RememberTab IncludeSelf DisplayNames MaxLines Timestamps AutoScroll EmptyText Status Hidden Build PerGame IgnoreGameProcessed OnResult Elements Element Url Current Notify Author ToggleKey HideSearchBar SideBarWidth Folder Transparent Values AllowNone InputIcon Opened ImageSize Thumbnail ThumbnailSize ScrollBarEnabled Checkbox MinimizedBar MiniBar KeySystem Hide Note SaveKey Check Validate Verify Keys KeyLink GetKeyText SubmitText CanClose OnSuccess OnFail Toggles Restore Logo Discord", "%S+") do
 	KNOWN_OPTIONS[name] = true
 	KNOWN_OPTIONS_LOWER[string.lower(name)] = name
 end
@@ -6892,7 +6892,7 @@ function Window:_setCompact(compact, animated)
 	local contentSize = UDim2.new(1, -(width + 2), 1, 0)
 	local top = compact and 66 or self._listTop
 	local listPosition = UDim2.fromOffset(0, top)
-	local listSize = UDim2.new(1, 0, 1, -(top + 66))
+	local listSize = UDim2.new(1, 0, 1, -(top + (self._listBottom or 66)))
 	local logoHalf = math.floor(self._logo.Size.X.Offset / 2)
 	local avatarHalf = math.floor(self._avatar.Size.X.Offset / 2)
 	local logoPosition = compact and UDim2.new(0.5, -logoHalf, 0, 15) or UDim2.fromOffset(12, 15)
@@ -6927,6 +6927,9 @@ function Window:_setCompact(compact, animated)
 		self._profileName.Visible = not compact
 		self._keyChip.Visible = not compact and not IS_TOUCH
 		self._hintLabel.Visible = not compact
+		if self._enforceParts then
+			self:_enforceParts()
+		end
 		for _, tab in ipairs(self.Tabs) do
 			self:_layoutTabButton(tab)
 		end
@@ -6989,6 +6992,9 @@ function Window:_setCompact(compact, animated)
 		self._keyChip.Visible = not IS_TOUCH
 		if self._searchFrame then
 			self._searchFrame.Visible = true
+		end
+		if self._enforceParts then
+			self:_enforceParts()
 		end
 		for _, tab in ipairs(self.Tabs) do
 			self:_layoutTabButton(tab, true)
@@ -8247,7 +8253,7 @@ function Window:Tab(input, icon)
 		Parent = page,
 	})
 	if options.Desc then
-		createLabel({
+		tab._pageDesc = createLabel({
 			Position = UDim2.fromOffset(60, 40),
 			Size = UDim2.new(1, -108, 0, 16),
 			Text = options.Desc,
@@ -10461,6 +10467,9 @@ function Window:_headerRow()
 	})
 	self._headerItems = row
 	self._headerOrder = 0
+	if self._layoutHeader then
+		self:_layoutHeader()
+	end
 	return row
 end
 
@@ -11334,6 +11343,19 @@ function Window:_miniBar()
 		return self._miniBarFrame
 	end
 	local miniOptions = self._miniOptions or {}
+	local function shown(name)
+		if miniOptions[name] == false then
+			return false
+		end
+		if type(miniOptions.Hide) == "table" then
+			for key, value in pairs(miniOptions.Hide) do
+				if value == name or (key == name and value == true) then
+					return false
+				end
+			end
+		end
+		return true
+	end
 	local bar = create("Frame", {
 		Name = "MinimizedBar",
 		Size = UDim2.fromOffset(0, 50),
@@ -11361,6 +11383,7 @@ function Window:_miniBar()
 		ImageColor3 = Color3.new(1, 1, 1),
 		ScaleType = Enum.ScaleType.Fit,
 		LayoutOrder = 1,
+		Visible = shown("Logo"),
 		ZIndex = 41,
 		Parent = bar,
 	})
@@ -11392,6 +11415,7 @@ function Window:_miniBar()
 		TextSize = 14,
 		TextTruncate = Enum.TextTruncate.None,
 		LayoutOrder = 1,
+		Visible = shown("Title"),
 		ZIndex = 41,
 		Parent = textColumn,
 	})
@@ -11461,11 +11485,57 @@ function Window:_miniBar()
 		FontFace = Fonts.Regular,
 		TextColor3 = Theme.Muted,
 		TextTruncate = Enum.TextTruncate.None,
-		LayoutOrder = 4,
-		Visible = miniOptions.Stats ~= false,
+		LayoutOrder = 5,
+		Visible = shown("Stats"),
 		ZIndex = 41,
 		Parent = bar,
 	})
+
+	local chips = {}
+	for _, entry in ipairs(type(miniOptions.Toggles) == "table" and miniOptions.Toggles or {}) do
+		local flag = type(entry) == "table" and entry.Flag or entry
+		local chip = create("TextButton", {
+			Name = "Toggle",
+			Size = UDim2.fromOffset(0, 24),
+			AutomaticSize = Enum.AutomaticSize.X,
+			BackgroundColor3 = Theme.Surface2,
+			Text = "",
+			AutoButtonColor = false,
+			LayoutOrder = 4,
+			Visible = false,
+			ZIndex = 41,
+			Parent = bar,
+		})
+		addCorner(chip, UDim.new(1, 0))
+		local chipStroke = addStroke(chip)
+		addPadding(chip, 10, 10)
+		local chipLabel = createLabel({
+			Size = UDim2.new(0, 0, 1, 0),
+			AutomaticSize = Enum.AutomaticSize.X,
+			Text = "",
+			TextSize = 11,
+			TextColor3 = Theme.Muted,
+			TextTruncate = Enum.TextTruncate.None,
+			ZIndex = 42,
+			Parent = chip,
+		})
+		chip.MouseButton1Click:Connect(function()
+			local element = self.Flags[tostring(flag)]
+			if element and element.Set and not element._destroyed then
+				element:Set(element.Value ~= true)
+				if self._miniRefresh then
+					self._miniRefresh()
+				end
+			end
+		end)
+		table.insert(chips, {
+			Flag = tostring(flag),
+			Title = type(entry) == "table" and (entry.Title or entry.Name) or nil,
+			Button = chip,
+			Stroke = chipStroke,
+			Label = chipLabel,
+		})
+	end
 
 	local function barButton(order, name, icon, onClick)
 		local button = create("TextButton", {
@@ -11505,12 +11575,27 @@ function Window:_miniBar()
 		button.MouseButton1Click:Connect(onClick)
 		return button
 	end
-	barButton(5, "Restore", "maximize-2", function()
+	for index, entry in ipairs(type(miniOptions.Buttons) == "table" and miniOptions.Buttons or {}) do
+		if type(entry) == "table" then
+			local custom = barButton(6, "Custom" .. index, entry.Icon or "circle", function()
+				safeCall(entry.Callback)
+			end)
+			if entry.Tooltip or entry.Title then
+				custom.MouseEnter:Connect(function()
+					self:_showTooltip(tostring(entry.Tooltip or entry.Title), custom)
+				end)
+				custom.MouseLeave:Connect(function()
+					self:_hideTooltip(custom)
+				end)
+			end
+		end
+	end
+	barButton(7, "Restore", "maximize-2", function()
 		self:Minimize(false)
-	end)
-	barButton(6, "Close", "x", function()
+	end).Visible = shown("Restore")
+	barButton(8, "Close", "x", function()
 		self:Toggle(false)
-	end)
+	end).Visible = shown("Close")
 
 	local frames, lastCount = 0, os.clock()
 	local function refresh()
@@ -11524,10 +11609,22 @@ function Window:_miniBar()
 			text = self._subtitleLabel.Text
 		end
 		info.Text = tostring(text or "")
-		info.Visible = info.Text ~= ""
+		info.Visible = info.Text ~= "" and shown("Text")
+
+		for _, chip in ipairs(chips) do
+			local element = self.Flags[chip.Flag]
+			local exists = element ~= nil and not element._destroyed and element.Set ~= nil
+			chip.Button.Visible = exists
+			if exists then
+				local on = element.Value == true
+				chip.Label.Text = chip.Title or (element._label and element._label:match('^%w+ "(.*)"$')) or chip.Flag
+				chip.Label.TextColor3 = on and Theme.Text or Theme.Muted
+				chip.Stroke.Color = on and Theme.Accent or Theme.Stroke
+			end
+		end
 
 		local active = 0
-		if miniOptions.Active ~= false then
+		if shown("Active") then
 			for _, element in ipairs(self._elements) do
 				if element._type == "Toggle" and element.Value == true and not element._destroyed then
 					active += 1
@@ -11562,6 +11659,55 @@ function Window:_miniBar()
 	return bar
 end
 
+function Window:_startMiniLoop()
+	if self._miniStop then
+		self._miniStop()
+	end
+	local stopRender = self:_listen("Render", self._miniCount)
+	local running = true
+	self._miniStop = function()
+		running = false
+		stopRender()
+		self._miniStop = nil
+	end
+	task.spawn(function()
+		while running and not self._destroyed do
+			task.wait(1)
+			if running and self.Minimized then
+				self._miniRefresh()
+			end
+		end
+	end)
+end
+
+function Window:SetMinimizedBar(options)
+	if type(options) ~= "table" then
+		return
+	end
+	self._miniOptions = self._miniOptions or {}
+	for key, value in pairs(options) do
+		self._miniOptions[key] = value
+	end
+	if options.Text ~= nil then
+		self._miniText = options.Text
+	end
+	local bar = self._miniBarFrame
+	if not bar then
+		return
+	end
+	local position = bar.Position
+	local wasMinimized = self.Minimized
+	self._miniBarFrame = nil
+	bar:Destroy()
+	local fresh = self:_miniBar()
+	fresh.Position = position
+	if wasMinimized then
+		fresh.Visible = true
+		self._miniRefresh()
+		self:_startMiniLoop()
+	end
+end
+
 function Window:SetMinimizedText(text)
 	self._miniText = text
 	if self.Minimized and self._miniRefresh then
@@ -11592,24 +11738,7 @@ function Window:Minimize(minimized)
 		bar.Position = UDim2.fromOffset(math.max(topLeft.X, 8), math.max(topLeft.Y, 8))
 		root.Visible = false
 		bar.Visible = true
-		if self._miniStop then
-			self._miniStop()
-		end
-		local stopRender = self:_listen("Render", self._miniCount)
-		local running = true
-		self._miniStop = function()
-			running = false
-			stopRender()
-			self._miniStop = nil
-		end
-		task.spawn(function()
-			while running and not self._destroyed do
-				task.wait(1)
-				if running and self.Minimized then
-					self._miniRefresh()
-				end
-			end
-		end)
+		self:_startMiniLoop()
 	else
 		self.Minimized = false
 		if self._miniStop then
@@ -14936,6 +15065,636 @@ do
 	Tab.CreateConsole = Tab.Console
 	Tab.CreateStatus = Tab.Status
 	Tab.Log = Tab.Console
+
+	do
+		Const.WINDOW_PARTS = {
+			"Logo", "Title", "Subtitle", "Search", "Profile", "KeyHint",
+			"SidebarButton", "MinimizeButton", "CloseButton",
+		}
+		local partLookup = {}
+		for _, name in ipairs(Const.WINDOW_PARTS) do
+			partLookup[string.lower(name)] = name
+		end
+
+		function Window:_layoutHeader()
+			local cursor = -14
+			for _, button in ipairs({ self._closeButton, self._minimizeButton }) do
+				if button and button.Visible then
+					button.Position = UDim2.new(1, cursor, 0, 13)
+					cursor -= 38
+				end
+			end
+			if self._headerItems then
+				self._headerItems.Position = UDim2.new(1, cursor - 4, 0, 18)
+			end
+		end
+
+		function Window:_enforceParts()
+			local hidden = self._hiddenParts or {}
+			local compact = self._compact == true
+			self._logo.Visible = not hidden.Logo
+			if hidden.Title then
+				self._titleLabel.Visible = false
+			end
+			if hidden.Subtitle then
+				self._subtitleLabel.Visible = false
+			end
+			if self._searchFrame then
+				self._searchFrame.Visible = not hidden.Search and not compact
+			end
+			self._profile.Visible = not hidden.Profile
+			if hidden.KeyHint then
+				self._keyChip.Visible = false
+				self._hintLabel.Visible = false
+			end
+			if self._sidebarButton then
+				self._sidebarButton.Visible = not hidden.SidebarButton
+			end
+			if not compact then
+				self._titleLabel.Visible = not hidden.Title
+				self._subtitleLabel.Visible = not hidden.Subtitle
+			end
+		end
+
+		function Window:_applyParts()
+			local hidden = self._hiddenParts or {}
+			local textX = hidden.Logo and 14 or 54
+			local single = hidden.Subtitle or self._subtitleLabel.Text == ""
+			self._titleLabel.Position = UDim2.fromOffset(textX, single and 23 or 16)
+			self._titleLabel.Size = UDim2.new(1, -(textX + 4), 0, 20)
+			self._subtitleLabel.Position = UDim2.fromOffset(textX, hidden.Title and 26 or 36)
+			self._subtitleLabel.Size = UDim2.new(1, -(textX + 4), 0, 14)
+
+			self._listTopBase = self._listTopBase or self._listTop
+			self._listTop = (self._searchFrame and not hidden.Search) and self._listTopBase or 72
+			self._listBottom = hidden.Profile and 8 or 66
+			if hidden.Search and self._searchBox and self._searchBox.Text ~= "" then
+				self._searchBox.Text = ""
+			end
+			local top = self._compact and 66 or self._listTop
+			for _, list in ipairs({ self.TabList, self._searchResults }) do
+				if list then
+					list.Position = UDim2.fromOffset(0, top)
+					list.Size = UDim2.new(1, 0, 1, -(top + self._listBottom))
+				end
+			end
+
+			self._profileName.Position = UDim2.fromOffset(48, hidden.KeyHint and 16 or 7)
+			if not hidden.KeyHint and not self._compact then
+				self._keyChip.Visible = not IS_TOUCH
+				self._hintLabel.Visible = true
+			end
+
+			if self._closeButton then
+				self._closeButton.Visible = not hidden.CloseButton
+			end
+			if self._minimizeButton then
+				self._minimizeButton.Visible = not hidden.MinimizeButton
+			end
+			self:_layoutHeader()
+
+			for _, tab in ipairs(self.Tabs) do
+				self:_placePageTitle(tab)
+			end
+			self:_enforceParts()
+		end
+
+		function Window:_placePageTitle(tab)
+			local hidden = self._hiddenParts or {}
+			local x = hidden.SidebarButton and 24 or 60
+			if tab._pageTitle then
+				tab._pageTitle.Position = UDim2.fromOffset(x, 18)
+				tab._pageTitle.Size = UDim2.new(1, -(x + 48), 0, 24)
+			end
+			if tab._pageDesc then
+				tab._pageDesc.Position = UDim2.fromOffset(x, 40)
+				tab._pageDesc.Size = UDim2.new(1, -(x + 48), 0, 16)
+			end
+		end
+
+		function Window:SetPartVisible(name, visible)
+			local part = partLookup[string.lower(tostring(name))]
+			if not part then
+				log(("unknown window part '%s'. Parts: %s"):format(tostring(name), table.concat(Const.WINDOW_PARTS, ", ")))
+				return false
+			end
+			self._hiddenParts = self._hiddenParts or {}
+			self._hiddenParts[part] = visible == false or nil
+			self:_applyParts()
+			return true
+		end
+
+		function Window:HidePart(name)
+			return self:SetPartVisible(name, false)
+		end
+
+		function Window:ShowPart(name)
+			return self:SetPartVisible(name, true)
+		end
+
+		function Window:IsPartVisible(name)
+			local part = partLookup[string.lower(tostring(name))]
+			return part ~= nil and not (self._hiddenParts and self._hiddenParts[part])
+		end
+
+		function Window:GetParts()
+			return table.clone(Const.WINDOW_PARTS)
+		end
+
+		local baseSetSubtitle = Window.SetSubtitle
+		function Window:SetSubtitle(text)
+			baseSetSubtitle(self, text)
+			self:_applyParts()
+		end
+
+		local baseTab = Window.Tab
+		local function tabWithParts(self, ...)
+			local tab = baseTab(self, ...)
+			if type(tab) == "table" and self._hiddenParts and self._hiddenParts.SidebarButton then
+				self:_placePageTitle(tab)
+			end
+			return tab
+		end
+		for key, value in pairs(table.clone(Window)) do
+			if value == baseTab then
+				Window[key] = tabWithParts
+			end
+		end
+
+		local function readHideList(list)
+			local result = {}
+			if type(list) == "string" then
+				list = { list }
+			end
+			if type(list) ~= "table" then
+				return result
+			end
+			for key, value in pairs(list) do
+				local name = type(key) == "number" and value or (value == true and key or nil)
+				local part = name and partLookup[string.lower(tostring(name))]
+				if part then
+					result[part] = true
+				elseif name then
+					log(("unknown window part '%s' in Hide. Parts: %s"):format(tostring(name), table.concat(Const.WINDOW_PARTS, ", ")))
+				end
+			end
+			return result
+		end
+
+		local function keyFile(ks, windowOptions)
+			local folder = tostring(ks.Folder or "NucleusUI/Keys")
+			local name = tostring(ks.FileName or (windowOptions and windowOptions.Title) or "key")
+			name = name:gsub("[^%w%-_]", "")
+			if name == "" then
+				name = "key"
+			end
+			return folder, folder .. "/" .. name .. ".txt"
+		end
+
+		local function readSavedKey(path)
+			local ok, value = pcall(function()
+				if type(isfile) == "function" and isfile(path) then
+					return readfile(path)
+				end
+			end)
+			if ok and type(value) == "string" and value ~= "" then
+				return (value:gsub("^%s+", ""):gsub("%s+$", ""))
+			end
+			return nil
+		end
+
+		local function writeSavedKey(folder, path, key)
+			pcall(function()
+				if type(writefile) ~= "function" then
+					return
+				end
+				if type(makefolder) == "function" and type(isfolder) == "function" then
+					local current = ""
+					for piece in folder:gmatch("[^/]+") do
+						current = current == "" and piece or (current .. "/" .. piece)
+						if not isfolder(current) then
+							makefolder(current)
+						end
+					end
+				end
+				writefile(path, key)
+			end)
+		end
+
+		local function checkKey(ks, key)
+			local checker = ks.Check or ks.Validate or ks.Verify
+			if type(checker) == "function" then
+				local ok, result, message = pcall(checker, key)
+				if not ok then
+					return false, "Could not check the key. Try again."
+				end
+				if type(result) == "table" then
+					return result.Valid == true or result.Success == true, result.Message
+				end
+				return result == true, message
+			end
+			local keys = ks.Key or ks.Keys
+			if type(keys) == "string" then
+				keys = { keys }
+			end
+			for _, valid in ipairs(type(keys) == "table" and keys or {}) do
+				if key == tostring(valid) then
+					return true
+				end
+			end
+			return false
+		end
+
+		function Nucleus:KeySystem(ks, windowOptions)
+			ks = type(ks) == "table" and ks or {}
+			windowOptions = windowOptions or {}
+			if windowOptions.Theme ~= nil then
+				pcall(Nucleus.SetTheme, Nucleus, windowOptions.Theme)
+			end
+			local folder, path = keyFile(ks, windowOptions)
+			if ks.SaveKey ~= false then
+				local saved = readSavedKey(path)
+				if saved and checkKey(ks, saved) then
+					Nucleus.Key = saved
+					safeCall(ks.OnSuccess, saved)
+					return saved
+				end
+			end
+
+			local gui = create("ScreenGui", {
+				Name = "NucleusKeySystem",
+				IgnoreGuiInset = true,
+				ResetOnSpawn = false,
+				DisplayOrder = 1000,
+				ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
+			})
+			pcall(function()
+				if typeof(syn) == "table" and typeof(syn.protect_gui) == "function" then
+					syn.protect_gui(gui)
+				end
+			end)
+			gui.Parent = windowOptions.Parent or getGuiParent()
+
+			local width = IS_TOUCH and 320 or 360
+			local card = create("Frame", {
+				Name = "Card",
+				AnchorPoint = Vector2.new(0.5, 0.5),
+				Position = UDim2.fromScale(0.5, 0.5),
+				Size = UDim2.fromOffset(width, 0),
+				AutomaticSize = Enum.AutomaticSize.Y,
+				BackgroundColor3 = Theme.Background,
+				BorderSizePixel = 0,
+				Parent = gui,
+			})
+			addCorner(card, UDim.new(0, Appearance.WindowRadius))
+			addStroke(card)
+			addPadding(card, 20, 20, 18, 20)
+			create("UIListLayout", {
+				SortOrder = Enum.SortOrder.LayoutOrder,
+				Padding = UDim.new(0, 12),
+				Parent = card,
+			})
+			local cardScale = create("UIScale", { Parent = card })
+			local function fitCard()
+				local screen = gui.AbsoluteSize
+				if screen.Y > 0 then
+					cardScale.Scale = math.clamp(math.min(screen.Y / 460, screen.X / (width + 40)), 0.6, 1)
+				end
+			end
+			gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(fitCard)
+			fitCard()
+
+			local header = create("Frame", {
+				Size = UDim2.new(1, 0, 0, 38),
+				BackgroundTransparency = 1,
+				LayoutOrder = 1,
+				Parent = card,
+			})
+			local icon = create("ImageLabel", {
+				AnchorPoint = Vector2.new(0, 0.5),
+				Position = UDim2.new(0, 0, 0.5, 0),
+				Size = UDim2.fromOffset(32, 32),
+				BackgroundTransparency = 1,
+				ImageColor3 = Theme.Accent,
+				ScaleType = Enum.ScaleType.Fit,
+				Parent = header,
+			})
+			if not setIcon(icon, ks.Icon or windowOptions.Icon or "key-round") then
+				setIcon(icon, "key-round")
+			end
+			createLabel({
+				Position = UDim2.fromOffset(44, 1),
+				Size = UDim2.new(1, -84, 0, 20),
+				Text = tostring(ks.Title or windowOptions.Title or Const.LIB_NAME),
+				TextSize = 16,
+				FontFace = Fonts.Bold,
+				Parent = header,
+			})
+			createLabel({
+				Position = UDim2.fromOffset(44, 21),
+				Size = UDim2.new(1, -84, 0, 16),
+				Text = tostring(ks.Subtitle or "Key system"),
+				TextSize = 12,
+				FontFace = Fonts.Regular,
+				TextColor3 = Theme.Muted,
+				Parent = header,
+			})
+
+			local closed = false
+			local accepted
+			if ks.CanClose ~= false then
+				local closeButton = create("TextButton", {
+					AnchorPoint = Vector2.new(1, 0.5),
+					Position = UDim2.new(1, 4, 0.5, 0),
+					Size = UDim2.fromOffset(30, 30),
+					BackgroundColor3 = Theme.Surface2,
+					BackgroundTransparency = 1,
+					Text = "",
+					AutoButtonColor = false,
+					Parent = header,
+				})
+				addCorner(closeButton, UDim.new(0, 8))
+				local closeIcon = create("ImageLabel", {
+					AnchorPoint = Vector2.new(0.5, 0.5),
+					Position = UDim2.fromScale(0.5, 0.5),
+					Size = UDim2.fromOffset(16, 16),
+					BackgroundTransparency = 1,
+					ImageColor3 = Theme.Muted,
+					ScaleType = Enum.ScaleType.Fit,
+					Parent = closeButton,
+				})
+				setIcon(closeIcon, "x")
+				closeButton.MouseEnter:Connect(function()
+					tween(closeButton, { BackgroundTransparency = 0 }, 0.15)
+					tween(closeIcon, { ImageColor3 = Theme.Text }, 0.15)
+				end)
+				closeButton.MouseLeave:Connect(function()
+					tween(closeButton, { BackgroundTransparency = 1 }, 0.2)
+					tween(closeIcon, { ImageColor3 = Theme.Muted }, 0.2)
+				end)
+				closeButton.MouseButton1Click:Connect(function()
+					closed = true
+				end)
+			end
+
+			local note = ks.Note or ks.Desc or ks.Description
+			if note then
+				createLabel({
+					Size = UDim2.new(1, 0, 0, 0),
+					AutomaticSize = Enum.AutomaticSize.Y,
+					Text = tostring(note),
+					TextSize = 13,
+					FontFace = Fonts.Regular,
+					TextColor3 = Theme.Muted,
+					TextWrapped = true,
+					TextTruncate = Enum.TextTruncate.None,
+					LayoutOrder = 2,
+					Parent = card,
+				})
+			end
+
+			local inputFrame = create("Frame", {
+				Size = UDim2.new(1, 0, 0, 40),
+				BackgroundColor3 = Theme.Surface,
+				BorderSizePixel = 0,
+				LayoutOrder = 3,
+				Parent = card,
+			})
+			addCorner(inputFrame, UDim.new(0, 8))
+			local inputStroke = addStroke(inputFrame)
+			local _, inputIcon = createIcon(inputFrame, "key-round", Theme.Muted, UDim2.new(0, 12, 0.5, 0))
+			local box = create("TextBox", {
+				Position = UDim2.fromOffset(38, 0),
+				Size = UDim2.new(1, -48, 1, 0),
+				BackgroundTransparency = 1,
+				Text = "",
+				PlaceholderText = tostring(ks.Placeholder or "Enter your key"),
+				PlaceholderColor3 = Theme.Muted,
+				TextColor3 = Theme.Text,
+				TextSize = 14,
+				FontFace = Fonts.Regular,
+				TextXAlignment = Enum.TextXAlignment.Left,
+				TextTruncate = Enum.TextTruncate.AtEnd,
+				ClearTextOnFocus = false,
+				Parent = inputFrame,
+			})
+
+			local status = createLabel({
+				Size = UDim2.new(1, 0, 0, 0),
+				AutomaticSize = Enum.AutomaticSize.Y,
+				Text = "",
+				TextSize = 12,
+				FontFace = Fonts.Regular,
+				TextColor3 = Theme.Muted,
+				TextWrapped = true,
+				TextTruncate = Enum.TextTruncate.None,
+				Visible = false,
+				LayoutOrder = 4,
+				Parent = card,
+			})
+			local function setStatus(text, color)
+				status.Text = text or ""
+				status.TextColor3 = color or Theme.Muted
+				status.Visible = status.Text ~= ""
+			end
+
+			local row = create("Frame", {
+				Size = UDim2.new(1, 0, 0, 36),
+				BackgroundTransparency = 1,
+				LayoutOrder = 5,
+				Parent = card,
+			})
+			create("UIListLayout", {
+				FillDirection = Enum.FillDirection.Horizontal,
+				SortOrder = Enum.SortOrder.LayoutOrder,
+				Padding = UDim.new(0, 8),
+				Parent = row,
+			})
+			local buttons = {}
+			local function keyButton(order, text, iconName, primary, callback)
+				local button = create("TextButton", {
+					Size = UDim2.fromOffset(0, 36),
+					BackgroundColor3 = primary and Theme.Accent or Theme.Surface,
+					Text = "",
+					AutoButtonColor = false,
+					LayoutOrder = order,
+					Parent = row,
+				})
+				addCorner(button, UDim.new(0, 8))
+				local stroke = addStroke(button, primary and Theme.Accent or Theme.Stroke)
+				local layout = create("UIListLayout", {
+					FillDirection = Enum.FillDirection.Horizontal,
+					HorizontalAlignment = Enum.HorizontalAlignment.Center,
+					VerticalAlignment = Enum.VerticalAlignment.Center,
+					SortOrder = Enum.SortOrder.LayoutOrder,
+					Padding = UDim.new(0, 7),
+					Parent = button,
+				})
+				if iconName then
+					local image = create("ImageLabel", {
+						Size = UDim2.fromOffset(15, 15),
+						BackgroundTransparency = 1,
+						ImageColor3 = primary and Theme.AccentDark or Theme.Accent,
+						ScaleType = Enum.ScaleType.Fit,
+						LayoutOrder = 1,
+						Parent = button,
+					})
+					if not setIcon(image, iconName) then
+						image:Destroy()
+					end
+				end
+				local label = createLabel({
+					Size = UDim2.new(0, 0, 1, 0),
+					AutomaticSize = Enum.AutomaticSize.X,
+					Text = text,
+					TextSize = 13,
+					TextColor3 = primary and Theme.AccentDark or Theme.Text,
+					TextTruncate = Enum.TextTruncate.None,
+					LayoutOrder = 2,
+					Parent = button,
+				})
+				button.MouseEnter:Connect(function()
+					if IS_TOUCH then
+						return
+					end
+					if primary then
+						tween(button, { BackgroundTransparency = 0.12 }, 0.12)
+					else
+						tween(stroke, { Color = Theme.StrokeHover }, 0.12)
+						tween(button, { BackgroundColor3 = Theme.Surface2 }, 0.12)
+					end
+				end)
+				button.MouseLeave:Connect(function()
+					if primary then
+						tween(button, { BackgroundTransparency = 0 }, 0.2)
+					else
+						tween(stroke, { Color = Theme.Stroke }, 0.2)
+						tween(button, { BackgroundColor3 = Theme.Surface }, 0.2)
+					end
+				end)
+				button.MouseButton1Click:Connect(function()
+					safeCall(callback)
+				end)
+				table.insert(buttons, button)
+				return button, label, layout
+			end
+
+			local checking = false
+			local function submit()
+				if checking or accepted or closed then
+					return
+				end
+				local key = (box.Text:gsub("^%s+", ""):gsub("%s+$", ""))
+				if key == "" then
+					setStatus("Type or paste your key first.", Theme.Warning)
+					return
+				end
+				checking = true
+				setStatus("Checking...", Theme.Muted)
+				task.spawn(function()
+					local valid, message = checkKey(ks, key)
+					checking = false
+					if closed then
+						return
+					end
+					if valid then
+						setStatus(message or "Key accepted.", Theme.Success)
+						tween(inputStroke, { Color = Theme.Success }, 0.15)
+						if ks.SaveKey ~= false then
+							writeSavedKey(folder, path, key)
+						end
+						task.wait(0.35)
+						accepted = key
+					else
+						setStatus(message or "That key isn't valid. Check it and try again.", Theme.Error)
+						tween(inputStroke, { Color = Theme.Error }, 0.15)
+						safeCall(ks.OnFail, key)
+					end
+				end)
+			end
+
+			local link = ks.URL or ks.Url or ks.Link or ks.KeyLink
+			if link or type(ks.GetKey) == "function" then
+				keyButton(1, tostring(ks.GetKeyText or "Get key"), "link", false, function()
+					if type(ks.GetKey) == "function" then
+						ks.GetKey()
+						return
+					end
+					if Nucleus:Copy(tostring(link), true) then
+						setStatus("Link copied. Paste it in your browser.", Theme.Muted)
+					else
+						setStatus(tostring(link), Theme.Muted)
+					end
+				end)
+			end
+			if ks.Discord then
+				keyButton(2, "Discord", "discord", false, function()
+					if Nucleus:Copy(tostring(ks.Discord), true) then
+						setStatus("Discord invite copied.", Theme.Muted)
+					else
+						setStatus(tostring(ks.Discord), Theme.Muted)
+					end
+				end)
+			end
+			keyButton(3, tostring(ks.SubmitText or "Continue"), "arrow-right", true, submit)
+			local count = #buttons
+			for _, button in ipairs(buttons) do
+				button.Size = UDim2.new(1 / count, -math.ceil(8 * (count - 1) / count), 0, 36)
+			end
+
+			box.Focused:Connect(function()
+				tween(inputStroke, { Color = Theme.StrokeHover }, 0.15)
+				tween(inputIcon, { ImageColor3 = Theme.Text }, 0.15)
+			end)
+			box.FocusLost:Connect(function(enterPressed)
+				tween(inputStroke, { Color = Theme.Stroke }, 0.15)
+				tween(inputIcon, { ImageColor3 = Theme.Muted }, 0.2)
+				if enterPressed then
+					submit()
+				end
+			end)
+
+			while not accepted and not closed do
+				task.wait(0.05)
+			end
+			gui:Destroy()
+			if closed then
+				safeCall(ks.OnClose)
+				return nil
+			end
+			Nucleus.Key = accepted
+			safeCall(ks.OnSuccess, accepted)
+			return accepted
+		end
+
+		local createWindowBase = Nucleus.Window
+		local function windowWithExtras(first, second)
+			local options = first == Nucleus and second or first
+			if type(options) == "table" and type(options.KeySystem) == "table" and options.KeySystem.Enabled ~= false then
+				local key = Nucleus:KeySystem(options.KeySystem, options)
+				if not key then
+					while true do
+						task.wait(3600)
+					end
+				end
+			end
+			local window = createWindowBase(first, second)
+			if type(window) == "table" and type(options) == "table" then
+				window.Key = Nucleus.Key
+				local hide = readHideList(options.Hide)
+				if next(hide) then
+					window._hiddenParts = hide
+				end
+				window:_applyParts()
+			end
+			return window
+		end
+		for key, value in pairs(table.clone(Nucleus)) do
+			if value == createWindowBase then
+				Nucleus[key] = windowWithExtras
+			end
+		end
+	end
 
 	do
 		local function fits(kind, value)
