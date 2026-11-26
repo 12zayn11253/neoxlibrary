@@ -10,7 +10,7 @@ local LocalPlayer = Players.LocalPlayer
 local Nucleus = {}
 local Const = {}
 Nucleus.Name = "Nucleus UI"
-Nucleus.Version = "4.12.3"
+Nucleus.Version = "4.12.4"
 Nucleus.Flags = {}
 Nucleus.Windows = {}
 
@@ -458,8 +458,8 @@ Nucleus.Themes = {
 	}),
 }
 
-Nucleus.Theme = table.clone(Nucleus.Themes.Crimson)
-Nucleus.ThemeName = "Crimson"
+Nucleus.Theme = table.clone(Nucleus.Themes.Violet)
+Nucleus.ThemeName = "Violet"
 
 Nucleus.Assets = {
 	Shadow = "rbxassetid://6014261993",
@@ -606,10 +606,20 @@ end
 Const.ICON_PACK_URL = "https://raw.githubusercontent.com/Footagesus/Icons/refs/heads/main/lucide/dist/Icons.lua"
 local iconPack
 
+local iconPackLoading = false
+
 local function getIconPack()
 	if iconPack ~= nil then
 		return iconPack
 	end
+	if iconPackLoading then
+		local waited = 0
+		while iconPack == nil and waited < 15 do
+			waited += task.wait(0.05)
+		end
+		return iconPack or false
+	end
+	iconPackLoading = true
 	local ok, result = pcall(function()
 		return loadstring(game:HttpGet(Const.ICON_PACK_URL))()
 	end)
@@ -619,8 +629,10 @@ local function getIconPack()
 		iconPack = false
 		log("lucide icons unavailable: " .. tostring(result))
 	end
+	iconPackLoading = false
 	return iconPack
 end
+task.spawn(getIconPack)
 
 function Nucleus:PreloadIcons()
 	return getIconPack() ~= false
@@ -15446,7 +15458,6 @@ do
 					syn.protect_gui(gui)
 				end
 			end)
-			gui.Parent = windowOptions.Parent or getGuiParent()
 
 			local width = IS_TOUCH and 312 or 344
 			local backdrop = create("Frame", {
@@ -15951,7 +15962,10 @@ do
 					inputStroke.Color = focused and Theme.StrokeHover or Theme.Stroke
 				end
 			end)
+			setIcon(statusIcon, "circle-check")
+			gui.Parent = windowOptions.Parent or getGuiParent()
 			fitCard()
+			task.defer(fitCard)
 
 			while not accepted and not closed do
 				task.wait(0.05)
