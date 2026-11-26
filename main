@@ -10,7 +10,7 @@ local LocalPlayer = Players.LocalPlayer
 local Nucleus = {}
 local Const = {}
 Nucleus.Name = "Nucleus UI"
-Nucleus.Version = "4.13.0"
+Nucleus.Version = "4.13.1"
 Nucleus.Flags = {}
 Nucleus.Windows = {}
 
@@ -925,6 +925,7 @@ Const.APPEARANCE_DEFAULTS = {
 	Shadow = true,
 	TabHighlight = "Fill",
 	Depth = true,
+	Gradient = true,
 }
 
 Const.APPEARANCE_LIMITS = {
@@ -5308,6 +5309,7 @@ Window.__index = Window
 
 Const.DEFAULT_WINDOW_SIZE = UDim2.fromOffset(644, 428)
 Const.COMPACT_WIDTH = 560
+Const.SCROLLBAR_GRAB = 6
 Const.PAGE_PAD = 18
 Const.TAB_HEIGHT = 32
 Const.PHONE_LAYOUT = Vector2.new(512, 330)
@@ -5524,6 +5526,27 @@ function Nucleus.Window(selfOrOptions, maybeOptions)
 	addCorner(fader, UDim.new(0, Appearance.WindowRadius))
 	window._fader = fader
 
+	if Appearance.Gradient then
+		local glow = create("Frame", {
+			Name = "Gradient",
+			Size = UDim2.fromScale(1, 1),
+			BackgroundColor3 = Theme.Accent,
+			BorderSizePixel = 0,
+			Parent = body,
+		})
+		addCorner(glow, UDim.new(0, Appearance.WindowRadius))
+		create("UIGradient", {
+			Rotation = 90,
+			Transparency = NumberSequence.new({
+				NumberSequenceKeypoint.new(0, 0.9),
+				NumberSequenceKeypoint.new(0.45, 0.975),
+				NumberSequenceKeypoint.new(1, 1),
+			}),
+			Parent = glow,
+		})
+		window._gradient = glow
+	end
+
 	local sidebar = create("Frame", {
 		Name = "Sidebar",
 		Active = true,
@@ -5535,6 +5558,14 @@ function Nucleus.Window(selfOrOptions, maybeOptions)
 	})
 	addCorner(sidebar, UDim.new(0, 10))
 	window._sidebar = sidebar
+	if Appearance.Gradient then
+		create("UIGradient", {
+			Name = "Shade",
+			Rotation = 90,
+			Color = ColorSequence.new(Color3.new(1, 1, 1), Color3.fromRGB(214, 214, 220)),
+			Parent = sidebar,
+		})
+	end
 	if options.Transparent == true then
 		body.BackgroundTransparency = 0.12
 		sidebar.BackgroundTransparency = 0.35
@@ -6417,14 +6448,34 @@ local function isVisiblyAt(guiObject, stopAt, point)
 end
 
 function Window:_refreshControls()
-	local controls = {}
+	local controls, scrollers = {}, {}
 	for _, descendant in ipairs(self.Body:GetDescendants()) do
 		if descendant:IsA("GuiButton") or descendant:IsA("TextBox") or descendant:GetAttribute(Const.ATTR_NO_DRAG) then
 			table.insert(controls, descendant)
+		elseif descendant:IsA("ScrollingFrame") then
+			table.insert(scrollers, descendant)
 		end
 	end
 	self._controls = controls
+	self._scrollers = scrollers
 	self._controlsDirty = false
+end
+
+function Window:_overScrollbar(point)
+	for _, frame in ipairs(self._scrollers or {}) do
+		if frame.Parent and frame.ScrollBarThickness > 0 and pointInside(point, frame) then
+			local canvas, view = frame.AbsoluteCanvasSize, frame.AbsoluteWindowSize
+			local right = frame.AbsolutePosition.X + frame.AbsoluteSize.X
+			local bottom = frame.AbsolutePosition.Y + frame.AbsoluteSize.Y
+			local reach = frame.ScrollBarThickness + Const.SCROLLBAR_GRAB
+			local vertical = canvas.Y > view.Y + 1 and point.X >= right - reach
+			local horizontal = canvas.X > view.X + 1 and point.Y >= bottom - reach
+			if (vertical or horizontal) and isVisiblyAt(frame, self.Body, point) then
+				return true
+			end
+		end
+	end
+	return false
 end
 
 function Window:_overControl(point)
@@ -6439,7 +6490,7 @@ function Window:_overControl(point)
 			return true
 		end
 	end
-	return false
+	return self:_overScrollbar(point)
 end
 
 function Window:_overOverlay(point)
@@ -6497,7 +6548,7 @@ function Window:_enableDrag()
 		local target = getMousePosition() - grabOffset
 		local alpha = 1 - math.exp(-deltaTime * 45)
 		local position = rootCenter():Lerp(target, alpha)
-		self.Root.Position = UDim2.fromOffset(position.X, position.Y)
+		self.Root.Position = UDim2.fromOffset(math.floor(position.X + 0.5), math.floor(position.Y + 0.5))
 		self._userMoved = true
 	end)
 end
