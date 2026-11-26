@@ -10,7 +10,7 @@ local LocalPlayer = Players.LocalPlayer
 local Nucleus = {}
 local Const = {}
 Nucleus.Name = "Nucleus UI"
-Nucleus.Version = "4.10.1"
+Nucleus.Version = "4.10.2"
 Nucleus.Flags = {}
 Nucleus.Windows = {}
 
@@ -5303,8 +5303,10 @@ Const.NOTIFY_TYPES = {
 local Window = {}
 Window.__index = Window
 
-Const.DEFAULT_WINDOW_SIZE = UDim2.fromOffset(692, 460)
+Const.DEFAULT_WINDOW_SIZE = UDim2.fromOffset(644, 428)
 Const.COMPACT_WIDTH = 560
+Const.PHONE_LAYOUT = Vector2.new(512, 330)
+Const.PHONE_FIT = { PortraitX = 0.9, PortraitY = 0.56, TabletX = 0.56, LandscapeX = 0.52, LandscapeY = 0.82 }
 Const.COMPACT_SIDEBAR = 64
 Const.COMPACT_MIN = Vector2.new(400, 260)
 Const.DEFAULT_MIN_SIZE = Vector2.new(480, 360)
@@ -5831,46 +5833,31 @@ function Nucleus.Window(selfOrOptions, maybeOptions)
 	})
 	sidebarButton:SetAttribute(Const.ATTR_NO_DRAG, true)
 	addCorner(sidebarButton, UDim.new(0, 7))
-	local sidebarGlyph = create("Frame", {
-		Name = "Glyph",
+	local sidebarIcon = create("ImageLabel", {
+		Name = "Arrow",
 		AnchorPoint = Vector2.new(0.5, 0.5),
 		Position = UDim2.fromScale(0.5, 0.5),
-		Size = UDim2.fromOffset(16, 12),
+		Size = UDim2.fromOffset(18, 18),
 		BackgroundTransparency = 1,
+		ImageColor3 = Theme.Muted,
+		ScaleType = Enum.ScaleType.Fit,
 		ZIndex = 7,
 		Parent = sidebarButton,
 	})
-	local glyphLines = {}
-	for index = 0, 2 do
-		local line = create("Frame", {
-			Position = UDim2.fromOffset(0, index * 5),
-			Size = UDim2.fromOffset(16, 2),
-			BackgroundColor3 = Theme.Muted,
-			BorderSizePixel = 0,
-			ZIndex = 8,
-			Parent = sidebarGlyph,
-		})
-		addCorner(line, UDim.new(1, 0))
-		table.insert(glyphLines, line)
-	end
+	setIcon(sidebarIcon, "chevron-left")
 	window._sidebarButton = sidebarButton
-	window._sidebarGlyph = glyphLines
-	local function paintGlyph(color, duration)
-		for _, line in ipairs(glyphLines) do
-			tween(line, { BackgroundColor3 = color }, duration)
-		end
-	end
+	window._sidebarIcon = sidebarIcon
 	sidebarButton.MouseEnter:Connect(function()
 		if IS_TOUCH then
 			return
 		end
 		tween(sidebarButton, { BackgroundTransparency = 0 }, 0.15)
-		paintGlyph(Theme.Text, 0.15)
+		tween(sidebarIcon, { ImageColor3 = Theme.Text }, 0.15)
 		window:_showTooltip(window._compact and "Show tab names" or "Hide tab names", sidebarButton)
 	end)
 	sidebarButton.MouseLeave:Connect(function()
 		tween(sidebarButton, { BackgroundTransparency = 1 }, 0.2)
-		paintGlyph(Theme.Muted, 0.2)
+		tween(sidebarIcon, { ImageColor3 = Theme.Muted }, 0.2)
 		window:_hideTooltip(sidebarButton)
 	end)
 	sidebarButton.MouseButton1Click:Connect(function()
@@ -6790,10 +6777,10 @@ function Window:_fitToScreen(instant)
 			height = math.floor(base.Y)
 			fit = self._lockedFit or self._fitScale or 1
 		else
-			width = math.floor(large and base.X or math.min(base.X, Const.COMPACT_WIDTH))
-			height = math.floor(large and base.Y or math.min(base.Y, 360))
-			local maxX = screen.X * (portrait and 0.94 or (large and 0.62 or 0.56))
-			local maxY = usableY * (portrait and 0.6 or 0.88)
+			width = math.floor(large and base.X or math.min(base.X, Const.PHONE_LAYOUT.X))
+			height = math.floor(large and base.Y or math.min(base.Y, Const.PHONE_LAYOUT.Y))
+			local maxX = screen.X * (portrait and Const.PHONE_FIT.PortraitX or (large and Const.PHONE_FIT.TabletX or Const.PHONE_FIT.LandscapeX))
+			local maxY = usableY * (portrait and Const.PHONE_FIT.PortraitY or Const.PHONE_FIT.LandscapeY)
 			fit = math.min(maxX / width, maxY / height, 1) * userScale
 		end
 		fit = math.min(fit, (screen.X - 16) / width, (usableY - 16) / height)
@@ -6826,7 +6813,7 @@ function Window:_fitToScreen(instant)
 	if current.X.Offset ~= width or current.Y.Offset ~= height then
 		self.Root.Size = UDim2.fromOffset(width, height)
 	end
-	self._autoCompact = width < Const.COMPACT_WIDTH
+	self._autoCompact = width < (IS_TOUCH and Const.PHONE_LAYOUT.X or Const.COMPACT_WIDTH)
 	self:_setCompact(self._autoCompact or self._sidebarCollapsed == true)
 
 	if self._introDone and self.Open then
@@ -6964,6 +6951,14 @@ function Window:_setCompact(compact, animated)
 	animated = animated == true and not IS_TOUCH
 	self._compactGeneration = (self._compactGeneration or 0) + 1
 	local generation = self._compactGeneration
+	if self._sidebarIcon then
+		local rotation = compact and 180 or 0
+		if animated then
+			tween(self._sidebarIcon, { Rotation = rotation }, Const.SIDEBAR_TWEEN, Enum.EasingStyle.Quint)
+		else
+			self._sidebarIcon.Rotation = rotation
+		end
+	end
 
 	local width = compact and Const.COMPACT_SIDEBAR or self._sidebarWidth
 	local sidebarSize = UDim2.new(0, width - 8, 1, -16)
@@ -15415,7 +15410,7 @@ do
 			end)
 			gui.Parent = windowOptions.Parent or getGuiParent()
 
-			local width = IS_TOUCH and 310 or 340
+			local width = IS_TOUCH and 300 or 330
 			local card = create("Frame", {
 				Name = "Card",
 				AnchorPoint = Vector2.new(0.5, 0.5),
