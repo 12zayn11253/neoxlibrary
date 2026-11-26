@@ -10,7 +10,7 @@ local LocalPlayer = Players.LocalPlayer
 local Nucleus = {}
 local Const = {}
 Nucleus.Name = "Nucleus UI"
-Nucleus.Version = "4.12.0"
+Nucleus.Version = "4.12.1"
 Nucleus.Flags = {}
 Nucleus.Windows = {}
 
@@ -470,10 +470,16 @@ Nucleus.Assets = {
 
 Const.DEFAULT_FONT_FAMILY = "rbxasset://fonts/families/GothamSSm.json"
 
+Const.TEXT_WEIGHTS = {
+	Regular = Enum.FontWeight.Medium,
+	Medium = Enum.FontWeight.Bold,
+	Bold = Enum.FontWeight.Bold,
+}
+
 Nucleus.Fonts = {
-	Regular = Font.new(Const.DEFAULT_FONT_FAMILY, Enum.FontWeight.Regular),
-	Medium = Font.new(Const.DEFAULT_FONT_FAMILY, Enum.FontWeight.Medium),
-	Bold = Font.new(Const.DEFAULT_FONT_FAMILY, Enum.FontWeight.Bold),
+	Regular = Font.new(Const.DEFAULT_FONT_FAMILY, Const.TEXT_WEIGHTS.Regular),
+	Medium = Font.new(Const.DEFAULT_FONT_FAMILY, Const.TEXT_WEIGHTS.Medium),
+	Bold = Font.new(Const.DEFAULT_FONT_FAMILY, Const.TEXT_WEIGHTS.Bold),
 }
 
 local KNOWN_FONTS = {
@@ -508,9 +514,9 @@ function Nucleus:SetFont(family)
 		return false
 	end
 	local fonts = Nucleus.Fonts
-	fonts.Regular = Font.new(resolved, Enum.FontWeight.Regular)
-	fonts.Medium = Font.new(resolved, Enum.FontWeight.Medium)
-	fonts.Bold = Font.new(resolved, Enum.FontWeight.Bold)
+	fonts.Regular = Font.new(resolved, Const.TEXT_WEIGHTS.Regular)
+	fonts.Medium = Font.new(resolved, Const.TEXT_WEIGHTS.Medium)
+	fonts.Bold = Font.new(resolved, Const.TEXT_WEIGHTS.Bold)
 	return true
 end
 
