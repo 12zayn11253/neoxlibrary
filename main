@@ -10,7 +10,7 @@ local LocalPlayer = Players.LocalPlayer
 local Nucleus = {}
 local Const = {}
 Nucleus.Name = "Nucleus UI"
-Nucleus.Version = "4.12.4"
+Nucleus.Version = "4.13.0"
 Nucleus.Flags = {}
 Nucleus.Windows = {}
 
@@ -7798,21 +7798,114 @@ function Window:_buildHome(homeOptions, membership)
 	self._homeShown = shown
 	self._homeOrderOf = orderOf
 
-	local pillRow
-	if type(pageDefs) == "table" and #pageDefs > 0 then
-		pillRow = create("Frame", {
-			Size = UDim2.new(1, 0, 0, 32),
-			BackgroundTransparency = 1,
-			LayoutOrder = 1,
-			Parent = list,
-		})
-		create("UIListLayout", {
-			FillDirection = Enum.FillDirection.Horizontal,
-			SortOrder = Enum.SortOrder.LayoutOrder,
-			Padding = UDim.new(0, 6),
+	if type(pageDefs) ~= "table" then
+		pageDefs = {}
+	end
+	local pillRow = create("Frame", {
+		Name = "PageBar",
+		Size = UDim2.new(1, 0, 0, 32),
+		BackgroundTransparency = 1,
+		LayoutOrder = 1,
+		Visible = #pageDefs > 0,
+		Parent = list,
+	})
+	pillRow:SetAttribute(Const.ATTR_NO_DRAG, true)
+	local pillStrip = create("ScrollingFrame", {
+		Name = "Strip",
+		Size = UDim2.fromScale(1, 1),
+		BackgroundTransparency = 1,
+		BorderSizePixel = 0,
+		ScrollBarThickness = 0,
+		ScrollingDirection = Enum.ScrollingDirection.X,
+		AutomaticCanvasSize = Enum.AutomaticSize.X,
+		CanvasSize = UDim2.new(),
+		ElasticBehavior = Enum.ElasticBehavior.Never,
+		Parent = pillRow,
+	})
+	pillStrip:SetAttribute(Const.ATTR_NO_DRAG, true)
+	local pillLayout = create("UIListLayout", {
+		FillDirection = Enum.FillDirection.Horizontal,
+		SortOrder = Enum.SortOrder.LayoutOrder,
+		Padding = UDim.new(0, 6),
+		Parent = pillStrip,
+	})
+
+	local function pageArrow(name, icon, anchorX)
+		local button = create("TextButton", {
+			Name = name,
+			AnchorPoint = Vector2.new(anchorX, 0),
+			Position = UDim2.fromScale(anchorX, 0),
+			Size = UDim2.fromOffset(28, 32),
+			BackgroundColor3 = Theme.Surface2,
+			Text = "",
+			AutoButtonColor = false,
+			Visible = false,
+			ZIndex = 3,
 			Parent = pillRow,
 		})
+		addCorner(button, UDim.new(0, 7))
+		local stroke = addStroke(button)
+		local image = create("ImageLabel", {
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			Position = UDim2.fromScale(0.5, 0.5),
+			Size = UDim2.fromOffset(16, 16),
+			BackgroundTransparency = 1,
+			ImageColor3 = Theme.Text,
+			ScaleType = Enum.ScaleType.Fit,
+			ZIndex = 4,
+			Parent = button,
+		})
+		setIcon(image, icon)
+		button.MouseEnter:Connect(function()
+			if not IS_TOUCH and button:GetAttribute("Enabled") ~= false then
+				stroke.Color = Theme.StrokeHover
+			end
+		end)
+		button.MouseLeave:Connect(function()
+			stroke.Color = Theme.Stroke
+		end)
+		return button, image
 	end
+	local leftArrow, leftImage = pageArrow("Previous", "chevron-left", 0)
+	local rightArrow, rightImage = pageArrow("Next", "chevron-right", 1)
+
+	local function stripLimit()
+		return math.max(pillLayout.AbsoluteContentSize.X - pillStrip.AbsoluteSize.X, 0)
+	end
+	local function updateArrows()
+		local overflow = pillLayout.AbsoluteContentSize.X > pillRow.AbsoluteSize.X + 1
+		leftArrow.Visible = overflow
+		rightArrow.Visible = overflow
+		if overflow then
+			pillStrip.Position = UDim2.fromOffset(34, 0)
+			pillStrip.Size = UDim2.new(1, -68, 1, 0)
+		else
+			pillStrip.Position = UDim2.fromOffset(0, 0)
+			pillStrip.Size = UDim2.fromScale(1, 1)
+			pillStrip.CanvasPosition = Vector2.zero
+		end
+		local x = pillStrip.CanvasPosition.X
+		local canLeft = overflow and x > 1
+		local canRight = overflow and x < stripLimit() - 1
+		leftArrow:SetAttribute("Enabled", canLeft)
+		rightArrow:SetAttribute("Enabled", canRight)
+		leftImage.ImageTransparency = canLeft and 0 or 0.65
+		rightImage.ImageTransparency = canRight and 0 or 0.65
+	end
+	local function scrollStrip(target)
+		target = math.clamp(math.floor(target + 0.5), 0, stripLimit())
+		pillStrip.CanvasPosition = Vector2.new(target, 0)
+		updateArrows()
+	end
+	leftArrow.MouseButton1Click:Connect(function()
+		scrollStrip(pillStrip.CanvasPosition.X - math.max(pillStrip.AbsoluteSize.X * 0.7, 80))
+	end)
+	rightArrow.MouseButton1Click:Connect(function()
+		scrollStrip(pillStrip.CanvasPosition.X + math.max(pillStrip.AbsoluteSize.X * 0.7, 80))
+	end)
+	pillLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(updateArrows)
+	pillRow:GetPropertyChangedSignal("AbsoluteSize"):Connect(updateArrows)
+	pillStrip:GetPropertyChangedSignal("CanvasPosition"):Connect(updateArrows)
 
 	local greeting = homeOptions.Greeting
 	if greeting == nil then
@@ -8055,7 +8148,7 @@ function Window:_buildHome(homeOptions, membership)
 		Frame = detailsPage,
 	})
 
-	if pillRow then
+	do
 		local function addTextCard(parent, order)
 			local card = create("Frame", {
 				Size = UDim2.new(1, 0, 0, 0),
@@ -8071,7 +8164,7 @@ function Window:_buildHome(homeOptions, membership)
 			return card
 		end
 
-		for _, pageDef in ipairs(pageDefs) do
+		local function buildPage(pageDef)
 			local pageFrame = create("Frame", {
 				Size = UDim2.new(1, 0, 0, 0),
 				AutomaticSize = Enum.AutomaticSize.Y,
@@ -8117,14 +8210,34 @@ function Window:_buildHome(homeOptions, membership)
 				end
 			end
 
-			table.insert(pages, {
+			return {
 				Title = pageDef.Name or pageDef.Title or "Page",
 				Icon = pageDef.Icon,
 				Frame = pageFrame,
-			})
+			}
+		end
+
+		for _, pageDef in ipairs(pageDefs) do
+			if type(pageDef) == "table" then
+				table.insert(pages, buildPage(pageDef))
+			end
 		end
 
 		local pills = {}
+		local function revealPill(pageIndex)
+			local pill = pills[pageIndex]
+			if not pill or not leftArrow.Visible then
+				return
+			end
+			local left = pill.Frame.AbsolutePosition.X - pillStrip.AbsolutePosition.X + pillStrip.CanvasPosition.X
+			local right = left + pill.Frame.AbsoluteSize.X
+			local view = pillStrip.CanvasPosition.X
+			if left < view then
+				scrollStrip(left)
+			elseif right > view + pillStrip.AbsoluteSize.X then
+				scrollStrip(right - pillStrip.AbsoluteSize.X)
+			end
+		end
 
 		local function showPage(pageIndex, instant)
 			local changed = self._homeIndex ~= pageIndex
@@ -8149,6 +8262,9 @@ function Window:_buildHome(homeOptions, membership)
 
 				local pill = pills[index]
 				if pill then
+					if active then
+						task.defer(revealPill, index)
+					end
 					tween(pill.Frame, { BackgroundTransparency = active and 0 or 1 }, 0.15)
 					tween(pill.Stroke, { Transparency = active and 0 or 1 }, 0.15)
 					tween(pill.Label, { TextColor3 = active and Theme.Text or Theme.Muted }, 0.15)
@@ -8159,7 +8275,7 @@ function Window:_buildHome(homeOptions, membership)
 			end
 		end
 
-		for index, page in ipairs(pages) do
+		local function addPill(index, page)
 			local pillButton = create("TextButton", {
 				Size = UDim2.fromOffset(0, 32),
 				AutomaticSize = Enum.AutomaticSize.X,
@@ -8168,7 +8284,7 @@ function Window:_buildHome(homeOptions, membership)
 				Text = "",
 				AutoButtonColor = false,
 				LayoutOrder = index,
-				Parent = pillRow,
+				Parent = pillStrip,
 			})
 			addCorner(pillButton, UDim.new(0, 7))
 			local pillStroke = addStroke(pillButton, Theme.Stroke, 1)
@@ -8226,8 +8342,23 @@ function Window:_buildHome(homeOptions, membership)
 			end)
 		end
 
+		for index, page in ipairs(pages) do
+			addPill(index, page)
+		end
+
 		showPage(1)
 		self._showHomePage = showPage
+		self._homePages = pages
+		self._addHomePage = function(pageDef)
+			local page = buildPage(pageDef)
+			table.insert(pages, page)
+			addPill(#pages, page)
+			pillRow.Visible = #pages > 1
+			showPage(self._homeIndex or 1, true)
+			task.defer(updateArrows)
+			return page
+		end
+		task.defer(updateArrows)
 	end
 
 	homeTab._order = 10
@@ -11763,6 +11894,54 @@ function Window:_startMiniLoop()
 			end
 		end
 	end)
+end
+
+function Window:AddHomePage(first, second, third)
+	if not self._addHomePage then
+		log("AddHomePage needs the Home tab. Remove Home = false from your window to use it.")
+		return nil
+	end
+	local pageDef = first
+	if type(first) == "string" then
+		pageDef = { Title = first }
+		for _, value in ipairs({ second, third }) do
+			if type(value) == "function" then
+				pageDef.Build = value
+			elseif type(value) == "table" then
+				pageDef.Entries = value
+			elseif type(value) == "string" then
+				if pageDef.Content == nil then
+					pageDef.Content = value
+				else
+					pageDef.Icon = value
+				end
+			end
+		end
+	end
+	if type(pageDef) ~= "table" then
+		return nil
+	end
+	local page = self._addHomePage(pageDef)
+	return page and page.Frame or nil
+end
+
+function Window:SelectHomePage(page)
+	if not self._showHomePage or not self._homePages then
+		return false
+	end
+	local index = tonumber(page)
+	if not index then
+		for position, entry in ipairs(self._homePages) do
+			if entry.Title == page then
+				index = position
+			end
+		end
+	end
+	if not index or not self._homePages[index] then
+		return false
+	end
+	self._showHomePage(index)
+	return true
 end
 
 function Nucleus:SetAnimations(enabled)
