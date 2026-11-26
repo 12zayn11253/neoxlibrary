@@ -10,7 +10,7 @@ local LocalPlayer = Players.LocalPlayer
 local Nucleus = {}
 local Const = {}
 Nucleus.Name = "Nucleus UI"
-Nucleus.Version = "4.11.0"
+Nucleus.Version = "4.12.0"
 Nucleus.Flags = {}
 Nucleus.Windows = {}
 
@@ -29,7 +29,7 @@ end
 
 local KNOWN_OPTIONS = {}
 local KNOWN_OPTIONS_LOWER = {}
-for name in string.gmatch("AU AbsoluteContentSize AbsoluteSize Accent AccentDark Active ActiveOnly AliveCheck Always Anonymous Asc Australia AutoLoad AutoSave BR Background BackgroundColor3 BackgroundTransparency Backspace BasePart Began Body Bold BottomRight Brazil Button ButtonRow Buttons CA CFrame Callback Canada Cancel CancelText CanvasGroup Caption Changed Changes ClearOnFocus Close CloseOnBackdrop Code Collapsed Color Color3 ColorPicker Configs ConfigurationSaving Confirm ConfirmText ConfirmTimeout Content ContentProvider Copied Copy Copyable CoreGui Create CurrentKeybind CurrentOption CurrentValue Custom CustomFont DE Danger Date DateFormat Decal Default DefaultState Delay Delete Depends DependsOn Desc Description Details Discord DiscordButton DiscordLink Divider Dropdown Duration Element EmptyText Enabled Ended Enter Entries Enum EnumItem Error ErrorNotifications Esc Example ExcludeSelf Executor Expired Expiry FPS FR FileName Flag Folder FolderName Format Frame France Free GET Game Germany GetActive GetKey Glow Greeting Group GuiButton GuiName GuiObject GuiService HWID HasKey Header HeaderItems Height Hold Home HttpService Humanoid HumanoidRootPart IN Icon Image ImageButton ImageColor3 ImageLabel ImageRectPosition ImageRectSize ImageTransparency Increment India Info Input Instance JP Japan KeepOnScreen Key KeyInfo KeyPanel Keybind Keybinds LAlt LCtrl LShift Label Language Lifetime Lighting Load Loading LoadingDuration LoadingSteps LoadingSubtitle LoadingText LoadingTitle Localization Lock Locked LockedReason Loop LoopDelay Lowest Main MarketplaceService Max MaxDistance MaxHeight MaxLength MaxNotifications MaxSize Medium Membership Merge Message Method Min MinSize MobileButton MobileIcon Mode Model MinimizeButton Mono Monospace Monthly Multi MultiLine Multiline MultipleOptions Muted NL Name NucleusHidden Nucleus NucleusUIBlur NucleusUIFonts NucleusLoc NucleusLocPlaceholderText NucleusLocText NucleusNoTheme Netherlands NoDrag None Not Notification NotificationPosition Notifications Numeric OK OnCancel OnChanged OnClose OnRelease Open OpenButton Opened Options Page Pages Paragraph Parent Ping Placeholder PlaceholderColor3 PlaceholderText Player PlayerGui Players Popup Position Prefix Premium PremiumBanner PremiumButton Perks Price PopupDelay Cooldown HeaderButton ExpiryButtons OnClick OnShown ShowWithoutKey ButtonText Link PremiumLink PremiumText Primary Profile Progress Qd Qn RAlt RCtrl RShift Radius Range Region RegionCity Regular Reminders Render Reset ResetOnUnload Resizable RunService SG Save Scale ScaleType ScreenGui ScrollBarImageColor3 ScrollingFrame Search SearchAfter SearchPlaceholder SearchResults Secondary Section SectionName Sections SemiBold Session ShowFPS ShowPing ShowPromo ShowTime Sidebar SidebarCollapsed Singapore Size Slider Sound Space Standard Stat Stats Step Stepper Stroke StrokeHover Studio Style Subtitle Success Suffix Surface Surface2 Surface3 Tab TabIcon TabSection Tabs Tag TeamCheck TeleportService Tertiary Text TextArea TextBounds TextBox TextButton TextColor3 TextLabel TextScale TextSize TextTransparency Texture Theme ThemeName Time TimeFormat Title Toggle ToggleUIKeybind Tooltip Top TotalTime TouchOnly TransitionIn TransitionOut Translations Transparency TweenService Type TypeName TypeNames UDim2 UICorner UIGradient UIGridLayout UIListLayout UIPadding UIScale UISizeConstraint UIStroke Unavailable Unknown Update UpdateRate Uptime Usage UseDisplayName User UserInputService UserInputType Value Values Variant Vector2 Vector3 Version VirtualUser Visible Volume Warning Weekly Weights Welcome Window Appearance WindowRadius CardRadius CardBorder SidebarWidth Spacing Shadow TabHighlight Fill Outline Data Labels Texts Protected Badge TimeLeft NoKey NeverExpires Ends Ocean Crimson Amber Violet Slate Obsidian Mint Light Badge Settings SettingsTab AccentPicker Interface Server Unload History FlagPrefix Socials Donations Links Url URL Robux AssetId ShirtId GamePassId PassId Address Goal Target Current Thanks ThanksTitle OnDonate ShowOnHome Tiers Amount Currency Network Wallet Depth InnerShadow ScrollFades RememberTab IncludeSelf DisplayNames MaxLines Timestamps AutoScroll EmptyText Status Hidden Build PerGame IgnoreGameProcessed OnResult Elements Element Url Current Notify Author ToggleKey HideSearchBar SideBarWidth Folder Transparent Values AllowNone InputIcon Opened ImageSize Thumbnail ThumbnailSize ScrollBarEnabled Checkbox MinimizedBar MiniBar KeySystem Hide Note SaveKey Check Validate Verify Keys KeyLink GetKeyText SubmitText CanClose OnSuccess OnFail Toggles Restore Logo Discord CloseAction ConfirmClose", "%S+") do
+for name in string.gmatch("AU AbsoluteContentSize AbsoluteSize Accent AccentDark Active ActiveOnly AliveCheck Always Anonymous Asc Australia AutoLoad AutoSave BR Background BackgroundColor3 BackgroundTransparency Backspace BasePart Began Body Bold BottomRight Brazil Button ButtonRow Buttons CA CFrame Callback Canada Cancel CancelText CanvasGroup Caption Changed Changes ClearOnFocus Close CloseOnBackdrop Code Collapsed Color Color3 ColorPicker Configs ConfigurationSaving Confirm ConfirmText ConfirmTimeout Content ContentProvider Copied Copy Copyable CoreGui Create CurrentKeybind CurrentOption CurrentValue Custom CustomFont DE Danger Date DateFormat Decal Default DefaultState Delay Delete Depends DependsOn Desc Description Details Discord DiscordButton DiscordLink Divider Dropdown Duration Element EmptyText Enabled Ended Enter Entries Enum EnumItem Error ErrorNotifications Esc Example ExcludeSelf Executor Expired Expiry FPS FR FileName Flag Folder FolderName Format Frame France Free GET Game Germany GetActive GetKey Glow Greeting Group GuiButton GuiName GuiObject GuiService HWID HasKey Header HeaderItems Height Hold Home HttpService Humanoid HumanoidRootPart IN Icon Image ImageButton ImageColor3 ImageLabel ImageRectPosition ImageRectSize ImageTransparency Increment India Info Input Instance JP Japan KeepOnScreen Key KeyInfo KeyPanel Keybind Keybinds LAlt LCtrl LShift Label Language Lifetime Lighting Load Loading LoadingDuration LoadingSteps LoadingSubtitle LoadingText LoadingTitle Localization Lock Locked LockedReason Loop LoopDelay Lowest Main MarketplaceService Max MaxDistance MaxHeight MaxLength MaxNotifications MaxSize Medium Membership Merge Message Method Min MinSize MobileButton MobileIcon Mode Model MinimizeButton Mono Monospace Monthly Multi MultiLine Multiline MultipleOptions Muted NL Name NucleusHidden Nucleus NucleusUIBlur NucleusUIFonts NucleusLoc NucleusLocPlaceholderText NucleusLocText NucleusNoTheme Netherlands NoDrag None Not Notification NotificationPosition Notifications Numeric OK OnCancel OnChanged OnClose OnRelease Open OpenButton Opened Options Page Pages Paragraph Parent Ping Placeholder PlaceholderColor3 PlaceholderText Player PlayerGui Players Popup Position Prefix Premium PremiumBanner PremiumButton Perks Price PopupDelay Cooldown HeaderButton ExpiryButtons OnClick OnShown ShowWithoutKey ButtonText Link PremiumLink PremiumText Primary Profile Progress Qd Qn RAlt RCtrl RShift Radius Range Region RegionCity Regular Reminders Render Reset ResetOnUnload Resizable RunService SG Save Scale ScaleType ScreenGui ScrollBarImageColor3 ScrollingFrame Search SearchAfter SearchPlaceholder SearchResults Secondary Section SectionName Sections SemiBold Session ShowFPS ShowPing ShowPromo ShowTime Sidebar SidebarCollapsed Singapore Size Slider Sound Space Standard Stat Stats Step Stepper Stroke StrokeHover Studio Style Subtitle Success Suffix Surface Surface2 Surface3 Tab TabIcon TabSection Tabs Tag TeamCheck TeleportService Tertiary Text TextArea TextBounds TextBox TextButton TextColor3 TextLabel TextScale TextSize TextTransparency Texture Theme ThemeName Time TimeFormat Title Toggle ToggleUIKeybind Tooltip Top TotalTime TouchOnly TransitionIn TransitionOut Translations Transparency TweenService Type TypeName TypeNames UDim2 UICorner UIGradient UIGridLayout UIListLayout UIPadding UIScale UISizeConstraint UIStroke Unavailable Unknown Update UpdateRate Uptime Usage UseDisplayName User UserInputService UserInputType Value Values Variant Vector2 Vector3 Version VirtualUser Visible Volume Warning Weekly Weights Welcome Window Appearance WindowRadius CardRadius CardBorder SidebarWidth Spacing Shadow TabHighlight Fill Outline Data Labels Texts Protected Badge TimeLeft NoKey NeverExpires Ends Ocean Crimson Amber Violet Slate Obsidian Mint Light Badge Settings SettingsTab AccentPicker Interface Server Unload History FlagPrefix Socials Donations Links Url URL Robux AssetId ShirtId GamePassId PassId Address Goal Target Current Thanks ThanksTitle OnDonate ShowOnHome Tiers Amount Currency Network Wallet Depth InnerShadow ScrollFades RememberTab IncludeSelf DisplayNames MaxLines Timestamps AutoScroll EmptyText Status Hidden Build PerGame IgnoreGameProcessed OnResult Elements Element Url Current Notify Author ToggleKey HideSearchBar SideBarWidth Folder Transparent Values AllowNone InputIcon Opened ImageSize Thumbnail ThumbnailSize ScrollBarEnabled Checkbox MinimizedBar MiniBar KeySystem Hide Note SaveKey Check Validate Verify Keys KeyLink GetKeyText SubmitText CanClose OnSuccess OnFail Toggles Restore Logo Discord CloseAction ConfirmClose Animations", "%S+") do
 	KNOWN_OPTIONS[name] = true
 	KNOWN_OPTIONS_LOWER[string.lower(name)] = name
 end
@@ -687,6 +687,11 @@ local Fonts = Nucleus.Fonts
 
 local IS_TOUCH = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
 Nucleus.Touch = IS_TOUCH
+Nucleus.Animations = false
+
+local function instantUI()
+	return IS_TOUCH or Nucleus.Animations ~= true
+end
 
 Const.ROW_HEIGHT = 38
 Const.MIN_TEXT_SIZE = 12
@@ -771,7 +776,7 @@ end
 
 local function tween(object, goals, duration, style, direction)
 	duration = duration or 0.2
-	if IS_TOUCH then
+	if instantUI() then
 		duration = 0
 	end
 	if not IS_TOUCH and goals.GroupTransparency ~= nil and virtualGroups[object] then
@@ -5960,6 +5965,9 @@ function Nucleus.Window(selfOrOptions, maybeOptions)
 	window:_enableDrag()
 	window.MaxSize = toVector2(options.MaxSize)
 	window.KeepOnScreen = options.KeepOnScreen ~= false
+	if options.Animations ~= nil then
+		Nucleus.Animations = options.Animations == true
+	end
 	window._closeAction = (type(options.CloseAction) == "string" and string.lower(options.CloseAction) == "hide") and "Hide" or "Unload"
 	window._confirmClose = options.ConfirmClose ~= false
 	local miniOptions = options.MinimizedBar
@@ -6503,7 +6511,7 @@ function Window:_revealCards(tab, delay)
 		return
 	end
 	tab._revealed = true
-	if IS_TOUCH then
+	if instantUI() then
 		return
 	end
 	local index = 0
@@ -6551,7 +6559,7 @@ function Window:_playIntro(fromLoader)
 		tween(shadow, { ImageTransparency = 0.6 }, 0.5)
 	end
 
-	if IS_TOUCH then
+	if instantUI() then
 		for _, tab in ipairs(self.Tabs) do
 			tab._button.Visible = tab._button:GetAttribute(Const.ATTR_HIDDEN) ~= true
 		end
@@ -6932,7 +6940,7 @@ function Window:_setCompact(compact, animated)
 		return
 	end
 	self._compact = compact
-	animated = animated == true and not IS_TOUCH
+	animated = animated == true and not instantUI()
 	self._compactGeneration = (self._compactGeneration or 0) + 1
 	local generation = self._compactGeneration
 	if self._sidebarIcon then
@@ -8480,11 +8488,11 @@ function Window:SelectTab(tab)
 			tween(previous._icon, { ImageColor3 = Theme.Muted }, 0.18)
 		end
 
-		if IS_TOUCH then
+		if instantUI() then
 			previous._page.Parent = self.Content
 			previous._page.Visible = false
 		end
-		local outLayer = IS_TOUCH and nil or self._outLayer
+		local outLayer = (not instantUI()) and self._outLayer or nil
 		if outLayer then
 			previous._page.Parent = outLayer
 			self._outPage = previous._page
@@ -8512,7 +8520,7 @@ function Window:SelectTab(tab)
 	local page = tab._page
 	page.Position = UDim2.fromOffset(0, 0)
 	page.Visible = true
-	if IS_TOUCH then
+	if instantUI() then
 		page.Parent = self.Content
 		return
 	end
@@ -8974,7 +8982,7 @@ function Window:Toggle(open)
 		self:_fadeOut(0.16)
 		tween(self.BodyStroke, { Transparency = 1 }, 0.12)
 		tween(self.Shadow, { ImageTransparency = 1 }, 0.16)
-		if IS_TOUCH then
+		if instantUI() then
 			self.Root.Visible = false
 		end
 		task.delay(0.2, function()
@@ -8998,7 +9006,7 @@ function Window:_fadeIn(duration)
 	local generation = self._fadeGeneration
 	local fader = self._fader
 	fader.BackgroundColor3 = Theme.Background
-	if IS_TOUCH or not duration or duration <= 0 then
+	if instantUI() or not duration or duration <= 0 then
 		fader.BackgroundTransparency = 1
 		fader.Visible = false
 		return
@@ -9017,7 +9025,7 @@ function Window:_fadeOut(duration)
 	local fader = self._fader
 	fader.BackgroundColor3 = Theme.Background
 	fader.Visible = true
-	if IS_TOUCH or not duration or duration <= 0 then
+	if instantUI() or not duration or duration <= 0 then
 		fader.BackgroundTransparency = 0
 		return
 	end
@@ -9939,7 +9947,7 @@ local function showToast(host, input)
 		for _, connection in ipairs(dragConnections) do
 			connection:Disconnect()
 		end
-		if IS_TOUCH then
+		if instantUI() then
 			slot:Destroy()
 			safeCall(options.OnClose)
 			return
@@ -11737,6 +11745,10 @@ function Window:_startMiniLoop()
 			end
 		end
 	end)
+end
+
+function Nucleus:SetAnimations(enabled)
+	Nucleus.Animations = enabled == true
 end
 
 function Window:RequestClose()
