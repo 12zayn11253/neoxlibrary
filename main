@@ -10,7 +10,7 @@ local LocalPlayer = Players.LocalPlayer
 local Nucleus = {}
 local Const = {}
 Nucleus.Name = "Nucleus UI"
-Nucleus.Version = "4.10.0"
+Nucleus.Version = "4.10.1"
 Nucleus.Flags = {}
 Nucleus.Windows = {}
 
@@ -689,6 +689,8 @@ local IS_TOUCH = UserInputService.TouchEnabled and not UserInputService.Keyboard
 Nucleus.Touch = IS_TOUCH
 
 Const.ROW_HEIGHT = 42
+Const.MIN_TEXT_SIZE = 12
+Const.REAL_GROUPS = { TransitionIn = true, TransitionOut = true }
 Const.PANEL_BUTTON_GAP = 8
 Const.PREMIUM_GOLD = Color3.fromRGB(232, 186, 90)
 Const.ROW_HEIGHT_DESC = 56
@@ -714,11 +716,76 @@ local function logoColor(customIcon)
 end
 
 local tweenInfoCache = {}
+local virtualGroups = setmetatable({}, { __mode = "k" })
+
+local function fadeGroup(root, value, info)
+	local state = virtualGroups[root]
+	if not state then
+		state = { Value = 0, Bases = setmetatable({}, { __mode = "k" }) }
+		virtualGroups[root] = state
+	end
+	local previous = state.Value
+	state.Value = value
+	local last
+	local function apply(object, property)
+		local bases = state.Bases[object]
+		if not bases then
+			bases = {}
+			state.Bases[object] = bases
+		end
+		local base = bases[property]
+		if base == nil then
+			base = object[property]
+			if type(base) ~= "number" then
+				return
+			end
+			bases[property] = base
+			object[property] = base + (1 - base) * previous
+		end
+		local target = base + (1 - base) * value
+		if info then
+			last = TweenService:Create(object, info, { [property] = target })
+			last:Play()
+		else
+			object[property] = target
+		end
+	end
+	local function visit(object)
+		if object:IsA("TextLabel") or object:IsA("TextButton") or object:IsA("TextBox") then
+			apply(object, "TextTransparency")
+		elseif object:IsA("ImageLabel") or object:IsA("ImageButton") then
+			apply(object, "ImageTransparency")
+		end
+		if object:IsA("UIStroke") then
+			apply(object, "Transparency")
+		elseif object:IsA("GuiObject") then
+			apply(object, "BackgroundTransparency")
+		end
+	end
+	visit(root)
+	for _, descendant in ipairs(root:GetDescendants()) do
+		visit(descendant)
+	end
+	return last
+end
 
 local function tween(object, goals, duration, style, direction)
 	duration = duration or 0.2
 	if IS_TOUCH then
 		duration = 0
+	end
+	if not IS_TOUCH and goals.GroupTransparency ~= nil and virtualGroups[object] then
+		local rest = table.clone(goals)
+		rest.GroupTransparency = nil
+		local info
+		if duration > 0 then
+			info = TweenInfo.new(duration, style or Enum.EasingStyle.Quart, direction or Enum.EasingDirection.Out)
+		end
+		local track = fadeGroup(object, goals.GroupTransparency, info)
+		if next(rest) then
+			return tween(object, rest, duration, style, direction) or track
+		end
+		return track
 	end
 	if duration <= 0 then
 		for property, value in pairs(goals) do
@@ -782,13 +849,16 @@ local function setTranslated(instance, property, value)
 end
 
 local function create(className, properties, children)
-	local plainGroup = className == "CanvasGroup" and IS_TOUCH
+	local plainGroup = className == "CanvasGroup" and (IS_TOUCH or not Const.REAL_GROUPS[properties.Name or ""])
 	local instance = Instance.new(plainGroup and "Frame" or className)
+	if plainGroup and not IS_TOUCH then
+		virtualGroups[instance] = { Value = properties.GroupTransparency or 0, Bases = setmetatable({}, { __mode = "k" }) }
+	end
 	for property, value in pairs(properties) do
 		if plainGroup and property == "GroupTransparency" then
 			continue
 		elseif property == "TextSize" then
-			instance.TextSize = math.max(IS_TOUCH and 12 or 11, math.floor(value * (Nucleus.TextScale or 1) + 0.5))
+			instance.TextSize = math.max(Const.MIN_TEXT_SIZE, math.floor(value * (Nucleus.TextScale or 1) + 0.5))
 		elseif Const.TRANSLATED_PROPERTIES[property] and type(value) == "string" then
 			setTranslated(instance, property, value)
 		elseif property ~= "Parent" then
@@ -5233,7 +5303,7 @@ Const.NOTIFY_TYPES = {
 local Window = {}
 Window.__index = Window
 
-Const.DEFAULT_WINDOW_SIZE = UDim2.fromOffset(746, 496)
+Const.DEFAULT_WINDOW_SIZE = UDim2.fromOffset(692, 460)
 Const.COMPACT_WIDTH = 560
 Const.COMPACT_SIDEBAR = 64
 Const.COMPACT_MIN = Vector2.new(400, 260)
@@ -6741,6 +6811,15 @@ function Window:_fitToScreen(instant)
 		height = math.floor(math.max(height, math.min(Const.COMPACT_MIN.Y, base.Y)))
 		local fit = math.min(availX / width, availY / height)
 		self._fitScale = math.max(math.min(userScale, fit), 0.5)
+		local root = self.Root
+		local centered = root.AnchorPoint.X == 0.5 and root.Position.X.Scale == 0.5
+		if centered then
+			width -= (math.floor(screen.X) - width) % 2
+			height -= (math.floor(screen.Y) - height) % 2
+		else
+			width -= width % 2
+			height -= height % 2
+		end
 	end
 
 	local current = self.Root.Size
@@ -7031,7 +7110,7 @@ function Window:_clampToScreen()
 		math.clamp(center.Y, math.min(half.Y, screen.Y / 2), math.max(screen.Y - half.Y, screen.Y / 2))
 	)
 	if (clamped - center).Magnitude > 0.5 then
-		tween(root, { Position = UDim2.fromOffset(clamped.X, clamped.Y) }, 0.25, Enum.EasingStyle.Quint)
+		tween(root, { Position = UDim2.fromOffset(math.floor(clamped.X + 0.5), math.floor(clamped.Y + 0.5)) }, 0.25, Enum.EasingStyle.Quint)
 	end
 end
 
@@ -7137,8 +7216,8 @@ function Window:_makeDraggable(target, onTap)
 		local position = point - grabOffset - screenGui.AbsolutePosition
 		target.AnchorPoint = Vector2.new(0, 0)
 		target.Position = UDim2.fromOffset(
-			math.clamp(position.X, 0, math.max(screenGui.AbsoluteSize.X - target.AbsoluteSize.X, 0)),
-			math.clamp(position.Y, 0, math.max(screenGui.AbsoluteSize.Y - target.AbsoluteSize.Y, 0))
+			math.floor(math.clamp(position.X, 0, math.max(screenGui.AbsoluteSize.X - target.AbsoluteSize.X, 0)) + 0.5),
+			math.floor(math.clamp(position.Y, 0, math.max(screenGui.AbsoluteSize.Y - target.AbsoluteSize.Y, 0)) + 0.5)
 		)
 	end))
 
@@ -9605,6 +9684,7 @@ local function showToast(host, input)
 		Parent = slider,
 	})
 	local card = create("CanvasGroup", {
+		Name = "Toast",
 		Size = UDim2.new(1, 0, 0, 0),
 		AutomaticSize = Enum.AutomaticSize.Y,
 		BackgroundColor3 = Theme.Background,
@@ -15335,7 +15415,7 @@ do
 			end)
 			gui.Parent = windowOptions.Parent or getGuiParent()
 
-			local width = IS_TOUCH and 320 or 360
+			local width = IS_TOUCH and 310 or 340
 			local card = create("Frame", {
 				Name = "Card",
 				AnchorPoint = Vector2.new(0.5, 0.5),
