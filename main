@@ -10,7 +10,7 @@ local LocalPlayer = Players.LocalPlayer
 local Nucleus = {}
 local Const = {}
 Nucleus.Name = "Nucleus UI"
-Nucleus.Version = "4.12.1"
+Nucleus.Version = "4.12.2"
 Nucleus.Flags = {}
 Nucleus.Windows = {}
 
@@ -29,7 +29,7 @@ end
 
 local KNOWN_OPTIONS = {}
 local KNOWN_OPTIONS_LOWER = {}
-for name in string.gmatch("AU AbsoluteContentSize AbsoluteSize Accent AccentDark Active ActiveOnly AliveCheck Always Anonymous Asc Australia AutoLoad AutoSave BR Background BackgroundColor3 BackgroundTransparency Backspace BasePart Began Body Bold BottomRight Brazil Button ButtonRow Buttons CA CFrame Callback Canada Cancel CancelText CanvasGroup Caption Changed Changes ClearOnFocus Close CloseOnBackdrop Code Collapsed Color Color3 ColorPicker Configs ConfigurationSaving Confirm ConfirmText ConfirmTimeout Content ContentProvider Copied Copy Copyable CoreGui Create CurrentKeybind CurrentOption CurrentValue Custom CustomFont DE Danger Date DateFormat Decal Default DefaultState Delay Delete Depends DependsOn Desc Description Details Discord DiscordButton DiscordLink Divider Dropdown Duration Element EmptyText Enabled Ended Enter Entries Enum EnumItem Error ErrorNotifications Esc Example ExcludeSelf Executor Expired Expiry FPS FR FileName Flag Folder FolderName Format Frame France Free GET Game Germany GetActive GetKey Glow Greeting Group GuiButton GuiName GuiObject GuiService HWID HasKey Header HeaderItems Height Hold Home HttpService Humanoid HumanoidRootPart IN Icon Image ImageButton ImageColor3 ImageLabel ImageRectPosition ImageRectSize ImageTransparency Increment India Info Input Instance JP Japan KeepOnScreen Key KeyInfo KeyPanel Keybind Keybinds LAlt LCtrl LShift Label Language Lifetime Lighting Load Loading LoadingDuration LoadingSteps LoadingSubtitle LoadingText LoadingTitle Localization Lock Locked LockedReason Loop LoopDelay Lowest Main MarketplaceService Max MaxDistance MaxHeight MaxLength MaxNotifications MaxSize Medium Membership Merge Message Method Min MinSize MobileButton MobileIcon Mode Model MinimizeButton Mono Monospace Monthly Multi MultiLine Multiline MultipleOptions Muted NL Name NucleusHidden Nucleus NucleusUIBlur NucleusUIFonts NucleusLoc NucleusLocPlaceholderText NucleusLocText NucleusNoTheme Netherlands NoDrag None Not Notification NotificationPosition Notifications Numeric OK OnCancel OnChanged OnClose OnRelease Open OpenButton Opened Options Page Pages Paragraph Parent Ping Placeholder PlaceholderColor3 PlaceholderText Player PlayerGui Players Popup Position Prefix Premium PremiumBanner PremiumButton Perks Price PopupDelay Cooldown HeaderButton ExpiryButtons OnClick OnShown ShowWithoutKey ButtonText Link PremiumLink PremiumText Primary Profile Progress Qd Qn RAlt RCtrl RShift Radius Range Region RegionCity Regular Reminders Render Reset ResetOnUnload Resizable RunService SG Save Scale ScaleType ScreenGui ScrollBarImageColor3 ScrollingFrame Search SearchAfter SearchPlaceholder SearchResults Secondary Section SectionName Sections SemiBold Session ShowFPS ShowPing ShowPromo ShowTime Sidebar SidebarCollapsed Singapore Size Slider Sound Space Standard Stat Stats Step Stepper Stroke StrokeHover Studio Style Subtitle Success Suffix Surface Surface2 Surface3 Tab TabIcon TabSection Tabs Tag TeamCheck TeleportService Tertiary Text TextArea TextBounds TextBox TextButton TextColor3 TextLabel TextScale TextSize TextTransparency Texture Theme ThemeName Time TimeFormat Title Toggle ToggleUIKeybind Tooltip Top TotalTime TouchOnly TransitionIn TransitionOut Translations Transparency TweenService Type TypeName TypeNames UDim2 UICorner UIGradient UIGridLayout UIListLayout UIPadding UIScale UISizeConstraint UIStroke Unavailable Unknown Update UpdateRate Uptime Usage UseDisplayName User UserInputService UserInputType Value Values Variant Vector2 Vector3 Version VirtualUser Visible Volume Warning Weekly Weights Welcome Window Appearance WindowRadius CardRadius CardBorder SidebarWidth Spacing Shadow TabHighlight Fill Outline Data Labels Texts Protected Badge TimeLeft NoKey NeverExpires Ends Ocean Crimson Amber Violet Slate Obsidian Mint Light Badge Settings SettingsTab AccentPicker Interface Server Unload History FlagPrefix Socials Donations Links Url URL Robux AssetId ShirtId GamePassId PassId Address Goal Target Current Thanks ThanksTitle OnDonate ShowOnHome Tiers Amount Currency Network Wallet Depth InnerShadow ScrollFades RememberTab IncludeSelf DisplayNames MaxLines Timestamps AutoScroll EmptyText Status Hidden Build PerGame IgnoreGameProcessed OnResult Elements Element Url Current Notify Author ToggleKey HideSearchBar SideBarWidth Folder Transparent Values AllowNone InputIcon Opened ImageSize Thumbnail ThumbnailSize ScrollBarEnabled Checkbox MinimizedBar MiniBar KeySystem Hide Note SaveKey Check Validate Verify Keys KeyLink GetKeyText SubmitText CanClose OnSuccess OnFail Toggles Restore Logo Discord CloseAction ConfirmClose Animations", "%S+") do
+for name in string.gmatch("AU AbsoluteContentSize AbsoluteSize Accent AccentDark Active ActiveOnly AliveCheck Always Anonymous Asc Australia AutoLoad AutoSave BR Background BackgroundColor3 BackgroundTransparency Backspace BasePart Began Body Bold BottomRight Brazil Button ButtonRow Buttons CA CFrame Callback Canada Cancel CancelText CanvasGroup Caption Changed Changes ClearOnFocus Close CloseOnBackdrop Code Collapsed Color Color3 ColorPicker Configs ConfigurationSaving Confirm ConfirmText ConfirmTimeout Content ContentProvider Copied Copy Copyable CoreGui Create CurrentKeybind CurrentOption CurrentValue Custom CustomFont DE Danger Date DateFormat Decal Default DefaultState Delay Delete Depends DependsOn Desc Description Details Discord DiscordButton DiscordLink Divider Dropdown Duration Element EmptyText Enabled Ended Enter Entries Enum EnumItem Error ErrorNotifications Esc Example ExcludeSelf Executor Expired Expiry FPS FR FileName Flag Folder FolderName Format Frame France Free GET Game Germany GetActive GetKey Glow Greeting Group GuiButton GuiName GuiObject GuiService HWID HasKey Header HeaderItems Height Hold Home HttpService Humanoid HumanoidRootPart IN Icon Image ImageButton ImageColor3 ImageLabel ImageRectPosition ImageRectSize ImageTransparency Increment India Info Input Instance JP Japan KeepOnScreen Key KeyInfo KeyPanel Keybind Keybinds LAlt LCtrl LShift Label Language Lifetime Lighting Load Loading LoadingDuration LoadingSteps LoadingSubtitle LoadingText LoadingTitle Localization Lock Locked LockedReason Loop LoopDelay Lowest Main MarketplaceService Max MaxDistance MaxHeight MaxLength MaxNotifications MaxSize Medium Membership Merge Message Method Min MinSize MobileButton MobileIcon Mode Model MinimizeButton Mono Monospace Monthly Multi MultiLine Multiline MultipleOptions Muted NL Name NucleusHidden Nucleus NucleusUIBlur NucleusUIFonts NucleusLoc NucleusLocPlaceholderText NucleusLocText NucleusNoTheme Netherlands NoDrag None Not Notification NotificationPosition Notifications Numeric OK OnCancel OnChanged OnClose OnRelease Open OpenButton Opened Options Page Pages Paragraph Parent Ping Placeholder PlaceholderColor3 PlaceholderText Player PlayerGui Players Popup Position Prefix Premium PremiumBanner PremiumButton Perks Price PopupDelay Cooldown HeaderButton ExpiryButtons OnClick OnShown ShowWithoutKey ButtonText Link PremiumLink PremiumText Primary Profile Progress Qd Qn RAlt RCtrl RShift Radius Range Region RegionCity Regular Reminders Render Reset ResetOnUnload Resizable RunService SG Save Scale ScaleType ScreenGui ScrollBarImageColor3 ScrollingFrame Search SearchAfter SearchPlaceholder SearchResults Secondary Section SectionName Sections SemiBold Session ShowFPS ShowPing ShowPromo ShowTime Sidebar SidebarCollapsed Singapore Size Slider Sound Space Standard Stat Stats Step Stepper Stroke StrokeHover Studio Style Subtitle Success Suffix Surface Surface2 Surface3 Tab TabIcon TabSection Tabs Tag TeamCheck TeleportService Tertiary Text TextArea TextBounds TextBox TextButton TextColor3 TextLabel TextScale TextSize TextTransparency Texture Theme ThemeName Time TimeFormat Title Toggle ToggleUIKeybind Tooltip Top TotalTime TouchOnly TransitionIn TransitionOut Translations Transparency TweenService Type TypeName TypeNames UDim2 UICorner UIGradient UIGridLayout UIListLayout UIPadding UIScale UISizeConstraint UIStroke Unavailable Unknown Update UpdateRate Uptime Usage UseDisplayName User UserInputService UserInputType Value Values Variant Vector2 Vector3 Version VirtualUser Visible Volume Warning Weekly Weights Welcome Window Appearance WindowRadius CardRadius CardBorder SidebarWidth Spacing Shadow TabHighlight Fill Outline Data Labels Texts Protected Badge TimeLeft NoKey NeverExpires Ends Ocean Crimson Amber Violet Slate Obsidian Mint Light Badge Settings SettingsTab AccentPicker Interface Server Unload History FlagPrefix Socials Donations Links Url URL Robux AssetId ShirtId GamePassId PassId Address Goal Target Current Thanks ThanksTitle OnDonate ShowOnHome Tiers Amount Currency Network Wallet Depth InnerShadow ScrollFades RememberTab IncludeSelf DisplayNames MaxLines Timestamps AutoScroll EmptyText Status Hidden Build PerGame IgnoreGameProcessed OnResult Elements Element Url Current Notify Author ToggleKey HideSearchBar SideBarWidth Folder Transparent Values AllowNone InputIcon Opened ImageSize Thumbnail ThumbnailSize ScrollBarEnabled Checkbox MinimizedBar MiniBar KeySystem Hide Note SaveKey Check Validate Verify Keys KeyLink GetKeyText SubmitText CanClose OnSuccess OnFail Toggles Restore Logo Discord CloseAction ConfirmClose Animations Steps InputTitle FooterText", "%S+") do
 	KNOWN_OPTIONS[name] = true
 	KNOWN_OPTIONS_LOWER[string.lower(name)] = name
 end
@@ -15445,66 +15445,87 @@ do
 			end)
 			gui.Parent = windowOptions.Parent or getGuiParent()
 
-			local width = IS_TOUCH and 300 or 330
+			local width = IS_TOUCH and 312 or 344
+			local backdrop = create("Frame", {
+				Name = "Backdrop",
+				Size = UDim2.fromScale(1, 1),
+				BackgroundColor3 = Color3.new(0, 0, 0),
+				BackgroundTransparency = 0.45,
+				BorderSizePixel = 0,
+				Active = true,
+				Parent = gui,
+			})
+			backdrop:SetAttribute(Const.ATTR_NO_THEME, true)
 			local card = create("Frame", {
 				Name = "Card",
-				AnchorPoint = Vector2.new(0.5, 0.5),
-				Position = UDim2.fromScale(0.5, 0.5),
 				Size = UDim2.fromOffset(width, 0),
 				AutomaticSize = Enum.AutomaticSize.Y,
 				BackgroundColor3 = Theme.Background,
 				BorderSizePixel = 0,
+				ZIndex = 2,
 				Parent = gui,
 			})
-			addCorner(card, UDim.new(0, Appearance.WindowRadius))
+			addCorner(card, UDim.new(0, Appearance.WindowRadius + 2))
 			addStroke(card)
-			addPadding(card, 20, 20, 18, 20)
+			addPadding(card, 22, 22, 20, 18)
 			create("UIListLayout", {
 				SortOrder = Enum.SortOrder.LayoutOrder,
-				Padding = UDim.new(0, 12),
+				Padding = UDim.new(0, 14),
 				Parent = card,
 			})
 			local cardScale = create("UIScale", { Parent = card })
 			local function fitCard()
 				local screen = gui.AbsoluteSize
-				if screen.Y > 0 then
-					cardScale.Scale = math.clamp(math.min(screen.Y / 460, screen.X / (width + 40)), 0.6, 1)
+				if screen.X <= 0 or screen.Y <= 0 then
+					return
 				end
+				local height = math.max(card.AbsoluteSize.Y / math.max(cardScale.Scale, 0.01), 1)
+				cardScale.Scale = math.clamp(math.min((screen.Y - 32) / height, (screen.X - 24) / width), 0.6, 1)
+				local shown = Vector2.new(width, height) * cardScale.Scale
+				card.Position = UDim2.fromOffset(math.floor((screen.X - shown.X) / 2), math.floor((screen.Y - shown.Y) / 2))
 			end
 			gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(fitCard)
-			fitCard()
+			card:GetPropertyChangedSignal("AbsoluteSize"):Connect(fitCard)
 
 			local header = create("Frame", {
-				Size = UDim2.new(1, 0, 0, 38),
+				Size = UDim2.new(1, 0, 0, 44),
 				BackgroundTransparency = 1,
 				LayoutOrder = 1,
 				Parent = card,
 			})
+			local tile = create("Frame", {
+				Size = UDim2.fromOffset(44, 44),
+				BackgroundColor3 = Theme.Surface2,
+				BorderSizePixel = 0,
+				Parent = header,
+			})
+			addCorner(tile, UDim.new(0, 12))
+			addStroke(tile)
 			local icon = create("ImageLabel", {
-				AnchorPoint = Vector2.new(0, 0.5),
-				Position = UDim2.new(0, 0, 0.5, 0),
-				Size = UDim2.fromOffset(32, 32),
+				AnchorPoint = Vector2.new(0.5, 0.5),
+				Position = UDim2.fromScale(0.5, 0.5),
+				Size = UDim2.fromOffset(22, 22),
 				BackgroundTransparency = 1,
 				ImageColor3 = Theme.Accent,
 				ScaleType = Enum.ScaleType.Fit,
-				Parent = header,
+				Parent = tile,
 			})
 			if not setIcon(icon, ks.Icon or windowOptions.Icon or "key-round") then
 				setIcon(icon, "key-round")
 			end
 			createLabel({
-				Position = UDim2.fromOffset(44, 1),
-				Size = UDim2.new(1, -84, 0, 20),
+				Position = UDim2.fromOffset(56, 3),
+				Size = UDim2.new(1, -96, 0, 20),
 				Text = tostring(ks.Title or windowOptions.Title or Const.LIB_NAME),
-				TextSize = 16,
+				TextSize = 17,
 				FontFace = Fonts.Bold,
 				Parent = header,
 			})
 			createLabel({
-				Position = UDim2.fromOffset(44, 21),
-				Size = UDim2.new(1, -84, 0, 16),
-				Text = tostring(ks.Subtitle or "Key system"),
-				TextSize = 12,
+				Position = UDim2.fromOffset(56, 25),
+				Size = UDim2.new(1, -96, 0, 16),
+				Text = tostring(ks.Subtitle or "Enter your key to continue"),
+				TextSize = 13,
 				FontFace = Fonts.Regular,
 				TextColor3 = Theme.Muted,
 				Parent = header,
@@ -15514,8 +15535,8 @@ do
 			local accepted
 			if ks.CanClose ~= false then
 				local closeButton = create("TextButton", {
-					AnchorPoint = Vector2.new(1, 0.5),
-					Position = UDim2.new(1, 4, 0.5, 0),
+					AnchorPoint = Vector2.new(1, 0),
+					Position = UDim2.new(1, 6, 0, -4),
 					Size = UDim2.fromOffset(30, 30),
 					BackgroundColor3 = Theme.Surface2,
 					BackgroundTransparency = 1,
@@ -15563,22 +15584,110 @@ do
 				})
 			end
 
-			local inputFrame = create("Frame", {
-				Size = UDim2.new(1, 0, 0, 40),
-				BackgroundColor3 = Theme.Surface,
-				BorderSizePixel = 0,
-				LayoutOrder = 3,
+			local link = ks.URL or ks.Url or ks.Link or ks.KeyLink
+			local steps = ks.Steps
+			if steps == nil and (link or type(ks.GetKey) == "function") then
+				steps = {
+					"Press Get key to copy the link",
+					"Open it in your browser and finish the steps",
+					"Paste your key below and press " .. tostring(ks.SubmitText or "Continue"),
+				}
+			end
+			if type(steps) == "table" and #steps > 0 then
+				local stepBox = create("Frame", {
+					Name = "Steps",
+					Size = UDim2.new(1, 0, 0, 0),
+					AutomaticSize = Enum.AutomaticSize.Y,
+					BackgroundColor3 = Theme.Surface,
+					BorderSizePixel = 0,
+					LayoutOrder = 3,
+					Parent = card,
+				})
+				addCorner(stepBox, UDim.new(0, 10))
+				addStroke(stepBox)
+				addPadding(stepBox, 12, 12, 11, 11)
+				create("UIListLayout", {
+					SortOrder = Enum.SortOrder.LayoutOrder,
+					Padding = UDim.new(0, 8),
+					Parent = stepBox,
+				})
+				for index, text in ipairs(steps) do
+					local row = create("Frame", {
+						Size = UDim2.new(1, 0, 0, 20),
+						AutomaticSize = Enum.AutomaticSize.Y,
+						BackgroundTransparency = 1,
+						LayoutOrder = index,
+						Parent = stepBox,
+					})
+					local badge = create("Frame", {
+						Size = UDim2.fromOffset(20, 20),
+						BackgroundColor3 = Theme.Surface2,
+						BorderSizePixel = 0,
+						Parent = row,
+					})
+					addCorner(badge, UDim.new(1, 0))
+					addStroke(badge)
+					createLabel({
+						Size = UDim2.fromScale(1, 1),
+						Text = tostring(index),
+						TextSize = 12,
+						FontFace = Fonts.Bold,
+						TextColor3 = Theme.Accent,
+						TextXAlignment = Enum.TextXAlignment.Center,
+						Parent = badge,
+					})
+					createLabel({
+						Position = UDim2.fromOffset(30, 0),
+						Size = UDim2.new(1, -30, 0, 20),
+						AutomaticSize = Enum.AutomaticSize.Y,
+						Text = tostring(text),
+						TextSize = 12,
+						FontFace = Fonts.Regular,
+						TextColor3 = Theme.Text,
+						TextWrapped = true,
+						TextTruncate = Enum.TextTruncate.None,
+						Parent = row,
+					})
+				end
+			end
+
+			local field = create("Frame", {
+				Size = UDim2.new(1, 0, 0, 0),
+				AutomaticSize = Enum.AutomaticSize.Y,
+				BackgroundTransparency = 1,
+				LayoutOrder = 4,
 				Parent = card,
 			})
-			addCorner(inputFrame, UDim.new(0, 8))
+			create("UIListLayout", {
+				SortOrder = Enum.SortOrder.LayoutOrder,
+				Padding = UDim.new(0, 7),
+				Parent = field,
+			})
+			createLabel({
+				Size = UDim2.new(1, 0, 0, 14),
+				Text = tostring(ks.InputTitle or "Key"),
+				TextSize = 12,
+				FontFace = Fonts.Medium,
+				TextColor3 = Theme.Muted,
+				LayoutOrder = 1,
+				Parent = field,
+			})
+			local inputFrame = create("Frame", {
+				Size = UDim2.new(1, 0, 0, 42),
+				BackgroundColor3 = Theme.Surface,
+				BorderSizePixel = 0,
+				LayoutOrder = 2,
+				Parent = field,
+			})
+			addCorner(inputFrame, UDim.new(0, 9))
 			local inputStroke = addStroke(inputFrame)
-			local _, inputIcon = createIcon(inputFrame, "key-round", Theme.Muted, UDim2.new(0, 12, 0.5, 0))
+			local _, inputIcon = createIcon(inputFrame, "key-round", Theme.Muted, UDim2.new(0, 13, 0.5, 0))
 			local box = create("TextBox", {
-				Position = UDim2.fromOffset(38, 0),
-				Size = UDim2.new(1, -48, 1, 0),
+				Position = UDim2.fromOffset(40, 0),
+				Size = UDim2.new(1, -52, 1, 0),
 				BackgroundTransparency = 1,
 				Text = "",
-				PlaceholderText = tostring(ks.Placeholder or "Enter your key"),
+				PlaceholderText = tostring(ks.Placeholder or "Paste your key here"),
 				PlaceholderColor3 = Theme.Muted,
 				TextColor3 = Theme.Text,
 				TextSize = 14,
@@ -15589,8 +15698,24 @@ do
 				Parent = inputFrame,
 			})
 
-			local status = createLabel({
+			local statusRow = create("Frame", {
 				Size = UDim2.new(1, 0, 0, 0),
+				AutomaticSize = Enum.AutomaticSize.Y,
+				BackgroundTransparency = 1,
+				Visible = false,
+				LayoutOrder = 3,
+				Parent = field,
+			})
+			local statusIcon = create("ImageLabel", {
+				Position = UDim2.fromOffset(0, 1),
+				Size = UDim2.fromOffset(14, 14),
+				BackgroundTransparency = 1,
+				ScaleType = Enum.ScaleType.Fit,
+				Parent = statusRow,
+			})
+			local status = createLabel({
+				Position = UDim2.fromOffset(20, 0),
+				Size = UDim2.new(1, -20, 0, 16),
 				AutomaticSize = Enum.AutomaticSize.Y,
 				Text = "",
 				TextSize = 12,
@@ -15598,46 +15723,44 @@ do
 				TextColor3 = Theme.Muted,
 				TextWrapped = true,
 				TextTruncate = Enum.TextTruncate.None,
-				Visible = false,
-				LayoutOrder = 4,
-				Parent = card,
+				Parent = statusRow,
 			})
-			local function setStatus(text, color)
+			local function setStatus(text, color, iconName)
 				status.Text = text or ""
 				status.TextColor3 = color or Theme.Muted
-				status.Visible = status.Text ~= ""
+				statusIcon.ImageColor3 = color or Theme.Muted
+				statusIcon.Visible = setIcon(statusIcon, iconName or "info")
+				statusRow.Visible = status.Text ~= ""
 			end
 
-			local row = create("Frame", {
-				Size = UDim2.new(1, 0, 0, 36),
-				BackgroundTransparency = 1,
-				LayoutOrder = 5,
-				Parent = card,
-			})
-			create("UIListLayout", {
-				FillDirection = Enum.FillDirection.Horizontal,
-				SortOrder = Enum.SortOrder.LayoutOrder,
-				Padding = UDim.new(0, 8),
-				Parent = row,
-			})
-			local buttons = {}
-			local function keyButton(order, text, iconName, primary, callback)
+			local function keyButton(parent, order, text, iconName, primary, height, callback)
 				local button = create("TextButton", {
-					Size = UDim2.fromOffset(0, 36),
+					Size = UDim2.new(1, 0, 0, height),
 					BackgroundColor3 = primary and Theme.Accent or Theme.Surface,
 					Text = "",
 					AutoButtonColor = false,
 					LayoutOrder = order,
-					Parent = row,
+					Parent = parent,
 				})
-				addCorner(button, UDim.new(0, 8))
+				addCorner(button, UDim.new(0, 9))
 				local stroke = addStroke(button, primary and Theme.Accent or Theme.Stroke)
-				local layout = create("UIListLayout", {
+				create("UIListLayout", {
 					FillDirection = Enum.FillDirection.Horizontal,
 					HorizontalAlignment = Enum.HorizontalAlignment.Center,
 					VerticalAlignment = Enum.VerticalAlignment.Center,
 					SortOrder = Enum.SortOrder.LayoutOrder,
 					Padding = UDim.new(0, 7),
+					Parent = button,
+				})
+				local label = createLabel({
+					Size = UDim2.new(0, 0, 1, 0),
+					AutomaticSize = Enum.AutomaticSize.X,
+					Text = text,
+					TextSize = primary and 14 or 13,
+					FontFace = Fonts.Bold,
+					TextColor3 = primary and Theme.AccentDark or Theme.Text,
+					TextTruncate = Enum.TextTruncate.None,
+					LayoutOrder = primary and 1 or 2,
 					Parent = button,
 				})
 				if iconName then
@@ -15646,23 +15769,13 @@ do
 						BackgroundTransparency = 1,
 						ImageColor3 = primary and Theme.AccentDark or Theme.Accent,
 						ScaleType = Enum.ScaleType.Fit,
-						LayoutOrder = 1,
+						LayoutOrder = primary and 2 or 1,
 						Parent = button,
 					})
 					if not setIcon(image, iconName) then
 						image:Destroy()
 					end
 				end
-				local label = createLabel({
-					Size = UDim2.new(0, 0, 1, 0),
-					AutomaticSize = Enum.AutomaticSize.X,
-					Text = text,
-					TextSize = 13,
-					TextColor3 = primary and Theme.AccentDark or Theme.Text,
-					TextTruncate = Enum.TextTruncate.None,
-					LayoutOrder = 2,
-					Parent = button,
-				})
 				button.MouseEnter:Connect(function()
 					if IS_TOUCH then
 						return
@@ -15685,84 +15798,157 @@ do
 				button.MouseButton1Click:Connect(function()
 					safeCall(callback)
 				end)
-				table.insert(buttons, button)
-				return button, label, layout
+				return button, label
 			end
 
 			local checking = false
+			local submitLabel
+			local submitText = tostring(ks.SubmitText or "Continue")
 			local function submit()
 				if checking or accepted or closed then
 					return
 				end
 				local key = (box.Text:gsub("^%s+", ""):gsub("%s+$", ""))
 				if key == "" then
-					setStatus("Type or paste your key first.", Theme.Warning)
+					setStatus("Type or paste your key first.", Theme.Warning, "circle-alert")
 					return
 				end
 				checking = true
-				setStatus("Checking...", Theme.Muted)
+				setStatus("Checking...", Theme.Muted, "loader-circle")
+				if submitLabel then
+					submitLabel.Text = "Checking..."
+				end
 				task.spawn(function()
 					local valid, message = checkKey(ks, key)
 					checking = false
+					if submitLabel then
+						submitLabel.Text = submitText
+					end
 					if closed then
 						return
 					end
 					if valid then
-						setStatus(message or "Key accepted.", Theme.Success)
-						tween(inputStroke, { Color = Theme.Success }, 0.15)
+						setStatus(message or "Key accepted.", Theme.Success, "circle-check")
+						inputStroke.Color = Theme.Success
 						if ks.SaveKey ~= false then
 							writeSavedKey(folder, path, key)
 						end
 						task.wait(0.35)
 						accepted = key
 					else
-						setStatus(message or "That key isn't valid. Check it and try again.", Theme.Error)
-						tween(inputStroke, { Color = Theme.Error }, 0.15)
+						setStatus(message or "That key isn't valid. Check it and try again.", Theme.Error, "circle-x")
+						inputStroke.Color = Theme.Error
 						safeCall(ks.OnFail, key)
 					end
 				end)
 			end
 
-			local link = ks.URL or ks.Url or ks.Link or ks.KeyLink
+			local _, primaryLabel = keyButton(card, 5, submitText, "arrow-right", true, 42, submit)
+			submitLabel = primaryLabel
+
+			local secondary = {}
 			if link or type(ks.GetKey) == "function" then
-				keyButton(1, tostring(ks.GetKeyText or "Get key"), "link", false, function()
+				table.insert(secondary, { tostring(ks.GetKeyText or "Get key"), "link", function()
 					if type(ks.GetKey) == "function" then
 						ks.GetKey()
 						return
 					end
 					if Nucleus:Copy(tostring(link), true) then
-						setStatus("Link copied. Paste it in your browser.", Theme.Muted)
+						setStatus("Link copied. Paste it in your browser.", Theme.Muted, "copy")
 					else
-						setStatus(tostring(link), Theme.Muted)
+						setStatus(tostring(link), Theme.Muted, "link")
 					end
-				end)
+				end })
 			end
 			if ks.Discord then
-				keyButton(2, "Discord", "discord", false, function()
+				table.insert(secondary, { "Discord", "discord", function()
 					if Nucleus:Copy(tostring(ks.Discord), true) then
-						setStatus("Discord invite copied.", Theme.Muted)
+						setStatus("Discord invite copied.", Theme.Muted, "copy")
 					else
-						setStatus(tostring(ks.Discord), Theme.Muted)
+						setStatus(tostring(ks.Discord), Theme.Muted, "link")
 					end
-				end)
+				end })
 			end
-			keyButton(3, tostring(ks.SubmitText or "Continue"), "arrow-right", true, submit)
-			local count = #buttons
-			for _, button in ipairs(buttons) do
-				button.Size = UDim2.new(1 / count, -math.ceil(8 * (count - 1) / count), 0, 36)
+			if #secondary > 0 then
+				local row = create("Frame", {
+					Size = UDim2.new(1, 0, 0, 38),
+					BackgroundTransparency = 1,
+					LayoutOrder = 6,
+					Parent = card,
+				})
+				create("UIListLayout", {
+					FillDirection = Enum.FillDirection.Horizontal,
+					SortOrder = Enum.SortOrder.LayoutOrder,
+					Padding = UDim.new(0, 8),
+					Parent = row,
+				})
+				local count = #secondary
+				for index, entry in ipairs(secondary) do
+					local button = keyButton(row, index, entry[1], entry[2], false, 38, entry[3])
+					button.Size = UDim2.new(1 / count, -math.ceil(8 * (count - 1) / count), 0, 38)
+				end
 			end
 
+			if ks.SaveKey ~= false then
+				local footer = create("Frame", {
+					Size = UDim2.new(1, 0, 0, 16),
+					BackgroundTransparency = 1,
+					LayoutOrder = 7,
+					Parent = card,
+				})
+				create("UIListLayout", {
+					FillDirection = Enum.FillDirection.Horizontal,
+					HorizontalAlignment = Enum.HorizontalAlignment.Center,
+					VerticalAlignment = Enum.VerticalAlignment.Center,
+					SortOrder = Enum.SortOrder.LayoutOrder,
+					Padding = UDim.new(0, 6),
+					Parent = footer,
+				})
+				local lock = create("ImageLabel", {
+					Size = UDim2.fromOffset(12, 12),
+					BackgroundTransparency = 1,
+					ImageColor3 = Theme.Muted,
+					ScaleType = Enum.ScaleType.Fit,
+					LayoutOrder = 1,
+					Parent = footer,
+				})
+				if not setIcon(lock, "lock") then
+					lock:Destroy()
+				end
+				createLabel({
+					Size = UDim2.new(0, 0, 1, 0),
+					AutomaticSize = Enum.AutomaticSize.X,
+					Text = tostring(ks.FooterText or "Your key is remembered on this device"),
+					TextSize = 12,
+					FontFace = Fonts.Regular,
+					TextColor3 = Theme.Muted,
+					TextTruncate = Enum.TextTruncate.None,
+					LayoutOrder = 2,
+					Parent = footer,
+				})
+			end
+
+			local focused = false
 			box.Focused:Connect(function()
-				tween(inputStroke, { Color = Theme.StrokeHover }, 0.15)
-				tween(inputIcon, { ImageColor3 = Theme.Text }, 0.15)
+				focused = true
+				inputStroke.Color = Theme.StrokeHover
+				inputIcon.ImageColor3 = Theme.Text
 			end)
 			box.FocusLost:Connect(function(enterPressed)
-				tween(inputStroke, { Color = Theme.Stroke }, 0.15)
-				tween(inputIcon, { ImageColor3 = Theme.Muted }, 0.2)
+				focused = false
+				inputStroke.Color = Theme.Stroke
+				inputIcon.ImageColor3 = Theme.Muted
 				if enterPressed then
 					submit()
 				end
 			end)
+			box:GetPropertyChangedSignal("Text"):Connect(function()
+				if statusRow.Visible and not checking then
+					statusRow.Visible = false
+					inputStroke.Color = focused and Theme.StrokeHover or Theme.Stroke
+				end
+			end)
+			fitCard()
 
 			while not accepted and not closed do
 				task.wait(0.05)
