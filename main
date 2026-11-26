@@ -10,7 +10,7 @@ local LocalPlayer = Players.LocalPlayer
 local Nucleus = {}
 local Const = {}
 Nucleus.Name = "Nucleus UI"
-Nucleus.Version = "4.13.2"
+Nucleus.Version = "4.14.0"
 Nucleus.Flags = {}
 Nucleus.Windows = {}
 
@@ -29,7 +29,7 @@ end
 
 local KNOWN_OPTIONS = {}
 local KNOWN_OPTIONS_LOWER = {}
-for name in string.gmatch("AU AbsoluteContentSize AbsoluteSize Accent AccentDark Active ActiveOnly AliveCheck Always Anonymous Asc Australia AutoLoad AutoSave BR Background BackgroundColor3 BackgroundTransparency Backspace BasePart Began Body Bold BottomRight Brazil Button ButtonRow Buttons CA CFrame Callback Canada Cancel CancelText CanvasGroup Caption Changed Changes ClearOnFocus Close CloseOnBackdrop Code Collapsed Color Color3 ColorPicker Configs ConfigurationSaving Confirm ConfirmText ConfirmTimeout Content ContentProvider Copied Copy Copyable CoreGui Create CurrentKeybind CurrentOption CurrentValue Custom CustomFont DE Danger Date DateFormat Decal Default DefaultState Delay Delete Depends DependsOn Desc Description Details Discord DiscordButton DiscordLink Divider Dropdown Duration Element EmptyText Enabled Ended Enter Entries Enum EnumItem Error ErrorNotifications Esc Example ExcludeSelf Executor Expired Expiry FPS FR FileName Flag Folder FolderName Format Frame France Free GET Game Germany GetActive GetKey Glow Greeting Group GuiButton GuiName GuiObject GuiService HWID HasKey Header HeaderItems Height Hold Home HttpService Humanoid HumanoidRootPart IN Icon Image ImageButton ImageColor3 ImageLabel ImageRectPosition ImageRectSize ImageTransparency Increment India Info Input Instance JP Japan KeepOnScreen Key KeyInfo KeyPanel Keybind Keybinds LAlt LCtrl LShift Label Language Lifetime Lighting Load Loading LoadingDuration LoadingSteps LoadingSubtitle LoadingText LoadingTitle Localization Lock Locked LockedReason Loop LoopDelay Lowest Main MarketplaceService Max MaxDistance MaxHeight MaxLength MaxNotifications MaxSize Medium Membership Merge Message Method Min MinSize MobileButton MobileIcon Mode Model MinimizeButton Mono Monospace Monthly Multi MultiLine Multiline MultipleOptions Muted NL Name NucleusHidden Nucleus NucleusUIBlur NucleusUIFonts NucleusLoc NucleusLocPlaceholderText NucleusLocText NucleusNoTheme Netherlands NoDrag None Not Notification NotificationPosition Notifications Numeric OK OnCancel OnChanged OnClose OnRelease Open OpenButton Opened Options Page Pages Paragraph Parent Ping Placeholder PlaceholderColor3 PlaceholderText Player PlayerGui Players Popup Position Prefix Premium PremiumBanner PremiumButton Perks Price PopupDelay Cooldown HeaderButton ExpiryButtons OnClick OnShown ShowWithoutKey ButtonText Link PremiumLink PremiumText Primary Profile Progress Qd Qn RAlt RCtrl RShift Radius Range Region RegionCity Regular Reminders Render Reset ResetOnUnload Resizable RunService SG Save Scale ScaleType ScreenGui ScrollBarImageColor3 ScrollingFrame Search SearchAfter SearchPlaceholder SearchResults Secondary Section SectionName Sections SemiBold Session ShowFPS ShowPing ShowPromo ShowTime Sidebar SidebarCollapsed Singapore Size Slider Sound Space Standard Stat Stats Step Stepper Stroke StrokeHover Studio Style Subtitle Success Suffix Surface Surface2 Surface3 Tab TabIcon TabSection Tabs Tag TeamCheck TeleportService Tertiary Text TextArea TextBounds TextBox TextButton TextColor3 TextLabel TextScale TextSize TextTransparency Texture Theme ThemeName Time TimeFormat Title Toggle ToggleUIKeybind Tooltip Top TotalTime TouchOnly TransitionIn TransitionOut Translations Transparency TweenService Type TypeName TypeNames UDim2 UICorner UIGradient UIGridLayout UIListLayout UIPadding UIScale UISizeConstraint UIStroke Unavailable Unknown Update UpdateRate Uptime Usage UseDisplayName User UserInputService UserInputType Value Values Variant Vector2 Vector3 Version VirtualUser Visible Volume Warning Weekly Weights Welcome Window Appearance WindowRadius CardRadius CardBorder SidebarWidth Spacing Shadow TabHighlight Fill Outline Data Labels Texts Protected Badge TimeLeft NoKey NeverExpires Ends Ocean Crimson Amber Violet Slate Obsidian Mint Light Badge Settings SettingsTab AccentPicker Interface Server Unload History FlagPrefix Socials Donations Links Url URL Robux AssetId ShirtId GamePassId PassId Address Goal Target Current Thanks ThanksTitle OnDonate ShowOnHome Tiers Amount Currency Network Wallet Depth InnerShadow ScrollFades RememberTab IncludeSelf DisplayNames MaxLines Timestamps AutoScroll EmptyText Status Hidden Build PerGame IgnoreGameProcessed OnResult Elements Element Url Current Notify Author ToggleKey HideSearchBar SideBarWidth Folder Transparent Values AllowNone InputIcon Opened ImageSize Thumbnail ThumbnailSize ScrollBarEnabled Checkbox MinimizedBar MiniBar KeySystem Hide Note SaveKey Check Validate Verify Keys KeyLink GetKeyText SubmitText CanClose OnSuccess OnFail Toggles Restore Logo Discord CloseAction ConfirmClose Animations Steps InputTitle FooterText SavedNotice", "%S+") do
+for name in string.gmatch("AU AbsoluteContentSize AbsoluteSize Accent AccentDark Active ActiveOnly AliveCheck Always Anonymous Asc Australia AutoLoad AutoSave BR Background BackgroundColor3 BackgroundTransparency Backspace BasePart Began Body Bold BottomRight Brazil Button ButtonRow Buttons CA CFrame Callback Canada Cancel CancelText CanvasGroup Caption Changed Changes ClearOnFocus Close CloseOnBackdrop Code Collapsed Color Color3 ColorPicker Configs ConfigurationSaving Confirm ConfirmText ConfirmTimeout Content ContentProvider Copied Copy Copyable CoreGui Create CurrentKeybind CurrentOption CurrentValue Custom CustomFont DE Danger Date DateFormat Decal Default DefaultState Delay Delete Depends DependsOn Desc Description Details Discord DiscordButton DiscordLink Divider Dropdown Duration Element EmptyText Enabled Ended Enter Entries Enum EnumItem Error ErrorNotifications Esc Example ExcludeSelf Executor Expired Expiry FPS FR FileName Flag Folder FolderName Format Frame France Free GET Game Germany GetActive GetKey Glow Greeting Group GuiButton GuiName GuiObject GuiService HWID HasKey Header HeaderItems Height Hold Home HttpService Humanoid HumanoidRootPart IN Icon Image ImageButton ImageColor3 ImageLabel ImageRectPosition ImageRectSize ImageTransparency Increment India Info Input Instance JP Japan KeepOnScreen Key KeyInfo KeyPanel Keybind Keybinds LAlt LCtrl LShift Label Language Lifetime Lighting Load Loading LoadingDuration LoadingSteps LoadingSubtitle LoadingText LoadingTitle Localization Lock Locked LockedReason Loop LoopDelay Lowest Main MarketplaceService Max MaxDistance MaxHeight MaxLength MaxNotifications MaxSize Medium Membership Merge Message Method Min MinSize MobileButton MobileIcon Mode Model MinimizeButton Mono Monospace Monthly Multi MultiLine Multiline MultipleOptions Muted NL Name NucleusHidden Nucleus NucleusUIBlur NucleusUIFonts NucleusLoc NucleusLocPlaceholderText NucleusLocText NucleusNoTheme Netherlands NoDrag None Not Notification NotificationPosition Notifications Numeric OK OnCancel OnChanged OnClose OnRelease Open OpenButton Opened Options Page Pages Paragraph Parent Ping Placeholder PlaceholderColor3 PlaceholderText Player PlayerGui Players Popup Position Prefix Premium PremiumBanner PremiumButton Perks Price PopupDelay Cooldown HeaderButton ExpiryButtons OnClick OnShown ShowWithoutKey ButtonText Link PremiumLink PremiumText Primary Profile Progress Qd Qn RAlt RCtrl RShift Radius Range Region RegionCity Regular Reminders Render Reset ResetOnUnload Resizable RunService SG Save Scale ScaleType ScreenGui ScrollBarImageColor3 ScrollingFrame Search SearchAfter SearchPlaceholder SearchResults Secondary Section SectionName Sections SemiBold Session ShowFPS ShowPing ShowPromo ShowTime Sidebar SidebarCollapsed Singapore Size Slider Sound Space Standard Stat Stats Step Stepper Stroke StrokeHover Studio Style Subtitle Success Suffix Surface Surface2 Surface3 Tab TabIcon TabSection Tabs Tag TeamCheck TeleportService Tertiary Text TextArea TextBounds TextBox TextButton TextColor3 TextLabel TextScale TextSize TextTransparency Texture Theme ThemeName Time TimeFormat Title Toggle ToggleUIKeybind Tooltip Top TotalTime TouchOnly TransitionIn TransitionOut Translations Transparency TweenService Type TypeName TypeNames UDim2 UICorner UIGradient UIGridLayout UIListLayout UIPadding UIScale UISizeConstraint UIStroke Unavailable Unknown Update UpdateRate Uptime Usage UseDisplayName User UserInputService UserInputType Value Values Variant Vector2 Vector3 Version VirtualUser Visible Volume Warning Weekly Weights Welcome Window Appearance WindowRadius CardRadius CardBorder SidebarWidth Spacing Shadow TabHighlight Fill Outline Data Labels Texts Protected Badge TimeLeft NoKey NeverExpires Ends Ocean Crimson Amber Violet Slate Obsidian Mint Light Badge Settings SettingsTab AccentPicker Interface Server Unload History FlagPrefix Socials Donations Links Url URL Robux AssetId ShirtId GamePassId PassId Address Goal Target Current Thanks ThanksTitle OnDonate ShowOnHome Tiers Amount Currency Network Wallet Depth InnerShadow ScrollFades RememberTab IncludeSelf DisplayNames MaxLines Timestamps AutoScroll EmptyText Status Hidden Build PerGame IgnoreGameProcessed OnResult Elements Element Url Current Notify Author ToggleKey HideSearchBar SideBarWidth Folder Transparent Values AllowNone InputIcon Opened ImageSize Thumbnail ThumbnailSize ScrollBarEnabled Checkbox MinimizedBar MiniBar KeySystem Hide Note SaveKey Check Validate Verify Keys KeyLink GetKeyText SubmitText CanClose OnSuccess OnFail Toggles Restore Logo Discord CloseAction ConfirmClose Animations Steps InputTitle FooterText SavedNotice Timer", "%S+") do
 	KNOWN_OPTIONS[name] = true
 	KNOWN_OPTIONS_LOWER[string.lower(name)] = name
 end
@@ -5169,12 +5169,12 @@ local function createKeyPanel(window, parent, layoutOrder, input)
 
 		if left and not data.Lifetime then
 			if left <= 0 then
-				remind("expired", text("ExpiredTitle", "Key expired"), text("ExpiredMessage", "Your key has run out. Get a new key to keep using the script."), "Error")
+				remind("expired", text("ExpiredTitle", "Key expired"), text("ExpiredMessage", "Get a new key to keep using the script."), "Error")
 			elseif left <= 900 then
 				local minutes = tostring(math.max(1, math.floor(left / 60)))
 				remind("15m", text("SoonTitle", "Key expiring soon"), (text("SoonMessage", "Your key ends in about {minutes} minutes."):gsub("{minutes}", minutes)), "Warning")
 			elseif left <= 3600 then
-				remind("60m", text("HourTitle", "Key ends in 1 hour"), text("HourMessage", "Your key has about an hour left."), "Warning")
+				remind("60m", text("HourTitle", "Key expires in 1 hour"), text("HourMessage", "Your key has about an hour left."), "Warning")
 			end
 		end
 	end
@@ -6370,7 +6370,7 @@ function Nucleus:Copy(text, silent)
 		or (syn and syn.write_clipboard)
 		or (Clipboard and Clipboard.set)
 	if type(copyFn) ~= "function" then
-		Nucleus:Notify({ Title = "Copy unavailable", Content = "Your executor has no clipboard support.", Type = "Error", Duration = 3 })
+		Nucleus:Notify({ Title = "Can't copy", Content = "Your executor doesn't support copying.", Type = "Error", Duration = 3 })
 		return false
 	end
 	local ok = pcall(copyFn, text)
@@ -9849,9 +9849,9 @@ local function showToast(host, input)
 		GroupTransparency = 1,
 		Parent = slider,
 	})
-	addCorner(card, UDim.new(0, 10))
+	addCorner(card, UDim.new(0, 8))
 	local cardStroke = addStroke(card, Theme.Stroke)
-	addTopHighlight(card)
+	local showTimer = options.Timer == true
 
 	local inner = create("Frame", {
 		Size = UDim2.new(1, 0, 0, 0),
@@ -9859,7 +9859,7 @@ local function showToast(host, input)
 		BackgroundTransparency = 1,
 		Parent = card,
 	})
-	addPadding(inner, 12, 12, 12, 14)
+	addPadding(inner, 12, 12, 11, 12)
 	create("UIListLayout", {
 		SortOrder = Enum.SortOrder.LayoutOrder,
 		Padding = UDim.new(0, 8),
@@ -9875,25 +9875,21 @@ local function showToast(host, input)
 	})
 
 	local iconTile = create("Frame", {
-		Size = UDim2.fromOffset(30, 30),
-		BackgroundColor3 = Theme.Accent,
-		BackgroundTransparency = 0.85,
+		Size = UDim2.fromOffset(16, 16),
+		BackgroundTransparency = 1,
 		BorderSizePixel = 0,
 		Parent = topRow,
 	})
-	addCorner(iconTile, UDim.new(0, 8))
 	local iconImage = create("ImageLabel", {
-		AnchorPoint = Vector2.new(0.5, 0.5),
-		Position = UDim2.fromScale(0.5, 0.5),
-		Size = UDim2.fromOffset(16, 16),
+		Size = UDim2.fromScale(1, 1),
 		BackgroundTransparency = 1,
 		ScaleType = Enum.ScaleType.Fit,
 		Parent = iconTile,
 	})
 
 	local textColumn = create("Frame", {
-		Position = UDim2.fromOffset(40, 0),
-		Size = UDim2.new(1, -66, 0, 0),
+		Position = UDim2.fromOffset(24, 0),
+		Size = UDim2.new(1, -46, 0, 0),
 		AutomaticSize = Enum.AutomaticSize.Y,
 		BackgroundTransparency = 1,
 		Parent = topRow,
@@ -9910,9 +9906,10 @@ local function showToast(host, input)
 		Parent = textColumn,
 	})
 	local titleLabel = createLabel({
-		Size = UDim2.new(1, -36, 1, 0),
+		Size = UDim2.new(1, -30, 1, 0),
 		Text = "",
-		TextSize = 14,
+		TextSize = 13,
+		TextColor3 = Theme.Text,
 		Parent = titleRow,
 	})
 	local countBadge = create("Frame", {
@@ -9920,19 +9917,18 @@ local function showToast(host, input)
 		Position = UDim2.new(1, 0, 0.5, 0),
 		Size = UDim2.fromOffset(0, 16),
 		AutomaticSize = Enum.AutomaticSize.X,
-		BackgroundColor3 = Theme.Surface3,
+		BackgroundTransparency = 1,
 		BorderSizePixel = 0,
 		Visible = false,
 		Parent = titleRow,
 	})
-	addCorner(countBadge, UDim.new(1, 0))
-	addPadding(countBadge, 6, 6)
 	local countLabel = createLabel({
 		Size = UDim2.new(0, 0, 1, 0),
 		AutomaticSize = Enum.AutomaticSize.X,
 		Text = "",
-		TextSize = 11,
-		TextColor3 = Theme.Text,
+		TextSize = 12,
+		FontFace = Fonts.Regular,
+		TextColor3 = Theme.Muted,
 		TextTruncate = Enum.TextTruncate.None,
 		Parent = countBadge,
 	})
@@ -9940,7 +9936,7 @@ local function showToast(host, input)
 		Size = UDim2.new(1, 0, 0, 0),
 		AutomaticSize = Enum.AutomaticSize.Y,
 		Text = "",
-		TextSize = 13,
+		TextSize = 12,
 		FontFace = Fonts.Regular,
 		TextColor3 = Theme.Muted,
 		TextWrapped = true,
@@ -9951,12 +9947,14 @@ local function showToast(host, input)
 	})
 
 	local dismissButton = create("TextButton", {
+		Name = "Dismiss",
 		AnchorPoint = Vector2.new(1, 0),
 		Position = UDim2.new(1, 4, 0, -4),
 		Size = UDim2.fromOffset(IS_TOUCH and 30 or 22, IS_TOUCH and 30 or 22),
 		BackgroundTransparency = 1,
 		Text = "",
 		AutoButtonColor = false,
+		Visible = IS_TOUCH,
 		Parent = topRow,
 	})
 	setIcon(create("ImageLabel", {
@@ -10018,27 +10016,27 @@ local function showToast(host, input)
 		persistent = value == false or (type(value) == "number" and (value <= 0 or value == math.huge))
 		duration = type(value) == "number" and value > 0 and value ~= math.huge and value or 4
 		remaining = duration
-		timerTrack.Visible = not persistent
+		timerTrack.Visible = showTimer and not persistent
 		timerFill.Size = UDim2.fromScale(1, 1)
 	end
 
 	local function paint(data)
 		local kind = data.Type
-		local colorKey = Const.NOTIFY_TYPES[kind] or (kind == "Loading" and "Accent") or "Accent"
-		local color = Theme[colorKey] or Theme.Accent
-		iconTile.BackgroundColor3 = color
+		local status = kind == "Success" or kind == "Warning" or kind == "Error"
+		local colorKey = status and Const.NOTIFY_TYPES[kind] or nil
+		local color = colorKey and Theme[colorKey] or (kind == "Loading" and Theme.Muted) or Theme.Text
 		iconImage.ImageColor3 = color
-		timerFill.BackgroundColor3 = color
-		titleLabel.TextColor3 = (kind and kind ~= "Info" and kind ~= "Loading") and color or Theme.Text
+		timerFill.BackgroundColor3 = Theme.Muted
+		titleLabel.TextColor3 = Theme.Text
 
 		local icon = data.Icon
 		if icon == nil then
-			icon = kind == "Loading" and "loader-circle" or Const.NOTIFY_ICONS[kind] or "bell"
+			icon = (kind == "Loading" and "loader-circle") or (status and Const.NOTIFY_ICONS[kind]) or false
 		end
 		local hasIcon = icon ~= false and setIcon(iconImage, icon)
 		iconTile.Visible = hasIcon
-		textColumn.Position = UDim2.fromOffset(hasIcon and 40 or 0, 0)
-		textColumn.Size = UDim2.new(1, hasIcon and -66 or -26, 0, 0)
+		textColumn.Position = UDim2.fromOffset(hasIcon and 24 or 0, 0)
+		textColumn.Size = UDim2.new(1, hasIcon and -46 or -22, 0, 0)
 		spinning = kind == "Loading" and hasIcon
 		if not spinning then
 			iconImage.Rotation = 0
@@ -10176,9 +10174,13 @@ local function showToast(host, input)
 				return
 			end
 			paused = true
+			dismissButton.Visible = true
 		end)
 		target.MouseLeave:Connect(function()
 			paused = false
+			if not IS_TOUCH and target == card then
+				dismissButton.Visible = false
+			end
 		end)
 	end
 	dismissButton.MouseButton1Click:Connect(function()
@@ -10244,7 +10246,7 @@ local function showToast(host, input)
 
 	tween(slider, { Position = UDim2.fromOffset(0, 0) }, 0.45, Enum.EasingStyle.Quint)
 	tween(card, { GroupTransparency = 0 }, 0.3)
-	tween(shadow, { ImageTransparency = 0.6 }, 0.4)
+	tween(shadow, { ImageTransparency = 0.75 }, 0.4)
 
 	task.spawn(function()
 		while slot.Parent and not toast._dismissed do
@@ -10320,7 +10322,7 @@ end
 Nucleus._showErrorToast = function(entry)
 	local where = entry.Where or "a callback"
 	Nucleus:Notify({
-		Title = "Something went wrong",
+		Title = "Script error",
 		Content = ("In %s: %s"):format(where, entry.Summary or entry.Message or "unknown error"),
 		Type = "Error",
 		Duration = 8,
@@ -13877,7 +13879,7 @@ do
 				end
 				self:Notify({
 					Title = title,
-					Content = tostring(donationOptions.Thanks or (item.Address and "Paste it in your wallet app. Thank you for the support!" or "Paste it in your browser to donate. Thank you for the support!")),
+					Content = tostring(donationOptions.Thanks or (item.Address and "Paste it in your wallet app. Thanks for the support." or "Open it in your browser. Thanks for the support.")),
 					Type = "Success",
 					Icon = "heart",
 					Duration = 6,
@@ -16221,8 +16223,8 @@ do
 					task.delay(0.5, function()
 						if not window._destroyed then
 							window:Notify({
-								Title = "Signed in",
-								Content = "Your saved key still works, so the key screen was skipped.",
+								Title = "Key accepted",
+								Content = "Using your saved key.",
 								Type = "Success",
 								Icon = "key-round",
 								Duration = 4,
