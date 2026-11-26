@@ -10,7 +10,7 @@ local LocalPlayer = Players.LocalPlayer
 local Nucleus = {}
 local Const = {}
 Nucleus.Name = "Nucleus UI"
-Nucleus.Version = "4.13.1"
+Nucleus.Version = "4.13.2"
 Nucleus.Flags = {}
 Nucleus.Windows = {}
 
@@ -925,7 +925,6 @@ Const.APPEARANCE_DEFAULTS = {
 	Shadow = true,
 	TabHighlight = "Fill",
 	Depth = true,
-	Gradient = true,
 }
 
 Const.APPEARANCE_LIMITS = {
@@ -5526,27 +5525,6 @@ function Nucleus.Window(selfOrOptions, maybeOptions)
 	addCorner(fader, UDim.new(0, Appearance.WindowRadius))
 	window._fader = fader
 
-	if Appearance.Gradient then
-		local glow = create("Frame", {
-			Name = "Gradient",
-			Size = UDim2.fromScale(1, 1),
-			BackgroundColor3 = Theme.Accent,
-			BorderSizePixel = 0,
-			Parent = body,
-		})
-		addCorner(glow, UDim.new(0, Appearance.WindowRadius))
-		create("UIGradient", {
-			Rotation = 90,
-			Transparency = NumberSequence.new({
-				NumberSequenceKeypoint.new(0, 0.9),
-				NumberSequenceKeypoint.new(0.45, 0.975),
-				NumberSequenceKeypoint.new(1, 1),
-			}),
-			Parent = glow,
-		})
-		window._gradient = glow
-	end
-
 	local sidebar = create("Frame", {
 		Name = "Sidebar",
 		Active = true,
@@ -5558,14 +5536,6 @@ function Nucleus.Window(selfOrOptions, maybeOptions)
 	})
 	addCorner(sidebar, UDim.new(0, 10))
 	window._sidebar = sidebar
-	if Appearance.Gradient then
-		create("UIGradient", {
-			Name = "Shade",
-			Rotation = 90,
-			Color = ColorSequence.new(Color3.new(1, 1, 1), Color3.fromRGB(214, 214, 220)),
-			Parent = sidebar,
-		})
-	end
 	if options.Transparent == true then
 		body.BackgroundTransparency = 0.12
 		sidebar.BackgroundTransparency = 0.35
